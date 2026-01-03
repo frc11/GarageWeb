@@ -50,7 +50,7 @@ export function StaffGrid() {
                                     src={member.image}
                                     alt={member.name}
                                     fill
-                                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 transform group-hover:scale-105"
+                                    className="object-cover grayscale-0 md:grayscale md:group-hover:grayscale-0 transition-all duration-700 transform group-hover:scale-105"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             </div>

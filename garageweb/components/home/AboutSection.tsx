@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Counter } from "@/components/ui/Counter";
 
 export function AboutSection() {
     return (
@@ -27,15 +28,10 @@ export function AboutSection() {
                         </div>
 
                         <div className="pt-4">
-                            <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
-                                <div>
-                                    <span className="block text-4xl font-serif text-white mb-2">+200</span>
-                                    <span className="text-sm text-neutral-500 uppercase tracking-widest">Vehículos Entregados</span>
-                                </div>
-                                <div>
-                                    <span className="block text-4xl font-serif text-white mb-2">24/7</span>
-                                    <span className="text-sm text-neutral-500 uppercase tracking-widest">Soporte Concierge</span>
-                                </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-8">
+                                <Counter value={200} suffix="+" label="Autos Vendidos" />
+                                <Counter value={20} suffix="+" label="Años de Trayectoria" />
+                                <Counter value={15} suffix="+" label="Marcas Premium" />
                             </div>
                         </div>
                     </div>
@@ -45,7 +41,7 @@ export function AboutSection() {
                         <div className="aspect-[4/5] relative rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
                             {/* Using a high-quality Unsplash image representing a luxury garage/workshop */}
                             <Image
-                                src="https://images.unsplash.com/photo-1562519819-016930d66144?q=80&w=1760&auto=format&fit=crop"
+                                src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1760&auto=format&fit=crop"
                                 alt="Luxury Garage Workshop"
                                 fill
                                 className="object-cover"
