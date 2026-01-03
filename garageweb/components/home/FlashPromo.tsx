@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Timer, Zap, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Timer, ArrowRight } from "lucide-react";
 import { Car } from "@/types/main";
-import { formatCurrency } from "@/lib/utils";
+import { CarCard } from "@/components/cars/CarCard";
 
 // Swiper Import
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
@@ -55,124 +54,103 @@ export function FlashPromo({ cars }: FlashPromoProps) {
     }
 
     return (
-        <section className="bg-neutral-900 border-y border-white/10 relative overflow-hidden py-16">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-amber-500/5 blur-3xl pointer-events-none" />
+        <section className="bg-zinc-900 border-y border-white/5 relative overflow-hidden py-24">
+            {/* Ambient Spotlights */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-amber-600/10 blur-[120px] rounded-full" />
+                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-900/10 blur-[120px] rounded-full opacity-50" />
+            </div>
 
-            <div className="container mx-auto px-6">
-                <div className="flex flex-col lg:flex-row gap-12 items-center">
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
                     {/* Left: Timer & Context */}
-                    <div className="lg:w-1/3 text-center lg:text-left space-y-8 z-10 shrink-0">
-                        <div className="inline-flex items-center gap-2 text-amber-500 font-bold tracking-wider text-sm uppercase mb-2">
-                            <Timer size={16} />
-                            <span>Oferta Relámpago</span>
+                    <div className="lg:col-span-4 text-center lg:text-left space-y-10 shrink-0 relative z-20">
+
+                        {/* Header Group */}
+                        <div className="space-y-4">
+                            <div className="inline-flex items-center gap-2 text-amber-500 font-bold tracking-[0.2em] text-xs uppercase bg-amber-500/10 px-3 py-1.5 rounded border border-amber-500/20">
+                                <Timer size={14} />
+                                <span>Flash Deals</span>
+                            </div>
+
+                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-black text-white leading-[1.1]">
+                                Oportunidades <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500 drop-shadow-lg">
+                                    ÚNICAS
+                                </span>
+                            </h2>
+
+                            <p className="text-zinc-400 text-lg max-w-sm mx-auto lg:mx-0 leading-relaxed">
+                                Selección exclusiva de vehículos con beneficios limitados por tiempo.
+                            </p>
                         </div>
 
-                        <h2 className="text-4xl md:text-5xl font-serif font-bold text-white leading-tight">
-                            Oportunidades <span className="text-gray-500 italic">Únicas</span>
-                        </h2>
-
-                        {/* Timer */}
+                        {/* Metallic Timer */}
                         <div className="flex items-center justify-center lg:justify-start gap-4 text-white">
                             {['Hours', 'Mins', 'Segs'].map((label, i) => (
-                                <div key={label} className="text-center">
-                                    <div className="bg-black/50 border border-white/10 rounded-lg p-3 w-16 md:w-20 backdrop-blur-sm">
-                                        <span className="text-2xl md:text-3xl font-bold font-mono block">
+                                <div key={label} className="text-center group">
+                                    <div className="relative bg-zinc-950 border border-white/10 rounded-xl p-4 w-20 md:w-24 backdrop-blur-md shadow-2xl group-hover:border-amber-500/30 transition-colors duration-500">
+                                        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-xl pointer-events-none" />
+                                        <span className="text-3xl md:text-4xl font-bold font-mono block text-white/90 group-hover:text-amber-400 transition-colors">
                                             {String(Object.values(timeLeft)[i]).padStart(2, '0')}
                                         </span>
                                     </div>
-                                    <span className="text-xs text-gray-500 uppercase mt-2 block">{label}</span>
+                                    <span className="text-[10px] font-bold tracking-widest text-zinc-600 uppercase mt-3 block group-hover:text-zinc-400 transition-colors">
+                                        {label}
+                                    </span>
                                 </div>
                             ))}
                         </div>
 
-                        <p className="text-gray-400 max-w-sm mx-auto lg:mx-0">
-                            Unidades seleccionadas con condiciones especiales de financiación y entrega inmediata solo por tiempo limitado.
-                        </p>
-
-                        {/* Navigation Buttons (Desktop) - Custom Swiper Navigation */}
-                        <div className="hidden lg:flex gap-4 pt-4">
-                            <button className="swiper-button-prev-custom p-3 rounded-full border border-white/20 text-white hover:bg-white hover:text-black transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <ChevronLeft size={20} />
-                            </button>
-                            <button className="swiper-button-next-custom p-3 rounded-full border border-white/20 text-white hover:bg-white hover:text-black transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <ChevronRight size={20} />
-                            </button>
+                        {/* CTA */}
+                        <div>
+                            <Link
+                                href="/ofertas"
+                                className="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-white hover:text-amber-400 transition-colors"
+                            >
+                                <span className="border-b border-transparent group-hover:border-amber-400 pb-0.5 transition-all">Ver Inventario</span>
+                                <div className="bg-white/10 p-1.5 rounded-full group-hover:bg-amber-500 group-hover:text-black transition-all">
+                                    <ArrowRight size={14} className="group-hover:-rotate-45 transition-transform duration-300" />
+                                </div>
+                            </Link>
                         </div>
                     </div>
 
                     {/* Right: Swiper Carousel */}
-                    <div className="lg:w-2/3 w-full relative z-10 min-w-0"> {/* min-w-0 fixes flex child overflow issue */}
-                        <Swiper
-                            modules={[Autoplay, Navigation]}
-                            spaceBetween={24}
-                            slidesPerView={1.2}
-                            loop={true}
-                            autoplay={{
-                                delay: 3500,
-                                disableOnInteraction: false,
-                            }}
-                            breakpoints={{
-                                640: {
-                                    slidesPerView: 2.2,
-                                },
-                                1024: {
-                                    slidesPerView: 3,
-                                },
-                            }}
-                            navigation={{
-                                prevEl: '.swiper-button-prev-custom',
-                                nextEl: '.swiper-button-next-custom',
-                            }}
-                            className="!overflow-visible" // Allow shadows to overflow
-                        >
-                            {cars.map((car) => (
-                                <SwiperSlide key={car.id}>
-                                    <div className="relative group cursor-pointer h-full">
-                                        <Link href={`/autos/${car.slug}`}>
-                                            <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-4 border border-white/10 bg-neutral-800">
-                                                {/* Badge */}
-                                                <div className="absolute top-3 right-3 z-10 bg-amber-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg animate-pulse">
-                                                    <Zap size={12} fill="currentColor" />
-                                                    OFERTA
-                                                </div>
-                                                <Image
-                                                    src={car.images[0] || ""}
-                                                    alt={`${car.brand} ${car.model}`}
-                                                    fill
-                                                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-
-                                                <div className="absolute bottom-4 left-4 right-4 z-20">
-                                                    <h3 className="text-white font-bold text-lg leading-tight mb-1 truncate">{car.brand} {car.model}</h3>
-                                                    <div className="flex items-baseline gap-2">
-                                                        <span className="text-amber-500 font-bold text-xl">
-                                                            {formatCurrency(car.price, car.currency)}
-                                                        </span>
-                                                        {car.originalPrice && (
-                                                            <span className="text-gray-500 text-xs line-through decoration-gray-500">
-                                                                {formatCurrency(car.originalPrice, car.currency)}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-
-                            {/* View All Slide */}
-                            <SwiperSlide>
-                                <Link href="/catalogo" className="flex flex-col items-center justify-center h-full aspect-[4/3] rounded-xl border-2 border-dashed border-white/10 hover:border-amber-500/50 hover:bg-white/5 transition-all group">
-                                    <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform text-white group-hover:text-amber-500">
-                                        <ArrowRight size={24} />
-                                    </div>
-                                    <span className="text-sm font-medium uppercase tracking-wider text-gray-400 group-hover:text-white">Ver Inventario</span>
-                                </Link>
-                            </SwiperSlide>
-                        </Swiper>
+                    <div className="lg:col-span-8 w-full min-w-0 relative z-10">
+                        {/* Wrapper to allow overflow but keep structure */}
+                        <div className="relative w-[110%] -mr-[10%] lg:w-full lg:mr-0 pl-4 lg:pl-0">
+                            <Swiper
+                                modules={[Autoplay]}
+                                spaceBetween={32}
+                                slidesPerView={1.1}
+                                centeredSlides={false}
+                                loop={true}
+                                autoplay={{
+                                    delay: 4000,
+                                    disableOnInteraction: false,
+                                }}
+                                breakpoints={{
+                                    640: {
+                                        slidesPerView: 2.1,
+                                    },
+                                    1024: {
+                                        slidesPerView: 2.5,
+                                    },
+                                    1280: {
+                                        slidesPerView: 2.8,
+                                    }
+                                }}
+                                className="py-12" // Removing !overflow-visible, increasing vertical padding
+                            >
+                                {cars.map((car) => (
+                                    <SwiperSlide key={car.id} className="!h-auto transition-transform duration-500 hover:-translate-y-2">
+                                        <CarCard car={car} />
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </div>
                     </div>
 
                 </div>

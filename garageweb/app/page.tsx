@@ -4,6 +4,7 @@ import { SellCta } from "@/components/home/SellCta";
 import { FlashPromo } from "@/components/home/FlashPromo";
 import { AboutSection } from "@/components/home/AboutSection";
 import { StaffGrid } from "@/components/home/StaffGrid";
+import { BrandMarquee } from "@/components/home/BrandMarquee";
 import { getFeaturedCars, getOfferCars } from "@/sanity/lib/fetch";
 
 // Revalidate every 60 seconds (ISR)
@@ -16,6 +17,7 @@ export default async function Home() {
   return (
     <main>
       <Hero />
+      <BrandMarquee cars={[...featuredCars, ...offerCars]} />
       <FlashPromo cars={offerCars} />
       <FeaturedCars cars={featuredCars} />
       <AboutSection />

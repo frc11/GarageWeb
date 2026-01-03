@@ -1,5 +1,5 @@
 import { client } from "./client";
-import { CARS_QUERY, FEATURED_CARS_QUERY, CAR_BY_SLUG_QUERY, OFFER_CARS_QUERY } from "./queries";
+import { CARS_QUERY, FEATURED_CARS_QUERY, CAR_BY_SLUG_QUERY, OFFER_CARS_QUERY, ALL_OFFERS_QUERY } from "./queries";
 import { Car } from "@/types/main";
 
 // Mapper helper to ensure strict type compliance
@@ -38,6 +38,11 @@ export async function getFeaturedCars(): Promise<Car[]> {
 
 export async function getOfferCars(): Promise<Car[]> {
     const rawCars = await client.fetch(OFFER_CARS_QUERY);
+    return rawCars.map(mapSanityCarToCar);
+}
+
+export async function getAllOffers(): Promise<Car[]> {
+    const rawCars = await client.fetch(ALL_OFFERS_QUERY);
     return rawCars.map(mapSanityCarToCar);
 }
 

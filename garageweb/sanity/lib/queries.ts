@@ -7,6 +7,7 @@ export const CARS_QUERY = defineQuery(`*[_type == "car"] | order(_createdAt desc
   model,
   year,
   price,
+  originalPrice,
   currency,
   mileage,
   transmission,
@@ -14,7 +15,8 @@ export const CARS_QUERY = defineQuery(`*[_type == "car"] | order(_createdAt desc
   status,
   "images": images[].asset->url,
   description,
-  features
+  features,
+  isOffer
 }`);
 
 export const FEATURED_CARS_QUERY = defineQuery(`*[_type == "car" && isFeatured == true] | order(_createdAt desc)[0...6] {
@@ -24,6 +26,7 @@ export const FEATURED_CARS_QUERY = defineQuery(`*[_type == "car" && isFeatured =
   model,
   year,
   price,
+  originalPrice,
   currency,
   mileage,
   transmission,
@@ -32,10 +35,30 @@ export const FEATURED_CARS_QUERY = defineQuery(`*[_type == "car" && isFeatured =
   "images": images[].asset->url,
   description,
   features,
-  isFeatured
+  isFeatured,
+  isOffer
 }`);
 
 export const OFFER_CARS_QUERY = defineQuery(`*[_type == "car" && isOffer == true] | order(_createdAt desc)[0...9] {
+  "id": _id,
+  "slug": slug.current,
+  brand,
+  model,
+  year,
+  price,
+  originalPrice,
+  currency,
+  mileage,
+  transmission,
+  fuelType,
+  status,
+  "images": images[].asset->url,
+  description,
+  features,
+  isOffer
+}`);
+
+export const ALL_OFFERS_QUERY = defineQuery(`*[_type == "car" && isOffer == true] | order(_createdAt desc) {
   "id": _id,
   "slug": slug.current,
   brand,
@@ -61,6 +84,7 @@ export const CAR_BY_SLUG_QUERY = defineQuery(`*[_type == "car" && slug.current =
   model,
   year,
   price,
+  originalPrice,
   currency,
   mileage,
   transmission,
@@ -68,5 +92,6 @@ export const CAR_BY_SLUG_QUERY = defineQuery(`*[_type == "car" && slug.current =
   status,
   "images": images[].asset->url,
   description,
-  features
+  features,
+  isOffer
 }`);
