@@ -25,3 +25,10 @@ export interface FilterState {
     minYear: number | null;
     maxYear: number | null;
 }
+
+export interface Brand {
+    id: string;
+    name: string;
+    slug: string;
+    logo: string;
+}

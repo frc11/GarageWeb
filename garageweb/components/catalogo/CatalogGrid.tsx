@@ -2,32 +2,34 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Car } from "@/types/main";
+import { Car, Brand } from "@/types/main";
 import { CarCard } from "@/components/cars/CarCard";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { ChevronDown, Filter, X } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface CatalogGridProps {
     cars: Car[];
+    allBrands: Brand[];
 }
 
 interface FilterState {
-    brand: string | null;
     priceRange: [number, number]; // [min, max]
     transmission: 'all' | 'Automatic' | 'Manual';
 }
 
-export function CatalogGrid({ cars }: CatalogGridProps) {
-    // 1. Extract Filter Options
-    const brands = useMemo(() => ["Todos", ...Array.from(new Set(cars.map((c) => c.brand)))], [cars]);
+export function CatalogGrid({ cars, allBrands }: CatalogGridProps) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const currentBrandSlug = searchParams.get('brand');
 
-    const maxPrice = useMemo(() => Math.max(...cars.map(c => c.price)), [cars]);
-    const minPrice = useMemo(() => Math.min(...cars.map(c => c.price)), [cars]);
+    const maxPrice = useMemo(() => Math.max(...cars.map(c => c.price), 1000000), [cars]);
+    const minPrice = useMemo(() => Math.min(...cars.map(c => c.price), 0), [cars]);
 
-    // 2. Filter State
+    // 2. Filter State (Client side only for non-brand filters)
     const [filters, setFilters] = useState<FilterState>({
-        brand: null,
         priceRange: [minPrice, maxPrice],
         transmission: 'all'
     });
@@ -36,17 +38,13 @@ export function CatalogGrid({ cars }: CatalogGridProps) {
     // 3. Filter Logic (Schema Logic)
     const filteredCars = useMemo(() => {
         return cars.filter(car => {
-            // Brand Logic
-            if (filters.brand && filters.brand !== "Todos" && car.brand !== filters.brand) return false;
+            // Brand is handled by Server/URL. We don't filter it here.
 
             // Price Logic
             if (car.price < filters.priceRange[0] || car.price > filters.priceRange[1]) return false;
 
             // Transmission Logic
             if (filters.transmission !== 'all') {
-                // If data has "Automatic" but user selected "Automatic", match. 
-                // Need to match exact string or mapped values.
-                // Assuming car.transmission stores strings like "Automatic", "Manual"
                 if (car.transmission !== filters.transmission) return false;
             }
 
@@ -86,19 +84,32 @@ export function CatalogGrid({ cars }: CatalogGridProps) {
                     <div className="space-y-4">
                         <label className="text-xs font-bold uppercase tracking-widest text-zinc-500">Marca</label>
                         <div className="space-y-2">
-                            {brands.map(brand => (
-                                <button
-                                    key={brand}
-                                    onClick={() => updateFilter('brand', brand === "Todos" ? null : brand)}
+                            {/* 'Todos' Option */}
+                            <Link
+                                href="/catalogo"
+                                className={cn(
+                                    "block w-full text-left px-4 py-3 rounded-xl text-sm transition-all",
+                                    !currentBrandSlug
+                                        ? "bg-white text-black font-bold shadow-lg shadow-white/10"
+                                        : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                                )}
+                            >
+                                Todos
+                            </Link>
+
+                            {allBrands.map(brand => (
+                                <Link
+                                    key={brand.id}
+                                    href={`/catalogo?brand=${brand.slug}`}
                                     className={cn(
                                         "block w-full text-left px-4 py-3 rounded-xl text-sm transition-all",
-                                        (filters.brand === brand || (brand === "Todos" && filters.brand === null))
+                                        currentBrandSlug === brand.slug
                                             ? "bg-white text-black font-bold shadow-lg shadow-white/10"
                                             : "text-zinc-400 hover:bg-white/5 hover:text-white"
                                     )}
                                 >
-                                    {brand}
-                                </button>
+                                    {brand.name}
+                                </Link>
                             ))}
                         </div>
                     </div>
@@ -184,7 +195,10 @@ export function CatalogGrid({ cars }: CatalogGridProps) {
                         <h3 className="text-xl font-bold text-white">No se encontraron resultados</h3>
                         <p className="text-zinc-400 max-w-xs mx-auto">Prueba ajustando los filtros de búsqueda.</p>
                         <button
-                            onClick={() => setFilters({ brand: null, priceRange: [minPrice, maxPrice], transmission: 'all' })}
+                            onClick={() => {
+                                setFilters({ priceRange: [minPrice, maxPrice], transmission: 'all' });
+                                router.push('/catalogo');
+                            }}
                             className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs border-b border-amber-500/30 pb-0.5"
                         >
                             Limpiar Filtros

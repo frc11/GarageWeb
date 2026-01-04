@@ -1,86 +1,74 @@
 "use client";
 
-import { Car } from "@/types/main";
+import { Brand } from "@/types/main";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-// Configuración Manual de Logos (El usuario editará esto)
-const BRAND_LOGOS: Record<string, string> = {
-    "Ferrari": "https://cdn.simpleicons.org/ferrari/white",
-    "Porsche": "https://cdn.simpleicons.org/porsche/white",
-    "Lamborghini": "https://cdn.simpleicons.org/lamborghini/white",
-    "BMW": "https://cdn.simpleicons.org/bmw/white",
-    "Mercedes-Benz": "https://cdn.simpleicons.org/mercedes/white",
-    "Audi": "https://cdn.simpleicons.org/audi/white",
-    "Tesla": "https://cdn.simpleicons.org/tesla/white",
-    "Ford": "https://cdn.simpleicons.org/ford/white",
-    "Chevrolet": "https://cdn.simpleicons.org/chevrolet/white",
-    "Toyota": "https://cdn.simpleicons.org/toyota/white",
-    "Volkswagen": "https://cdn.simpleicons.org/volkswagen/white",
-    "Honda": "https://cdn.simpleicons.org/honda/white",
-    "Maserati": "https://cdn.simpleicons.org/maserati/white",
-    "Jeep": "https://cdn.simpleicons.org/jeep/white",
-    "Lexus": "https://cdn.simpleicons.org/lexus/white",
-    "Land Rover": "https://cdn.simpleicons.org/landrover/white",
-    "Jaguar": "https://cdn.simpleicons.org/jaguar/white",
-    "Volvo": "https://cdn.simpleicons.org/volvo/white",
-    "Nissan": "https://cdn.simpleicons.org/nissan/white",
-    "Hyundai": "https://cdn.simpleicons.org/hyundai/white",
-    "Subaru": "https://cdn.simpleicons.org/subaru/white",
-    "Kia": "https://cdn.simpleicons.org/kia/white",
-    // Agrega un fallback genérico si la marca no tiene logo
-};
+export function BrandMarquee({ brands }: { brands: Brand[] }) {
+    if (!brands || brands.length === 0) return null;
 
-export function BrandMarquee({ cars }: { cars: Car[] }) {
-    // 1. Obtener marcas únicas disponibles en los autos
-    const uniqueBrands = Array.from(new Set(cars.map(c => c.brand)));
-
-    // 2. Filtrar solo las que tienen logo configurado
-    const validBrands = uniqueBrands.filter(brand => BRAND_LOGOS[brand]);
-
-    // Debug: Check which brands are valid
-    // console.log("Valid Brands:", validBrands);
-
-    if (validBrands.length === 0) return null;
+    // Double Buffer: Duplicating the array once ensures that when we translate -50%,
+    // we show the exact same content as at 0%.
+    const marqueeBrands = [...brands, ...brands];
 
     return (
-        <section className="relative w-full py-10 bg-neutral-950 overflow-hidden border-b border-white/5">
-            {/* Gradient Overlays */}
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-10 pointer-events-none" />
+        <section className="relative w-full py-10 bg-neutral-950 border-b border-white/5 overflow-hidden">
+            {/* Fade Effect */}
+            <div
+                className="absolute inset-0 pointer-events-none z-10"
+                style={{
+                    background: "transparent",
+                    maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+                    WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
+                }}
+            />
 
-            <div className="flex items-center">
-                {/* We create 2 copies for infinite loop effect */}
-                {[...Array(2)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="flex items-center gap-24 px-12 shrink-0"
-                        animate={{ x: "-100%" }}
-                        transition={{
-                            duration: 30,
-                            repeat: Infinity,
-                            ease: "linear",
-                        }}
-                    >
-                        {validBrands.map((brand) => (
-                            <div
-                                key={`${i}-${brand}`}
-                                className="group flex flex-col items-center justify-center cursor-pointer"
+            <div className="flex w-full select-none overflow-hidden hover:cursor-pointer">
+                <motion.div
+                    className="flex min-w-full shrink-0 gap-24 items-center px-12"
+                    initial={{ x: 0 }}
+                    animate={{ x: "-50%" }}
+                    transition={{
+                        duration: Math.max(20, brands.length * 5),
+                        ease: "linear",
+                        repeat: Infinity,
+                        repeatType: "loop"
+                    }}
+                    style={{ width: "max-content" }}
+                >
+                    {marqueeBrands.map((brand, i) => (
+                        <Link
+                            key={`${brand.id}-${i}`}
+                            href={`/catalogo?brand=${encodeURIComponent(brand.slug)}`}
+                            className="relative flex flex-col items-center justify-center shrink-0 py-4"
+                            aria-label={`Ver catálogo de ${brand.name}`}
+                        >
+                            <motion.div
+                                className="relative w-24 h-24 opacity-40 grayscale transition-all duration-300"
+                                whileHover={{
+                                    scale: 1.1,
+                                    opacity: 1,
+                                    grayscale: 0,
+                                    zIndex: 50
+                                }}
                             >
-                                <div className="relative w-20 h-20 opacity-40 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-110">
+                                {brand.logo ? (
                                     <Image
-                                        src={BRAND_LOGOS[brand]}
-                                        alt={brand}
+                                        src={brand.logo}
+                                        alt={brand.name}
                                         fill
                                         className="object-contain"
-                                    // Removing complex filters as we are loading white icons directly.
-                                    // Adjust opacity for 'dimmed' state.
+                                        sizes="96px"
                                     />
-                                </div>
-                            </div>
-                        ))}
-                    </motion.div>
-                ))}
+                                ) : (
+                                    <span className="text-white text-xs font-mono">{brand.name}</span>
+                                )}
+                            </motion.div>
+                        </Link>
+                    ))}
+                </motion.div>
             </div>
         </section>
     );

@@ -1,6 +1,6 @@
 import { defineQuery } from "next-sanity";
 
-export const CARS_QUERY = defineQuery(`*[_type == "car"] | order(_createdAt desc) {
+export const CARS_QUERY = defineQuery(`*[_type == "car" && (!defined($brandSlug) || brand == *[_type == "brand" && slug.current == $brandSlug][0].name)] | order(_createdAt desc) {
   "id": _id,
   "slug": slug.current,
   brand,
@@ -94,4 +94,18 @@ export const CAR_BY_SLUG_QUERY = defineQuery(`*[_type == "car" && slug.current =
   description,
   features,
   isOffer
+}`);
+
+export const BRANDS_QUERY = defineQuery(`*[_type == "brand"] | order(name asc) {
+  "id": _id,
+  name,
+  "slug": slug.current,
+  "logo": logo.asset->url
+}`);
+
+export const STOCK_BRANDS_QUERY = defineQuery(`*[_type == "brand" && count(*[_type == "car" && brand == ^.name]) > 0] | order(name asc) {
+  "id": _id,
+  name,
+  "slug": slug.current,
+  "logo": logo.asset->url
 }`);

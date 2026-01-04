@@ -1,6 +1,6 @@
 import { client } from "./client";
-import { CARS_QUERY, FEATURED_CARS_QUERY, CAR_BY_SLUG_QUERY, OFFER_CARS_QUERY, ALL_OFFERS_QUERY } from "./queries";
-import { Car } from "@/types/main";
+import { CARS_QUERY, FEATURED_CARS_QUERY, CAR_BY_SLUG_QUERY, OFFER_CARS_QUERY, ALL_OFFERS_QUERY, BRANDS_QUERY, STOCK_BRANDS_QUERY } from "./queries";
+import { Car, Brand } from "@/types/main";
 
 // Mapper helper to ensure strict type compliance
 // In our queries we are already projecting images->url, but we double check here
@@ -26,8 +26,8 @@ function mapSanityCarToCar(raw: any): Car {
     };
 }
 
-export async function getCars(): Promise<Car[]> {
-    const rawCars = await client.fetch(CARS_QUERY);
+export async function getCars(brandSlug?: string): Promise<Car[]> {
+    const rawCars = await client.fetch(CARS_QUERY, { brandSlug: brandSlug || null });
     return rawCars.map(mapSanityCarToCar);
 }
 
@@ -50,4 +50,12 @@ export async function getCarBySlug(slug: string): Promise<Car | null> {
     const rawCar = await client.fetch(CAR_BY_SLUG_QUERY, { slug });
     if (!rawCar) return null;
     return mapSanityCarToCar(rawCar);
+}
+
+export async function getBrands(): Promise<Brand[]> {
+    return await client.fetch(BRANDS_QUERY);
+}
+
+export async function getStockBrands(): Promise<Brand[]> {
+    return await client.fetch(STOCK_BRANDS_QUERY);
 }

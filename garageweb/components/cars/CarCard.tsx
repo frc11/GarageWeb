@@ -71,10 +71,7 @@ export function CarCard({ car }: CarCardProps) {
                                 <Calendar size={12} />
                                 <span className="text-[10px] font-medium">{car.year}</span>
                             </div>
-                            <div className="flex items-center gap-1.5" title="Mileage">
-                                <Gauge size={12} />
-                                <span className="text-[10px] font-medium">{car.mileage.toLocaleString()} km</span>
-                            </div>
+                            <span className="text-[10px] font-medium">{car.mileage.toLocaleString("es-AR")} km</span>
                             <div className="flex items-center gap-1.5" title="Transmission">
                                 <Zap size={12} />
                                 <span className="text-[10px] font-medium">
