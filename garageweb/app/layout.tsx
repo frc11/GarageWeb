@@ -18,29 +18,31 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Garage | Luxury & Exotic Cars",
-    template: "%s | Garage"
+    default: "El Garage | Autos de Lujo y Exóticos",
+    template: "%s | El Garage"
   },
-  description: "Concesionaria líder en vehículos de alta gama y deportivos exóticos. Compra, venta y consignación con máxima confidencialidad.",
+  description: "Concesionaria premium en Tucumán. Comercialización de vehículos de alta gama, exclusividad y confianza.",
+  keywords: ["autos de lujo", "concesionaria tucuman", "venta de autos", "audi", "bmw", "mercedes benz", "porsche"],
+  authors: [{ name: "El Garage Team" }],
   openGraph: {
-    type: 'website',
-    locale: 'es_AR',
-    url: 'https://garageweb.vercel.app', // URL genérica por ahora
-    title: 'Garage | Luxury & Exotic Cars',
-    description: 'Concesionaria líder en vehículos de alta gama y deportivos exóticos.',
-    siteName: 'Garage Luxury Cars',
+    type: "website",
+    locale: "es_AR",
+    url: "https://elgarage.com.ar",
+    title: 'El Garage | Autos de Lujo y Exóticos',
+    description: "La colección de vehículos más exclusiva del norte argentino.",
+    siteName: 'El Garage Luxury Cars',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=1200&auto=format&fit=crop',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Garage Luxury Cars Showroom',
+        alt: 'El Garage Luxury Cars Showroom',
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Garage | Luxury & Exotic Cars',
+    card: "summary_large_image",
+    title: 'El Garage | Autos de Lujo y Exóticos',
     description: 'Compra, venta y consignación de vehículos exclusivos.',
     images: ['https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=1200&auto=format&fit=crop'],
   },

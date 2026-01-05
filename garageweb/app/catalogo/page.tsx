@@ -3,7 +3,7 @@ import { CatalogGrid } from "@/components/catalogo/CatalogGrid";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export const metadata = {
-    title: "Catálogo Completo | Garage",
+    title: "Catálogo Completo | El Garage",
     description: "Explora nuestro inventario exclusivo de vehículos de alta gama.",
 };
 

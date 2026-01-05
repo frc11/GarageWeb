@@ -4,7 +4,7 @@ import { Timer, Zap } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
-    title: "Liquidación y Ofertas | Garage",
+    title: "Liquidación y Ofertas | El Garage",
     description: "Oportunidades únicas por tiempo limitado. Descuentos exclusivos en vehículos seleccionados.",
 };
 
