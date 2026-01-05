@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Instagram, Facebook, MapPin, Mail } from "lucide-react";
+import { DeveloperBadge } from "./DeveloperBadge";
 
 export function Footer() {
     return (
@@ -10,16 +11,6 @@ export function Footer() {
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             <div className="container mx-auto px-6 relative z-10">
-                {/* CTA Block */}
-                <div className="mb-32 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div>
-                        <h3 className="text-3xl font-serif text-white mb-2">¿Listo para conducir?</h3>
-                        <p className="text-zinc-500">Encuentra tu próximo vehículo hoy.</p>
-                    </div>
-                    <Link href="/catalogo" className="px-8 py-4 bg-white text-black rounded-full font-bold uppercase tracking-wider hover:bg-zinc-200 transition-colors">
-                        Ver Catálogo
-                    </Link>
-                </div>
 
                 {/* Main Grid: 4 Columns */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-32 mix-blend-difference">
@@ -91,30 +82,7 @@ export function Footer() {
 
                     {/* SIGNATURE BLOCK: The centerpiece of the bottom */}
                     {/* High-End Cinematic Version */}
-                    <Link
-                        href="https://develop-webdesign.netlify.app/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex flex-col items-center justify-center gap-4 transition-all duration-500"
-                    >
-                        {/* Logo Container */}
-                        <div className="relative">
-                            {/* Glow effect behind */}
-                            <div className="absolute inset-0 bg-white/5 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-700" />
-
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src="/logo-develop.png"
-                                alt="DevelOP"
-                                className="relative w-12 h-12 object-cover rounded-full border border-white/10 grayscale opacity-40 blur-[0.5px] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:opacity-100 group-hover:blur-0 group-hover:scale-110 group-hover:border-white/20 shadow-2xl"
-                            />
-                        </div>
-
-                        {/* Text Branding */}
-                        <span className="text-[10px] tracking-[0.2em] text-zinc-600 uppercase transition-colors duration-500 group-hover:text-zinc-400">
-                            Desarrollado por devel<span className="font-bold text-white tracking-widest transition-colors duration-500">OP</span>
-                        </span>
-                    </Link>
+                    <DeveloperBadge />
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 import { Hero } from "@/components/home/Hero";
 import { FeaturedCars } from "@/components/home/FeaturedCars";
-import { SellCta } from "@/components/home/SellCta";
+import { CinematicBanner } from "@/components/home/CinematicBanner";
 import { FlashPromo } from "@/components/home/FlashPromo";
 import { AboutSection } from "@/components/home/AboutSection";
 import { StaffGrid } from "@/components/home/StaffGrid";
@@ -59,7 +59,7 @@ export default async function Home() {
       <FeaturedCars cars={featuredCars} />
       <AboutSection />
       <StaffGrid />
-      <SellCta />
+      <CinematicBanner />
     </main>
   );
 }
