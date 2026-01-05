@@ -50,6 +50,7 @@ export const metadata: Metadata = {
 };
 
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
+import { MotionProvider } from "@/components/providers/MotionProvider";
 
 // ... (imports)
 
@@ -63,9 +64,11 @@ export default function RootLayout({
       <body className={`${manrope.variable} ${inter.variable} font-sans bg-black text-white antialiased selection:bg-white selection:text-black`}>
         <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
         <SmoothScroll>
-          <Navbar />
-          {children}
-          <Footer />
+          <MotionProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </MotionProvider>
         </SmoothScroll>
       </body>
     </html>

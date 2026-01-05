@@ -1,5 +1,5 @@
 import { client } from "./client";
-import { CARS_QUERY, FEATURED_CARS_QUERY, CAR_BY_SLUG_QUERY, OFFER_CARS_QUERY, ALL_OFFERS_QUERY, BRANDS_QUERY, STOCK_BRANDS_QUERY } from "./queries";
+import { CARS_QUERY, FEATURED_CARS_QUERY, CAR_BY_SLUG_QUERY, OFFER_CARS_QUERY, ALL_OFFERS_QUERY, BRANDS_QUERY, STOCK_BRANDS_QUERY, AVAILABLE_BRANDS_QUERY } from "./queries";
 import { Car, Brand } from "@/types/main";
 
 // Mapper helper to ensure strict type compliance
@@ -59,3 +59,10 @@ export async function getBrands(): Promise<Brand[]> {
 export async function getStockBrands(): Promise<Brand[]> {
     return await client.fetch(STOCK_BRANDS_QUERY);
 }
+
+export async function getAvailableBrands(): Promise<string[]> {
+    const brands: string[] = await client.fetch(AVAILABLE_BRANDS_QUERY);
+    // Dedup and filter nulls
+    return Array.from(new Set(brands)).filter(Boolean);
+}
+

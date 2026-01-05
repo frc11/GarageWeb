@@ -2,102 +2,103 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Gauge, Zap, Calendar } from "lucide-react";
+import { Gauge, Calendar, ArrowUpRight } from "lucide-react";
 import { Car } from "@/types/main";
-import { formatCurrency } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { formatCurrency, cn } from "@/lib/utils";
+import { m } from "framer-motion";
 
 interface CarCardProps {
     car: Car;
+    className?: string;
+    priority?: boolean;
 }
 
-export function CarCard({ car }: CarCardProps) {
+export function CarCard({ car, className, priority = false }: CarCardProps) {
     return (
-        <Link href={`/autos/${car.slug}`} className="block group h-full">
-            <div className={`
-                relative h-full flex flex-col
-                bg-zinc-900 rounded-2xl overflow-hidden
-                transition-all duration-500
-                ${car.isOffer
-                    ? 'border border-amber-500/50 shadow-lg shadow-amber-900/10'
-                    : 'border border-white/5 hover:border-white/20'
-                }
-            `}>
-                {/* Image Container */}
-                <div className="aspect-[4/3] relative overflow-hidden bg-zinc-800 shrink-0">
-                    {/* Offer Badge */}
-                    {car.isOffer && (
-                        <div className="absolute top-3 right-3 z-20 bg-amber-500 text-black text-[10px] font-black px-3 py-1 rounded shadow-md tracking-wider">
-                            SALE
-                        </div>
-                    )}
+        <Link
+            href={`/autos/${car.slug}`}
+            className={cn(
+                "block group relative h-full w-full overflow-hidden bg-neutral-900 border border-white/5",
+                className
+            )}
+        >
+            {/* Image Container - Absolute Fullness */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src={car.images[0]}
+                    alt={`${car.brand} ${car.model}`}
+                    fill
+                    className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority={priority}
+                />
 
-                    {/* Image Reveal Curtain */}
-                    <motion.div
-                        initial={{ height: "100%" }}
-                        whileInView={{ height: "0%" }}
-                        viewport={{ once: true, margin: "-10%" }}
-                        transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1] }} // Bezier for smooth reveal
-                        className="absolute inset-0 bg-zinc-800 z-10"
-                    />
+                {/* Gradient Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
 
-                    <div className="relative w-full h-full overflow-hidden">
-                        <Image
-                            src={car.images[0]}
-                            alt={`${car.brand} ${car.model}`}
-                            fill
-                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    </div>
+            {/* Offer Badge - Minimalist */}
+            {car.isOffer && (
+                <div className="absolute top-4 right-4 z-20">
+                    <span className="bg-amber-500 text-black text-[10px] font-bold uppercase tracking-widest px-2 py-1">
+                        Sale
+                    </span>
                 </div>
+            )}
 
-                {/* Content */}
-                <div className="p-6 space-y-4 flex flex-col flex-1 relative">
-                    <div className="flex-1">
-                        <h3 className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-2">
+            {/* Content Layer */}
+            <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-8">
+
+                <div className="transform transition-transform duration-500 ease-out translate-y-4 group-hover:translate-y-0">
+                    {/* Brand & Arrow */}
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
                             {car.brand}
-                        </h3>
-                        <h2 className="text-xl font-serif font-bold text-white leading-tight group-hover:translate-x-1 transition-transform duration-300">
-                            {car.model}
-                        </h2>
+                        </span>
+                        <div className="bg-white/10 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0">
+                            <ArrowUpRight className="w-3 h-3 text-white" />
+                        </div>
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-auto">
-                        <div className="flex gap-3 text-zinc-500">
-                            {/* Icons simplified or just text for cleaner look? Keeping icons but smaller */}
-                            <div className="flex items-center gap-1.5" title="Year">
-                                <Calendar size={12} />
-                                <span className="text-[10px] font-medium">{car.year}</span>
-                            </div>
-                            <span className="text-[10px] font-medium">{car.mileage.toLocaleString("es-AR")} km</span>
-                            <div className="flex items-center gap-1.5" title="Transmission">
-                                <Zap size={12} />
-                                <span className="text-[10px] font-medium">
-                                    {car.transmission === "Automatic" ? "Auto" : "Man"}
+                    {/* Model Name - Serif & Large */}
+                    <h2 className="text-2xl md:text-3xl font-serif text-white mb-2 leading-none tracking-tight">
+                        {car.model}
+                    </h2>
+
+                    {/* Price - Elegant Display */}
+                    <div className="mb-4">
+                        {car.isOffer && car.originalPrice ? (
+                            <div className="flex items-center gap-3">
+                                <span className="text-amber-500 text-lg font-medium">
+                                    {formatCurrency(car.price, car.currency)}
+                                </span>
+                                <span className="text-neutral-500 text-xs line-through decoration-white/30">
+                                    {formatCurrency(car.originalPrice, car.currency)}
                                 </span>
                             </div>
-                        </div>
+                        ) : (
+                            <span className="text-white/90 text-lg font-light">
+                                {formatCurrency(car.price, car.currency)}
+                            </span>
+                        )}
+                    </div>
 
-                        <div className="text-right">
-                            {car.isOffer && car.originalPrice ? (
-                                <div className="flex flex-col items-end leading-none">
-                                    <span className="text-xs text-zinc-500 line-through font-medium mb-1">
-                                        {formatCurrency(car.originalPrice, car.currency)}
-                                    </span>
-                                    <span className="text-base font-bold text-amber-500">
-                                        {formatCurrency(car.price, car.currency)}
-                                    </span>
-                                </div>
-                            ) : (
-                                <p className="text-base font-bold text-white">
-                                    {formatCurrency(car.price, car.currency)}
-                                </p>
-                            )}
+                    {/* Tech Specs - Reveal on Hover */}
+                    <div className="flex items-center gap-6 border-t border-white/10 pt-4 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-75">
+                        <div className="flex items-center gap-2 text-neutral-400" title="Año">
+                            <Calendar strokeWidth={1.5} size={12} />
+                            <span className="text-[10px] font-bold tracking-wider uppercase">{car.year}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-neutral-400" title="Kilometraje">
+                            <Gauge strokeWidth={1.5} size={12} />
+                            <span className="text-[10px] font-bold tracking-wider uppercase">
+                                {car.mileage > 0 ? `${(car.mileage / 1000).toFixed(0)}k KM` : 'Nuevo'}
+                            </span>
                         </div>
                     </div>
                 </div>
+
             </div>
         </Link>
     );

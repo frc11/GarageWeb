@@ -89,7 +89,7 @@ export function Footer() {
             {/* MASSIVE TYPOGRAPHY BACKGROUND */}
             <div className="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none select-none leading-none z-0">
                 <h1 className="text-[17vw] font-black text-zinc-900/50 tracking-tighter text-center whitespace-nowrap translate-y-[20%]">
-                    GARAGEWEB
+                    ELGARAGE
                 </h1>
             </div>
             {/* Gradient Fade for text bottom part if needed, or let it cut */}

@@ -91,6 +91,15 @@
   --font-display: var(--font-manrope);
   --font-serif: var(--font-serif);
   /* Nueva fuente Serif */
+
+  /* Animaciones */
+  --animate-scroll: scroll 40s linear infinite;
+
+  @keyframes scroll {
+    to {
+      transform: translateX(-100%);
+    }
+  }
 }
 
 /* Utilitarios de Lujo */

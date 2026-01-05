@@ -1,58 +1,154 @@
+"use client";
+
 import Image from "next/image";
-import { Counter } from "@/components/ui/Counter";
+import { m } from "framer-motion";
+import { PremiumButton } from "@/components/ui/PremiumButton";
+import { ArrowUpRight, ShieldCheck, Award, Users } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// Stats Data
+const stats = [
+    { label: "Años de Trayectoria", value: "20+", icon: Award },
+    { label: "Vehículos Vendidos", value: "500+", icon: ArrowUpRight },
+    { label: "Clientes Satisfechos", value: "100%", icon: Users },
+];
 
 export function AboutSection() {
     return (
-        <section className="py-32 bg-black overflow-hidden">
-            <div className="container mx-auto px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <section className="relative py-24 md:py-32 bg-neutral-50 dark:bg-zinc-950 overflow-hidden">
+            {/* Background Texture - Subtle Noise */}
+            <div className="absolute inset-0 z-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
 
-                    {/* Text Column */}
-                    <div className="space-y-8 order-2 lg:order-1">
-                        <h2 className="text-5xl md:text-7xl font-serif font-bold text-white leading-none">
-                            Tradición &<br />
-                            <span className="text-neutral-500 italic">Excelencia</span>
-                        </h2>
+            <div className="container relative z-10 mx-auto px-6">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
 
-                        <div className="space-y-6 text-lg text-neutral-400 font-light leading-relaxed">
-                            <p>
-                                Desde hace más de dos décadas, GarageWeb se ha establecido como el referente indiscutible
-                                en la comercialización de vehículos de alta gama. Nuestra pasión no es solo vender autos,
-                                sino curar una colección de obras de arte mecánicas.
-                            </p>
-                            <p>
-                                Cada vehículo que ingresa a nuestro showroom ha sido seleccionado meticulosamente,
-                                verificando su procedencia, historial y estado mecánico para garantizar que cumpla
-                                con los estándares más exigentes de la industria global.
-                            </p>
-                        </div>
-
-                        <div className="pt-4">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-8">
-                                <Counter value={200} suffix="+" label="Autos Vendidos" />
-                                <Counter value={20} suffix="+" label="Años de Trayectoria" />
-                                <Counter value={15} suffix="+" label="Marcas Premium" />
+                    {/* Left Column: Typographic & Editorial (5 Cols) */}
+                    <div className="lg:col-span-5 flex flex-col justify-center h-full space-y-12 pt-12">
+                        <m.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.6 }}
+                            className="space-y-6"
+                        >
+                            {/* Eyebrow */}
+                            <div className="flex items-center gap-3">
+                                <span className="h-px w-12 bg-neutral-400" />
+                                <span className="text-xs font-bold tracking-[0.2em] uppercase text-neutral-500">
+                                    Nuestra Esencia
+                                </span>
                             </div>
-                        </div>
+
+                            {/* Headline */}
+                            <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium text-neutral-900 dark:text-white leading-[0.95] tracking-tight">
+                                Más que <br />
+                                <span className="italic text-neutral-400 dark:text-neutral-600">Mecánica.</span><br />
+                                Arte Puro.
+                            </h2>
+                        </m.div>
+
+                        {/* Description */}
+                        <m.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="space-y-6 text-lg text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-md"
+                        >
+                            <p>
+                                En <strong>GarageWeb</strong>, no solo comercializamos vehículos; curamos una colección.
+                                Entendemos que un automóvil de lujo no es solo transporte, es una extensión de la personalidad y un legado de ingeniería.
+                            </p>
+                            <p>
+                                Cada pieza de nuestro inventario ha superado un riguroso proceso de certificación de 120 puntos,
+                                garantizando que la excelencia no sea una promesa, sino un estándar.
+                            </p>
+                        </m.div>
+
+                        {/* CTA & Trust Badge */}
+                        <m.div
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                            className="flex flex-col sm:flex-row items-center gap-8 pt-4"
+                        >
+                            <PremiumButton variant="primary">
+                                Conocer el Showroom
+                            </PremiumButton>
+
+                            <div className="flex items-center gap-3 text-sm font-medium text-neutral-500">
+                                <ShieldCheck className="w-5 h-5 text-neutral-900 dark:text-white" />
+                                <span>Garantía Certificada</span>
+                            </div>
+                        </m.div>
                     </div>
 
-                    {/* Image Column */}
-                    <div className="relative order-1 lg:order-2">
-                        <div className="aspect-[4/5] relative rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-                            {/* Using a high-quality Unsplash image representing a luxury garage/workshop */}
-                            <Image
-                                src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1760&auto=format&fit=crop"
-                                alt="Luxury Garage Workshop"
-                                fill
-                                className="object-cover"
-                            />
+                    {/* Right Column: Visual Bento Layout (7 Cols) */}
+                    <div className="lg:col-span-7 relative pt-12 lg:pt-0">
+                        {/* Bento Grid Layer */}
+                        <div className="grid grid-cols-2 gap-4 md:gap-6">
 
-                            {/* Overlay for cinematic feel */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />
+                            {/* Main Image (Tall) */}
+                            <m.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                className="relative col-span-1 row-span-2 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl"
+                            >
+                                <Image
+                                    src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop"
+                                    alt="Porsche Detail"
+                                    fill
+                                    className="object-cover hover:scale-105 transition-transform duration-1000 ease-in-out"
+                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+                            </m.div>
+
+                            {/* Secondary Image (Wide top) */}
+                            <m.div
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="relative col-span-1 h-full min-h-[200px] rounded-2xl overflow-hidden shadow-xl"
+                            >
+                                <Image
+                                    src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop"
+                                    alt="Showroom Interior"
+                                    fill
+                                    className="object-cover hover:scale-105 transition-transform duration-1000 ease-in-out"
+                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                />
+                            </m.div>
+
+                            {/* Stats Block (Bottom Right) */}
+                            <m.div
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.3 }}
+                                className="relative col-span-1 bg-white dark:bg-zinc-900 rounded-2xl p-6 flex flex-col justify-between shadow-xl border border-neutral-200 dark:border-zinc-800"
+                            >
+                                <div className="flex justify-between items-start">
+                                    <div className="p-2 bg-neutral-100 dark:bg-zinc-800 rounded-lg">
+                                        <Award className="w-6 h-6 text-neutral-900 dark:text-white" />
+                                    </div>
+                                    <span className="text-xs font-mono text-neutral-400 uppercase">Est. 2004</span>
+                                </div>
+
+                                <div>
+                                    <div className="text-3xl font-bold font-serif text-neutral-900 dark:text-white">
+                                        +20
+                                    </div>
+                                    <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                                        Años de excelencia automotriz.
+                                    </div>
+                                </div>
+                            </m.div>
                         </div>
-
-                        {/* Decorative Element */}
-                        <div className="absolute -bottom-12 -left-12 w-64 h-64 border border-white/5 rounded-full blur-2xl pointer-events-none" />
                     </div>
 
                 </div>

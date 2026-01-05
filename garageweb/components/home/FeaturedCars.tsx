@@ -3,82 +3,123 @@
 import { CarCard } from "@/components/cars/CarCard";
 import { Car } from "@/types/main";
 import { SectionDivider } from "@/components/ui/SectionDivider";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, LayoutGrid } from "lucide-react";
 
 interface FeaturedCarsProps {
     cars: Car[];
 }
 
 export function FeaturedCars({ cars }: FeaturedCarsProps) {
+    if (!cars || cars.length === 0) return null;
+
+    // Animation Variants
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const item = {
+        hidden: { opacity: 0, y: 30 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }
+    };
+
     return (
         <section className="py-32 bg-zinc-950 relative overflow-hidden">
-            {/* Divider Superior */}
-            <div className="absolute top-0 left-0 right-0 -translate-y-1 z-10 pointer-events-none">
-                <SectionDivider variant="curve-soft" position="top" className="text-zinc-950" />
-            </div>
+            {/* Divider Superior (Optional/Subtle) */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             {/* Ambient Lighting */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-white/5 blur-[120px] rounded-full pointer-events-none z-0" />
 
-            <div className="container mx-auto px-6 relative z-20 pt-10">
-                {/* Header */}
-                <div className="flex flex-col items-center mb-24 space-y-8 text-center">
-                    <span className="px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-[10px] font-bold uppercase tracking-[0.25em] text-white/80 shadow-lg">
-                        Nuestra Colección
-                    </span>
-
-                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif font-black text-white tracking-tighter drop-shadow-2xl">
-                        VEHÍCULOS <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-200 to-zinc-500">
-                            DESTACADOS
+            <div className="container mx-auto px-6 relative z-20">
+                {/* Header - Editorial Style */}
+                <div className="flex flex-col items-center mb-20 text-center space-y-6">
+                    <m.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="flex items-center gap-4"
+                    >
+                        <div className="h-px w-8 bg-neutral-700" />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-500">
+                            Nuestra Colección
                         </span>
-                    </h2>
+                        <div className="h-px w-8 bg-neutral-700" />
+                    </m.div>
 
-                    <div className="h-1 w-32 rounded-full bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-80" />
+                    <m.h2
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.1 }}
+                        className="text-5xl md:text-7xl font-serif font-medium text-white tracking-tight leading-[0.9]"
+                    >
+                        OBRAS <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-600">
+                            MAESTRAS
+                        </span>
+                    </m.h2>
+
+                    <m.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                    >
+                        <LayoutGrid className="w-5 h-5 text-neutral-600 mt-4" strokeWidth={1.5} />
+                    </m.div>
                 </div>
 
-                {/* Grid */}
-                {cars && cars.length > 0 ? (
-                    <ScrollReveal animation="fade-up-stagger" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-12">
-                        {cars.map((car) => (
-                            <motion.div
+                {/* Asymmetric Grid */}
+                <m.div
+                    variants={container}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[400px]" // Fixed row height for alignment
+                >
+                    {cars.map((car, index) => {
+                        // Logic for "Hero" items: 
+                        // Index 0 spans 2 columns
+                        const isHero = index === 0;
+
+                        return (
+                            <m.div
                                 key={car.id}
-                                whileHover={{ y: -10 }}
-                                transition={{ duration: 0.4, ease: "easeOut" }}
+                                variants={item}
+                                className={`
+                                    relative group
+                                    ${isHero ? "md:col-span-2 md:row-span-1 lg:row-span-1" : "md:col-span-1"}
+                                `}
                             >
-                                <CarCard car={car} />
-                            </motion.div>
-                        ))}
-                    </ScrollReveal>
-                ) : (
-                    <div className="text-center py-20 bg-white/5 rounded-3xl border border-white/5 backdrop-blur-sm">
-                        <p className="text-neutral-400 text-lg">No hay vehículos destacados por el momento.</p>
-                    </div>
-                )}
+                                <CarCard
+                                    car={car}
+                                    className="h-full border-neutral-800 hover:border-neutral-600 transition-colors bg-black"
+                                    priority={isHero}
+                                />
+                            </m.div>
+                        );
+                    })}
+                </m.div>
             </div>
 
             <div className="mt-24 text-center relative z-20">
                 <Link
                     href="/catalogo"
-                    className="group relative inline-flex items-center gap-4 px-10 py-5 bg-zinc-900 border border-zinc-800 rounded-full overflow-hidden transition-all duration-500 hover:border-zinc-500 hover:shadow-2xl hover:shadow-white/5"
+                    className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 hover:text-white transition-colors group"
                 >
-                    {/* Shine Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-
-                    <span className="relative z-10 text-white font-bold tracking-[0.2em] uppercase text-xs">
-                        Ver Inventario Completo
-                    </span>
-                    <ArrowRight size={16} className="relative z-10 text-white group-hover:translate-x-1 transition-transform duration-300" />
+                    Explorar Inventario
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Link>
             </div>
-
-            {/* Bottom Divider (Optional, to smooth transition to next section if added later) */}
-            {/* <div className="absolute bottom-0 left-0 right-0 z-10 text-black">
-                <SectionDivider variant="gradient-fade" position="bottom" />
-             </div> */}
         </section>
     );
 }

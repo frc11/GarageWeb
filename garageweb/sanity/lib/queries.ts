@@ -109,3 +109,5 @@ export const STOCK_BRANDS_QUERY = defineQuery(`*[_type == "brand" && count(*[_ty
   "slug": slug.current,
   "logo": logo.asset->url
 }`);
+
+export const AVAILABLE_BRANDS_QUERY = defineQuery(`*[_type == "car"].brand`);
