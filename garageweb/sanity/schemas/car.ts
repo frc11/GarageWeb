@@ -123,6 +123,27 @@ export default defineType({
             title: '¿Destacar en Home?',
             type: 'boolean',
             initialValue: false,
+            validation: (rule) =>
+                rule.custom(async (isFeatured, context) => {
+                    if (!isFeatured) return true;
+
+                    const { getClient } = context;
+                    const client = getClient({ apiVersion: '2024-01-01' });
+
+                    // Count how many OTHER docs are featured
+                    // We exclude the current document ID ($id) so we don't count itself if updating
+                    const query = `count(*[_type == "car" && isFeatured == true && _id != $id])`;
+                    const params = { id: context.document?._id || 'new-doc-id' };
+
+                    const featuredCount = await client.fetch(query, params);
+
+                    // Limit is 10
+                    if (featuredCount >= 10) {
+                        return `Límite alcanzado    : Solo se pueden destacar hasta 10 vehículos en el Home. Desactiva otro vehículo antes de activar este.`;
+                    }
+
+                    return true;
+                }),
         }),
 
     ],

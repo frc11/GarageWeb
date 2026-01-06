@@ -19,7 +19,7 @@ export const CARS_QUERY = defineQuery(`*[_type == "car" && (!defined($brandSlug)
   isOffer
 }`);
 
-export const FEATURED_CARS_QUERY = defineQuery(`*[_type == "car" && isFeatured == true] | order(_createdAt desc)[0...6] {
+export const FEATURED_CARS_QUERY = defineQuery(`*[_type == "car" && isFeatured == true] | order(_createdAt desc) {
   "id": _id,
   "slug": slug.current,
   brand,

@@ -38,6 +38,7 @@ export function AboutSection() {
                                 <span className="text-xs font-bold tracking-[0.2em] uppercase text-neutral-500">
                                     Nuestra Esencia
                                 </span>
+                                <span className="h-px w-12 bg-neutral-400" />
                             </div>
 
                             {/* Headline */}

@@ -84,12 +84,39 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[400px]" // Fixed row height for alignment
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 auto-rows-[450px]"
                 >
                     {cars.map((car, index) => {
-                        // Logic for "Hero" items: 
-                        // Index 0 spans 2 columns
-                        const isHero = index === 0;
+                        const total = cars.length;
+
+                        // --- SMART GRID LOGIC ---
+
+                        // Default Base (Mobile): 1 col (automatic in grid-cols-1)
+                        // Default MD: 1 col (of 2) -> md:col-span-1
+                        // Default LG: 4 cols (of 12) -> lg:col-span-4
+                        let mdClass = "md:col-span-1";
+                        let lgClass = "lg:col-span-4";
+
+                        // MD: Handle Orphan (if total is odd, last one spans 2)
+                        if (total % 2 !== 0 && index === total - 1) {
+                            mdClass = "md:col-span-2";
+                        }
+
+                        // LG: Handle Last Row (Remainder 1 or 2)
+                        const remainder = total % 3;
+
+                        // Case: 1 Orphan at the end
+                        if (remainder === 1 && index === total - 1) {
+                            // "Imponente y centrado" -> Full width (12) or Centered Half (6)?
+                            // User liked "Imponente" -> Let's go big but constrained? 
+                            // Actually, let's use col-span-12 for pure impact, usually looks best for "featured".
+                            lgClass = "lg:col-span-12";
+                        }
+                        // Case: 2 Items at the end (e.g. 5 items)
+                        else if (remainder === 2 && index >= total - 2) {
+                            // "Centered or Stretched" -> Spanning 6 cols each (half width) fills the row perfectly.
+                            lgClass = "lg:col-span-6";
+                        }
 
                         return (
                             <m.div
@@ -97,13 +124,14 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                                 variants={item}
                                 className={`
                                     relative group
-                                    ${isHero ? "md:col-span-2 md:row-span-1 lg:row-span-1" : "md:col-span-1"}
+                                    ${mdClass}
+                                    ${lgClass}
                                 `}
                             >
                                 <CarCard
                                     car={car}
                                     className="h-full border-neutral-800 hover:border-neutral-600 transition-colors bg-black"
-                                    priority={isHero}
+                                    priority={index <= 2} // First row gets priority
                                 />
                             </m.div>
                         );
