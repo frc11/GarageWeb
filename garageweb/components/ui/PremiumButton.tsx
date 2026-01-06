@@ -4,9 +4,10 @@ import { motion, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
+// 1. Agregamos 'inverted' a las opciones del tipo
 interface PremiumButtonProps extends Omit<HTMLMotionProps<"button">, "children"> {
     children: ReactNode;
-    variant?: 'primary' | 'outline' | 'glass';
+    variant?: 'primary' | 'outline' | 'glass' | 'inverted';
     className?: string;
 }
 
@@ -20,7 +21,9 @@ export function PremiumButton({
     const variants = {
         primary: "bg-white text-black hover:bg-zinc-200 border-transparent",
         outline: "bg-transparent text-white border-white/20 hover:bg-white/10 hover:border-white/40",
-        glass: "bg-white/5 text-white border-white/10 backdrop-blur-md hover:bg-white/10 hover:border-white/30"
+        glass: "bg-white/5 text-white border-white/10 backdrop-blur-md hover:bg-white/10 hover:border-white/30",
+        // 2. Definimos los estilos para 'inverted'
+        inverted: "bg-black text-white hover:bg-zinc-800 border-transparent shadow-lg"
     };
 
     return (
@@ -35,7 +38,7 @@ export function PremiumButton({
             )}
             {...props}
         >
-            {/* Optional Glow for primary/glass variants could go here */}
+            {/* Optional Glow for primary/glass/inverted variants */}
             {variant !== 'outline' && (
                 <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
             )}

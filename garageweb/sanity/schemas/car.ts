@@ -34,6 +34,19 @@ export default defineType({
             validation: (rule) => rule.required().positive(),
         }),
         defineField({
+            name: 'originalPrice',
+            title: 'Precio Original (Antes de Oferta)',
+            type: 'number',
+            description: 'Solo completar si el auto está en oferta. Se mostrará tachado al lado del precio actual.',
+        }),
+        defineField({
+            name: 'isOffer',
+            title: '¿Activar Oferta?',
+            type: 'boolean',
+            initialValue: false,
+            description: "Activa el badge de oferta y el estilo de precio reducido.",
+        }),
+        defineField({
             name: 'currency',
             title: 'Currency',
             type: 'string',
@@ -111,17 +124,7 @@ export default defineType({
             type: 'boolean',
             initialValue: false,
         }),
-        defineField({
-            name: 'isOffer',
-            title: '¿Es Oferta Relámpago?',
-            type: 'boolean',
-            initialValue: false,
-        }),
-        defineField({
-            name: 'originalPrice',
-            title: 'Precio Original (Antes de Oferta)',
-            type: 'number',
-        }),
+
     ],
     preview: {
         select: {

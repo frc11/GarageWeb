@@ -42,7 +42,7 @@ export function CarCard({ car, className, priority = false }: CarCardProps) {
             {car.isOffer && (
                 <div className="absolute top-4 right-4 z-20">
                     <span className="bg-amber-500 text-black text-[10px] font-bold uppercase tracking-widest px-2 py-1">
-                        Sale
+                        OFERTA
                     </span>
                 </div>
             )}
@@ -68,12 +68,12 @@ export function CarCard({ car, className, priority = false }: CarCardProps) {
 
                     {/* Price - Elegant Display */}
                     <div className="mb-4">
-                        {car.isOffer && car.originalPrice ? (
+                        {car.originalPrice && car.originalPrice > car.price ? (
                             <div className="flex items-center gap-3">
-                                <span className="text-amber-500 text-lg font-medium">
+                                <span className="text-white text-xl font-bold">
                                     {formatCurrency(car.price, car.currency)}
                                 </span>
-                                <span className="text-neutral-500 text-xs line-through decoration-white/30">
+                                <span className="text-gray-500 text-sm line-through">
                                     {formatCurrency(car.originalPrice, car.currency)}
                                 </span>
                             </div>

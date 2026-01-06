@@ -20,9 +20,10 @@ export function AboutSection() {
             <div className="absolute inset-0 z-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
 
             <div className="container relative z-10 mx-auto px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-stretch">
 
                     {/* Left Column: Typographic & Editorial (5 Cols) */}
+                    {/* Mantenemos justify-center para que el texto esté centrado verticalmente */}
                     <div className="lg:col-span-5 flex flex-col justify-center h-full space-y-12 pt-12">
                         <m.div
                             initial={{ opacity: 0, y: 20 }}
@@ -56,12 +57,12 @@ export function AboutSection() {
                             className="space-y-6 text-lg text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-md"
                         >
                             <p>
-                                En <strong>GarageWeb</strong>, no solo comercializamos vehículos; curamos una colección.
+                                En <strong>El Garage</strong>, no solo comercializamos vehículos; curamos una colección.
                                 Entendemos que un automóvil de lujo no es solo transporte, es una extensión de la personalidad y un legado de ingeniería.
                             </p>
                             <p>
                                 Cada pieza de nuestro inventario ha superado un riguroso proceso de certificación de 120 puntos,
-                                garantizando que la excelencia no sea una promesa, sino un estándar.
+                                garantizando que la excelencia no sea solo una promesa, sino un estándar.
                             </p>
                         </m.div>
 
@@ -73,9 +74,11 @@ export function AboutSection() {
                             transition={{ duration: 0.6, delay: 0.4 }}
                             className="flex flex-col sm:flex-row items-center gap-8 pt-4"
                         >
-                            <PremiumButton variant="primary">
-                                Conocer el Showroom
-                            </PremiumButton>
+                            <a href="/contacto">
+                                <PremiumButton variant="inverted">
+                                    Conocé el Showroom
+                                </PremiumButton>
+                            </a>
 
                             <div className="flex items-center gap-3 text-sm font-medium text-neutral-500">
                                 <ShieldCheck className="w-5 h-5 text-neutral-900 dark:text-white" />
@@ -85,17 +88,20 @@ export function AboutSection() {
                     </div>
 
                     {/* Right Column: Visual Bento Layout (7 Cols) */}
-                    <div className="lg:col-span-7 relative pt-12 lg:pt-0">
+                    {/* MODIFICADO: Agregado 'flex flex-col justify-center' para centrar el bloque entero respecto al texto */}
+                    <div className="lg:col-span-7 relative pt-12 lg:pt-0 flex flex-col justify-center h-full">
+
                         {/* Bento Grid Layer */}
                         <div className="grid grid-cols-2 gap-4 md:gap-6">
 
-                            {/* Main Image (Tall) */}
+                            {/* Main Image (Tall) - Izquierda */}
                             <m.div
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
-                                className="relative col-span-1 row-span-2 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl"
+                                // MODIFICADO: Cambiado aspect-[3/4] por h-full y min-h-[500px] para que se estire
+                                className="relative col-span-1 row-span-2 h-full min-h-[500px] rounded-2xl overflow-hidden shadow-2xl"
                             >
                                 <Image
                                     src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop"
@@ -107,13 +113,14 @@ export function AboutSection() {
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
                             </m.div>
 
-                            {/* Secondary Image (Wide top) */}
+                            {/* Secondary Image (Wide top) - Derecha Arriba */}
                             <m.div
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
-                                className="relative col-span-1 h-full min-h-[200px] rounded-2xl overflow-hidden shadow-xl"
+                                // MODIFICADO: Aumentado min-h de 200px a 300px para agrandar el bloque visual
+                                className="relative col-span-1 h-full min-h-[300px] rounded-2xl overflow-hidden shadow-xl"
                             >
                                 <Image
                                     src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop"
@@ -124,7 +131,7 @@ export function AboutSection() {
                                 />
                             </m.div>
 
-                            {/* Stats Block (Bottom Right) */}
+                            {/* Stats Block (Bottom Right) - Derecha Abajo */}
                             <m.div
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}

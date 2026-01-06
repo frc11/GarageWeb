@@ -56,7 +56,7 @@ export function Footer() {
 
                     {/* Column 4: Social */}
                     <div>
-                        <h3 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">Síguenos</h3>
+                        <h3 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">Seguinos</h3>
                         <div className="flex gap-4">
                             <a href="https://www.instagram.com/elgarageautomoviles/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white">
                                 <Instagram size={20} />
