@@ -10,13 +10,10 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
     if (!brands || brands.length === 0) return null;
 
     return (
-        // z-20: Debe estar DEBAJO del Hero.
-        // pt-32: Padding grande para que el contenido no quede tapado por la sombra negra de arriba.
-        <section className="w-full pt-50 pb-25 bg-white overflow-hidden relative z-20">
+        // Mantenemos tu ajuste de margen negativo para la integración superior
+        <section className="w-full pt-50 pb-25 bg-white overflow-hidden relative z-20 -mt-32">
 
             {/* === INTEGRACIÓN SUPERIOR (Hero -> Brand) === */}
-            {/* SOMBRA DE CAÍDA: Conecta el zinc-950 del Hero con el blanco de aquí. 
-                Usamos h-64 para que la sombra sea larga y suave. */}
             <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-zinc-950 via-zinc-950/40 to-transparent z-30 pointer-events-none" />
 
             <style jsx>{`
@@ -105,12 +102,25 @@ function BrandItem({ brand }: { brand: Brand }) {
                         src={brand.logo}
                         alt={brand.name}
                         fill
-                        className="object-contain opacity-40 grayscale transition-all duration-500 group-hover/item:opacity-100 group-hover/item:grayscale-0"
+                        // CAMBIOS APLICADOS AQUÍ:
+                        // 1. opacity-100: Visible por defecto en móvil.
+                        // 2. grayscale-0: A color por defecto en móvil.
+                        // 3. lg:opacity-40: Opacidad reducida solo en desktop.
+                        // 4. lg:grayscale: Escala de grises solo en desktop.
+                        // 5. lg:group-hover/item:...: Efectos de hover solo aplican desde desktop en adelante.
+                        className="object-contain transition-all duration-500 
+                                   opacity-100 grayscale-0 
+                                   lg:opacity-40 lg:grayscale 
+                                   lg:group-hover/item:opacity-100 lg:group-hover/item:grayscale-0"
                         sizes="(max-width: 768px) 128px, 192px"
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-xl font-bold uppercase font-display tracking-widest text-neutral-400 group-hover/item:text-neutral-900 transition-colors duration-500">
+                        {/* Mismo tratamiento para el texto si no hay logo */}
+                        <span className="text-xl font-bold uppercase font-display tracking-widest transition-colors duration-500
+                                         text-neutral-900 
+                                         lg:text-neutral-400 
+                                         lg:group-hover/item:text-neutral-900">
                             {brand.name}
                         </span>
                     </div>

@@ -6,18 +6,16 @@ import { motion } from "framer-motion";
 
 export function CinematicBanner() {
     return (
-        <section className="w-full bg-black relative overflow-hidden">
+        // CAMBIO 1: Agregamos '-mt-2' para subir la sección y tapar la micro-línea divisora.
+        // Mantenemos z-20 para que el degradado funcione correctamente.
+        <section className="w-full bg-black relative overflow-hidden -mt-2 z-20">
 
-            {/* === CAMBIO CLAVE: PUENTE DE INTEGRACIÓN VISUAL === */}
-            {/* Este degradado conecta el color 'neutral-950' del componente anterior (StaffGrid)
-                con el 'black' de este componente. Crea una transición suave en los primeros 150px. */}
+            {/* === PUENTE DE INTEGRACIÓN VISUAL === */}
             <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-neutral-950 via-neutral-950/60 to-transparent z-20 pointer-events-none" />
-
 
             {/* === MOBILE VIEW (Visible < 1024px) === */}
             <div className="flex lg:hidden flex-col items-center justify-center text-center px-6 py-24 min-h-[70vh] w-full relative z-10 gap-8">
-
-                {/* 1. Headline & Subhead */}
+                {/* ... (El código móvil se mantiene igual que antes) ... */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -34,7 +32,6 @@ export function CinematicBanner() {
                     </p>
                 </motion.div>
 
-                {/* 2. The Line Effect (UNIVERSAL - VW) */}
                 <div className="relative w-full py-6">
                     <div className="absolute left-1/2 -translate-x-1/2 w-[120vw] flex flex-col gap-8 top-0">
                         <motion.div
@@ -55,7 +52,6 @@ export function CinematicBanner() {
                     <div className="h-24 w-full opacity-0" />
                 </div>
 
-                {/* 3. CTA */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -74,7 +70,7 @@ export function CinematicBanner() {
             </div>
 
 
-            {/* === DESKTOP VIEW (Visible >= 1024px) - OPTIMIZADO === */}
+            {/* === DESKTOP VIEW (Visible >= 1024px) - CORREGIDO === */}
             <div className="hidden lg:flex w-full min-h-screen relative items-center justify-center overflow-hidden">
 
                 {/* 1. LAS LÍNEAS (FONDO ABSOLUTO) */}
@@ -96,32 +92,35 @@ export function CinematicBanner() {
                 </div>
 
                 {/* 2. EL CONTENIDO (CAPA SUPERIOR) */}
-                <div className="relative z-10 w-full max-w-[90%] xl:max-w-[80%] flex items-center justify-between">
+                {/* CAMBIO: width full y padding horizontal para asegurar márgenes seguros */}
+                <div className="relative z-10 w-full px-12 flex items-center justify-center">
 
                     {/* LADO IZQUIERDO */}
-                    <div className="flex-1 flex flex-col items-end text-right pr-12 xl:pr-24">
+                    <div className="flex-1 flex flex-col items-end text-right">
                         <motion.div
                             initial={{ x: -50, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
                             viewport={{ once: true }}
                             transition={{ duration: 1 }}
                         >
-                            <h1 className="text-6xl xl:text-8xl font-black text-white tracking-tighter leading-[0.9]">
+                            {/* CAMBIO: Reduje text-6xl a text-5xl en 'lg' y sube a 8xl en 'xl' */}
+                            <h1 className="text-5xl xl:text-8xl font-black text-white tracking-tighter leading-[0.9]">
                                 ¿LISTO PARA
                                 <br />
                                 CONDUCIR?
                             </h1>
-                            <p className="text-zinc-400 mt-6 text-xl xl:text-2xl font-light">
+                            <p className="text-zinc-400 mt-6 text-lg xl:text-2xl font-light">
                                 Encontrá tu próximo vehículo hoy.
                             </p>
                         </motion.div>
                     </div>
 
-                    {/* ESPACIADOR CENTRAL */}
-                    <div className="w-[200px] shrink-0" />
+                    {/* ESPACIADOR CENTRAL INTELIGENTE */}
+                    {/* CAMBIO: Se reduce a 200px en laptops y crece a 400px en monitores grandes */}
+                    <div className="w-[200px] xl:w-[400px] shrink-0" />
 
                     {/* LADO DERECHO */}
-                    <div className="flex-1 flex flex-col items-start text-left pl-12 xl:pl-24">
+                    <div className="flex-1 flex flex-col items-start text-left">
                         <motion.div
                             initial={{ x: 50, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
@@ -129,13 +128,15 @@ export function CinematicBanner() {
                             transition={{ duration: 1, delay: 0.2 }}
                         >
                             <Link href="/catalogo" className="group flex flex-col items-start gap-4">
-                                <span className="text-6xl xl:text-7xl font-black text-white tracking-tighter uppercase italic leading-none group-hover:text-zinc-300 transition-colors">
+                                {/* CAMBIO: Reduje text-6xl a text-5xl en 'lg' y sube a 7xl en 'xl' */}
+                                <span className="text-5xl xl:text-7xl font-black text-white tracking-tighter uppercase italic leading-none group-hover:text-zinc-300 transition-colors">
                                     VER
                                     <br />
                                     CATÁLOGO
                                 </span>
                                 <div>
-                                    <ArrowUpRight className="text-white w-16 h-16 xl:w-20 xl:h-20 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-300" />
+                                    {/* CAMBIO: Icono más pequeño en laptop */}
+                                    <ArrowUpRight className="text-white w-12 h-12 xl:w-20 xl:h-20 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-300" />
                                 </div>
                             </Link>
                         </motion.div>
