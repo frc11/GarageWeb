@@ -15,7 +15,7 @@ export default async function OffersPage() {
     const cars = await getAllOffers();
 
     return (
-        <main className="pt-24 min-h-screen bg-neutral-50 text-black">
+        <main className="pt-22 min-h-screen bg-neutral-50 text-black">
             {/* Header High Contrast */}
             <div className="bg-black text-white py-16 border-b-8 border-amber-500">
                 <div className="container mx-auto px-6">

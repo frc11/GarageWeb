@@ -39,7 +39,7 @@ export default function ContactPage() {
     };
 
     return (
-        <main className="min-h-screen bg-neutral-950 text-white selection:bg-amber-500/30">
+        <main className="min-h-screen pt-22 bg-neutral-950 text-white selection:bg-amber-500/30">
             <div className="flex flex-col lg:flex-row min-h-screen">
 
                 {/* Visual Column (Sticky) */}

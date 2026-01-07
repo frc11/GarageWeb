@@ -7,7 +7,7 @@ import { m } from "framer-motion";
 
 export default function SellPage() {
     return (
-        <main className="min-h-screen bg-black text-white selection:bg-amber-500/30">
+        <main className="min-h-screen pt-22 bg-black text-white selection:bg-amber-500/30">
             <div className="flex flex-col lg:flex-row min-h-screen">
 
                 {/* Left Column: Immersive Visual (Sticky) */}

@@ -41,7 +41,7 @@ const STAFF = [
 
 export function StaffGrid() {
     return (
-        <section className="py-24 md:py-32 bg-neutral-950 relative overflow-hidden">
+        <section className="py-25 md:py-32 bg-neutral-950 relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                 style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}

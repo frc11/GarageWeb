@@ -26,7 +26,7 @@ export function AboutSection() {
             <div className="absolute inset-0 z-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
 
             {/* === INTEGRACIÓN INFERIOR (About -> Staff) - SE MANTIENE === */}
-            <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent z-0 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent z-0 pointer-events-none" />
 
 
             <div className="container relative z-10 mx-auto px-6">

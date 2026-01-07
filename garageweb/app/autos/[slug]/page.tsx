@@ -28,7 +28,7 @@ export default async function CarPage(props: CarPageProps) {
     const whatsappUrl = `https://wa.me/5493814154708?text=${encodeURIComponent(whatsappMessage)}`;
 
     return (
-        <main className="bg-zinc-950 min-h-screen">
+        <main className="bg-zinc-950 min-h-screen pt-22">
 
             {/* 1. HERO SECTION (Full Screen) */}
             <div className="relative h-screen w-full overflow-hidden">

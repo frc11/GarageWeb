@@ -34,52 +34,63 @@ export function Navbar() {
                         maxWidth: "100%",
                         top: 0,
                         borderRadius: 0,
-                        backgroundColor: "rgba(0, 0, 0, 0)", // Transparent initially
+                        backgroundColor: "rgba(0, 0, 0, 0)",
                         borderBottomColor: "rgba(255, 255, 255, 0.05)",
                         backdropFilter: "blur(0px)",
-                        paddingTop: "24px",
-                        paddingBottom: "24px",
-                        paddingLeft: "32px",
-                        paddingRight: "32px"
+                        paddingTop: "20px",
+                        paddingBottom: "20px",
+                        paddingLeft: "24px",
+                        paddingRight: "24px",
+                        marginTop: "-2px",
                     },
                     scrolled: {
                         y: 0,
-                        width: "90%",
-                        maxWidth: "1152px", // max-w-6xl
-                        top: 24,
+                        // CAMBIO: Aumentamos el width base en sticky para que tenga más aire a los lados
+                        // Antes: "90%", Ahora: "95%" (o calc(100% - 32px) para margen fijo)
+                        width: "calc(100% - 24px)",
+                        // CAMBIO: Aumentamos el maxWidth para que en pantallas grandes se expanda más
+                        maxWidth: "1280px", // max-w-7xl equivalente
+                        top: 20,
                         borderRadius: "9999px",
                         backgroundColor: "rgba(0, 0, 0, 0.8)",
-                        borderBottomColor: "rgba(255, 255, 255, 0.1)", // Not strictly border-bottom, but border generally
+                        borderBottomColor: "rgba(255, 255, 255, 0.1)",
                         backdropFilter: "blur(16px)",
-                        paddingTop: "16px",
-                        paddingBottom: "16px",
+                        paddingTop: "12px",
+                        paddingBottom: "12px",
+                        // CAMBIO: Paddings laterales más generosos en sticky para centrar contenido visualmente
                         paddingLeft: "32px",
                         paddingRight: "32px"
                     }
                 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} // smooth graceful cubic bezier
-                className="fixed left-1/2 -translate-x-1/2 z-50 border border-transparent shadow-2xl"
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="fixed left-1/2 -translate-x-1/2 z-50 border border-transparent shadow-2xl box-border" // Agregado box-border por seguridad
                 style={{
                     background: isScrolled ? undefined : "linear-gradient(to bottom, rgba(0,0,0,0.8), transparent)"
                 }}
             >
-                <div className="flex items-center justify-between mx-auto max-w-7xl">
-                    {/* Logo - Prominent & Large */}
+                {/* CAMBIO: Quitamos 'max-w-7xl' aquí porque ya limitamos el ancho en el motion.nav padre.
+                   Usamos 'w-full' para que el flex ocupe todo el espacio disponible dentro del pill.
+                */}
+                <div className="flex items-center justify-between w-full h-full">
+
+                    {/* Logo */}
                     <Link href="/" className="flex items-center shrink-0 relative z-50">
-                        <div className="relative w-32 h-10 md:w-44 md:h-14 transition-all duration-300">
+                        <div className="relative w-28 h-9 md:w-40 md:h-12 transition-all duration-300">
                             <Image
-                                src="/ElGarageLogo.png"
+                                src="/ElGarageLogo-Modificado.png"
                                 alt="El Garage Logo"
                                 fill
-                                sizes="(max-width: 768px) 128px, 176px"
-                                className="object-contain brightness-0 invert"
+                                sizes="(max-width: 768px) 112px, 160px"
+                                className="object-contain object-left brightness-0 invert" // object-left ayuda a anclarlo visualmente si tiene padding interno la imagen
                                 priority
                             />
                         </div>
                     </Link>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-10 lg:gap-14">
+                    {/* Desktop Navigation - Centrado Absoluto */}
+                    {/* Truco: Usamos posición absoluta para que esté perfectamente al centro, 
+                        independientemente del ancho del logo o del botón de contacto */}
+                    <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 lg:gap-14">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
@@ -97,8 +108,8 @@ export function Navbar() {
                         ))}
                     </div>
 
-                    {/* Contact Button (Desktop) & Mobile Toggle */}
-                    <div className="flex items-center gap-6">
+                    {/* Contact Button & Mobile Toggle */}
+                    <div className="flex items-center gap-6 shrink-0">
                         <Link
                             href="/contacto"
                             className="hidden md:inline-flex items-center justify-center px-8 py-3 bg-white text-black rounded-full text-xs font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
@@ -106,7 +117,6 @@ export function Navbar() {
                             Contacto
                         </Link>
 
-                        {/* Mobile Menu Button - Larger Touch Target */}
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             className="md:hidden text-white p-2 rounded-full hover:bg-white/10 transition-colors relative z-50"
@@ -118,7 +128,7 @@ export function Navbar() {
                 </div>
             </m.nav>
 
-            {/* Mobile Menu Overlay */}
+            {/* Mobile Menu Overlay - (Sin cambios aquí) */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <m.div
@@ -128,7 +138,6 @@ export function Navbar() {
                         transition={{ duration: 0.4 }}
                         className="fixed inset-0 z-40 bg-black/95 backdrop-blur-3xl pt-32 px-6 md:hidden flex flex-col items-center justify-center space-y-10"
                     >
-                        {/* Background noise texture */}
                         <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
                         {navLinks.map((link, i) => (

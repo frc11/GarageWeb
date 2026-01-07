@@ -30,7 +30,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
 
     return (
         // Mantenemos overflow-hidden y el bg oscuro
-        <section className="pt-24 pb-32 bg-neutral-950 relative overflow-hidden z-20">
+        <section className="py-25 bg-neutral-950 relative overflow-hidden z-20">
 
             {/* INTEGRACIÓN SUPERIOR (FlashPromo -> Featured) - SE MANTIENE */}
             <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-neutral-950 via-neutral-950/80 to-transparent z-10 pointer-events-none" />

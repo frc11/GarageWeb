@@ -48,7 +48,7 @@ export function Hero() {
             <div className="absolute inset-0 z-10 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent" />
 
             {/* CAPA 2: Contenido Editorial */}
-            <div className="relative z-20 container mx-auto h-full flex flex-col justify-end pb-20 md:pb-24 lg:pb-32 px-6 items-center lg:items-start text-center lg:text-left">
+            <div className="relative z-20 my-10 container mx-auto h-full flex flex-col justify-end pb-20 md:pb-24 lg:pb-32 px-6 items-center lg:items-start text-center lg:text-left">
                 <ScrollReveal animation="text-reveal">
                     <div className="max-w-5xl w-full">
                         <span className="inline-block mb-4 md:mb-6 px-4 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm text-xs font-medium tracking-[0.2em] text-white uppercase">
