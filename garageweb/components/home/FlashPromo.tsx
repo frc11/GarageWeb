@@ -6,6 +6,7 @@ import { m } from "framer-motion";
 import { ArrowRight, Zap, TrendingDown } from "lucide-react";
 import { Car } from "@/types/main";
 import { cn, formatCurrency } from "@/lib/utils";
+import { PremiumButton } from "../ui/PremiumButton";
 
 interface FlashPromoProps {
     offers: Car[];
@@ -18,7 +19,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
     const runwayOffers = [...offers, ...offers, ...offers];
 
     return (
-        <section className="py-24 bg-neutral-950 relative overflow-hidden flex flex-col items-center">
+        <section className="bg-neutral-950 relative overflow-hidden flex flex-col items-center z-20 pt-24 pb-5 -mt-24">
 
             {/* CSS Animation Injection */}
             <style jsx>{`
@@ -34,8 +35,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 }
             `}</style>
 
-            {/* Background Ambience */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900 via-neutral-950 to-neutral-950 z-0 pointer-events-none" />
+            {/* Background Ambience - REMOVED per cleanup request */}
 
             {/* Header Section */}
             <div className="relative z-10 container mx-auto px-6 mb-16 text-center">
@@ -44,10 +44,10 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[10px] font-bold uppercase tracking-widest mb-6"
+                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border-none text-orange-400 text-[10px] font-bold uppercase tracking-widest mb-6"
                 >
                     <Zap className="w-3 h-3 text-orange-500 fill-orange-500" />
-                    <span>Limited Time Offers</span>
+                    <span>Ofertas de tiempo limitado</span>
                 </m.div>
 
                 <m.h2
@@ -75,10 +75,6 @@ export function FlashPromo({ offers }: FlashPromoProps) {
             {/* The Runway (Carousel) */}
             <div className="w-full relative group z-10 mb-16">
 
-                {/* Fade Masks */}
-                <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-neutral-950 to-transparent z-20 pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-neutral-950 to-transparent z-20 pointer-events-none" />
-
                 {/* Scrolling Track */}
                 <div className="flex animate-runway w-fit hover:cursor-grab active:cursor-grabbing">
                     {runwayOffers.map((car, index) => (
@@ -95,13 +91,12 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 transition={{ duration: 0.6 }}
                 className="relative z-10"
             >
-                <Link
-                    href="/ofertas"
-                    className="inline-flex items-center gap-3 px-8 py-4 bg-white text-neutral-950 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-                >
-                    Ver Todas las Ofertas
-                    <ArrowRight className="w-4 h-4" />
-                </Link>
+                <a href="/ofertas">
+                    <PremiumButton variant="primary">
+                        Ver Todas las Ofertas
+                        <ArrowRight className="w-4 h-4" />
+                    </PremiumButton>
+                </a>
             </m.div>
 
         </section>
@@ -123,7 +118,7 @@ function DealCard({ car }: { car: Car }) {
             href={`/autos/${car.slug}`}
             className="flex-shrink-0 w-[360px] md:w-[420px] mx-4 relative group/card h-full"
         >
-            <div className="relative bg-neutral-900 rounded-xl overflow-hidden border border-white/5 transition-all duration-300 group-hover/card:border-orange-500/40 group-hover/card:shadow-[0_0_40px_rgba(249,115,22,0.15)] flex flex-col h-full">
+            <div className="relative bg-neutral-900 rounded-xl overflow-hidden border border-transparent transition-all duration-300 group-hover/card:border-orange-500/40 group-hover/card:shadow-[0_0_40px_rgba(249,115,22,0.15)] flex flex-col h-full">
 
                 {/* Image Area (Top Half) */}
                 <div className="relative h-[240px] overflow-hidden bg-neutral-800 shrink-0">
@@ -161,7 +156,7 @@ function DealCard({ car }: { car: Car }) {
                     </div>
 
                     {/* Price Hierarchy - PRICING EMPHASIS */}
-                    <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+                    <div className="mt-auto pt-4 flex items-center justify-between">
                         <div className="flex flex-col items-start gap-1">
                             {/* Original Price (Strikethrough) */}
                             {car.isOffer && car.originalPrice && (

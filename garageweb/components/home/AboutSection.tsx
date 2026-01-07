@@ -101,17 +101,23 @@ export function AboutSection() {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
-                                // MODIFICADO: Cambiado aspect-[3/4] por h-full y min-h-[500px] para que se estire
-                                className="relative col-span-1 row-span-2 h-full min-h-[500px] rounded-2xl overflow-hidden shadow-2xl"
+                                // REMOVED: shadow-2xl, overflow-hidden directly on parent
+                                className="relative col-span-1 row-span-2 h-full min-h-[500px]"
                             >
-                                <Image
-                                    src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop"
-                                    alt="Porsche Detail"
-                                    fill
-                                    className="object-cover hover:scale-105 transition-transform duration-1000 ease-in-out"
-                                    sizes="(max-width: 768px) 50vw, 33vw"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+                                {/* Option B: Premium Glow (Behind) */}
+                                <div className="absolute -inset-4 bg-gradient-to-tr from-white/20 to-neutral-600/20 blur-2xl -z-10 rounded-[2rem] opacity-70" />
+
+                                {/* Inner Content Container with Border */}
+                                <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10">
+                                    <Image
+                                        src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop"
+                                        alt="Porsche Detail"
+                                        fill
+                                        className="object-cover hover:scale-105 transition-transform duration-1000 ease-in-out"
+                                        sizes="(max-width: 768px) 50vw, 33vw"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+                                </div>
                             </m.div>
 
                             {/* Secondary Image (Wide top) - Derecha Arriba */}
@@ -120,16 +126,21 @@ export function AboutSection() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
-                                // MODIFICADO: Aumentado min-h de 200px a 300px para agrandar el bloque visual
-                                className="relative col-span-1 h-full min-h-[300px] rounded-2xl overflow-hidden shadow-xl"
+                                // REMOVED: shadow-xl, overflow-hidden directly on parent
+                                className="relative col-span-1 h-full min-h-[300px]"
                             >
-                                <Image
-                                    src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop"
-                                    alt="Showroom Interior"
-                                    fill
-                                    className="object-cover hover:scale-105 transition-transform duration-1000 ease-in-out"
-                                    sizes="(max-width: 768px) 50vw, 33vw"
-                                />
+                                {/* Option B: Premium Glow (Behind) */}
+                                <div className="absolute -inset-4 bg-gradient-to-bl from-white/20 to-neutral-600/20 blur-2xl -z-10 rounded-[2rem] opacity-70" />
+
+                                <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10">
+                                    <Image
+                                        src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop"
+                                        alt="Showroom Interior"
+                                        fill
+                                        className="object-cover hover:scale-105 transition-transform duration-1000 ease-in-out"
+                                        sizes="(max-width: 768px) 50vw, 33vw"
+                                    />
+                                </div>
                             </m.div>
 
                             {/* Stats Block (Bottom Right) - Derecha Abajo */}
@@ -138,21 +149,26 @@ export function AboutSection() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: 0.3 }}
-                                className="relative col-span-1 bg-white dark:bg-zinc-900 rounded-2xl p-6 flex flex-col justify-between shadow-xl border border-neutral-200 dark:border-zinc-800"
+                                className="relative col-span-1"
                             >
-                                <div className="flex justify-between items-start">
-                                    <div className="p-2 bg-neutral-100 dark:bg-zinc-800 rounded-lg">
-                                        <Award className="w-6 h-6 text-neutral-900 dark:text-white" />
-                                    </div>
-                                    <span className="text-xs font-mono text-neutral-400 uppercase">Est. 2004</span>
-                                </div>
+                                {/* Option B: Premium Glow (Behind) */}
+                                <div className="absolute -inset-4 bg-gradient-to-tl from-white/10 to-neutral-700/10 blur-2xl -z-10 rounded-[2rem] opacity-60" />
 
-                                <div>
-                                    <div className="text-3xl font-bold font-serif text-neutral-900 dark:text-white">
-                                        +20
+                                <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10 bg-neutral-900/40 backdrop-blur-md p-6 flex flex-col justify-between">
+                                    <div className="flex justify-between items-start">
+                                        <div className="p-2 bg-neutral-100/5 rounded-lg">
+                                            <Award className="w-6 h-6 text-white" />
+                                        </div>
+                                        <span className="text-xs font-mono text-neutral-400 uppercase">Est. 2004</span>
                                     </div>
-                                    <div className="text-sm text-neutral-600 dark:text-neutral-400">
-                                        Años de excelencia automotriz.
+
+                                    <div>
+                                        <div className="text-3xl font-bold font-serif text-white">
+                                            +20
+                                        </div>
+                                        <div className="text-sm text-neutral-400">
+                                            Años de excelencia automotriz.
+                                        </div>
                                     </div>
                                 </div>
                             </m.div>

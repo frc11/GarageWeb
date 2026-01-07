@@ -11,7 +11,7 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
     if (!brands || brands.length === 0) return null;
 
     return (
-        <section className="w-full py-20 bg-neutral-50 overflow-hidden relative">
+        <section className="w-full py-20 bg-white overflow-hidden relative z-10">
 
             {/* INJECTED CSS ANIMATION */}
             <style jsx>{`
@@ -38,23 +38,9 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
                 >
                     {/* Eyebrow */}
                     <div className="flex items-center space-x-4">
-                        <m.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: 40 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2, duration: 0.8 }}
-                            className="h-px bg-neutral-300"
-                        />
                         <span className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500 font-sans">
                             Nuestros Socios
                         </span>
-                        <m.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: 40 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2, duration: 0.8 }}
-                            className="h-px bg-neutral-300"
-                        />
                     </div>
 
                     {/* Main Title */}
@@ -86,8 +72,8 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
             <div className="relative w-full group">
 
                 {/* Vignette / Fade Masks */}
-                <div className="absolute left-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-r from-neutral-50 to-transparent z-10 pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-l from-neutral-50 to-transparent z-10 pointer-events-none" />
+                <div className="absolute left-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
                 {/* Scrolling Container */}
                 <div className="flex w-fit animate-scroll">

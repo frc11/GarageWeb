@@ -6,6 +6,7 @@ import { SectionDivider } from "@/components/ui/SectionDivider";
 import { m } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, LayoutGrid } from "lucide-react";
+import { PremiumButton } from "../ui/PremiumButton";
 
 interface FeaturedCarsProps {
     cars: Car[];
@@ -31,12 +32,9 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
     };
 
     return (
-        <section className="py-32 bg-zinc-950 relative overflow-hidden">
-            {/* Divider Superior (Optional/Subtle) */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-            {/* Ambient Lighting */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-white/5 blur-[120px] rounded-full pointer-events-none z-0" />
+        <section className="py-24 bg-neutral-950 relative overflow-hidden">
+            {/* Ambient Background Light - Suave y difuminado */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900/50 via-neutral-950/80 to-neutral-950 pointer-events-none" />
 
             <div className="container mx-auto px-6 relative z-20">
                 {/* Header - Editorial Style */}
@@ -140,13 +138,12 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
             </div>
 
             <div className="mt-24 text-center relative z-20">
-                <Link
-                    href="/catalogo"
-                    className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 hover:text-white transition-colors group"
-                >
-                    Explorar Inventario
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+                <a href="/catalogo">
+                    <PremiumButton variant="primary">
+                        Ver Inventario
+                        <ArrowRight className="w-4 h-4" />
+                    </PremiumButton>
+                </a>
             </div>
         </section>
     );
