@@ -15,18 +15,24 @@ const stats = [
 
 export function AboutSection() {
     return (
-        <section className="relative py-24 md:py-32 bg-neutral-50 dark:bg-zinc-950 overflow-hidden">
-            {/* Background Texture - Subtle Noise */}
+        <section className="relative py-50  bg-neutral-50 dark:bg-zinc-950 overflow-hidden z-10">
+
+            {/* === INTEGRACIÓN SUPERIOR (Featured -> About) === */}
+            {/* Sombra de caída: Conecta el negro de arriba con el blanco de aquí. 
+                Va de NEGRO (arriba) a TRANSPARENTE. */}
+            <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-neutral-950 via-neutral-950/20 to-transparent z-20 pointer-events-none" />
+
+            {/* Background Texture */}
             <div className="absolute inset-0 z-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
+
+            {/* === INTEGRACIÓN INFERIOR (About -> Staff) - SE MANTIENE === */}
+            <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent z-0 pointer-events-none" />
+
 
             <div className="container relative z-10 mx-auto px-6">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-stretch">
 
                     {/* Left Column: Typographic & Editorial (5 Cols) */}
-                    {/* CAMBIO 1: 
-                        - 'items-center text-center': Centra todo en Móvil.
-                        - 'lg:items-start lg:text-left': Restaura la alineación izquierda en Desktop.
-                    */}
                     <div className="lg:col-span-5 flex flex-col justify-center h-full space-y-12 pt-12 items-center text-center lg:items-start lg:text-left">
                         <m.div
                             initial={{ opacity: 0, y: 20 }}
@@ -58,7 +64,6 @@ export function AboutSection() {
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            // CAMBIO 2: 'mx-auto' centra el bloque de texto limitado en móvil, 'lg:mx-0' lo mueve a la izquierda en PC.
                             className="space-y-6 text-lg text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-md mx-auto lg:mx-0"
                         >
                             <p>
@@ -107,10 +112,7 @@ export function AboutSection() {
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                                 className="relative col-span-1 row-span-2 h-full min-h-[500px]"
                             >
-                                {/* Option B: Premium Glow (Behind) */}
                                 <div className="absolute -inset-4 bg-gradient-to-tr from-white/20 to-neutral-600/20 blur-2xl -z-10 rounded-[2rem] opacity-70" />
-
-                                {/* Inner Content Container with Border */}
                                 <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10">
                                     <Image
                                         src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop"
@@ -131,9 +133,7 @@ export function AboutSection() {
                                 transition={{ duration: 0.8, delay: 0.2 }}
                                 className="relative col-span-1 h-full min-h-[300px]"
                             >
-                                {/* Option B: Premium Glow (Behind) */}
                                 <div className="absolute -inset-4 bg-gradient-to-bl from-white/20 to-neutral-600/20 blur-2xl -z-10 rounded-[2rem] opacity-70" />
-
                                 <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10">
                                     <Image
                                         src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop"
@@ -153,9 +153,7 @@ export function AboutSection() {
                                 transition={{ duration: 0.8, delay: 0.3 }}
                                 className="relative col-span-1"
                             >
-                                {/* Option B: Premium Glow (Behind) */}
                                 <div className="absolute -inset-4 bg-gradient-to-tl from-white/10 to-neutral-700/10 blur-2xl -z-10 rounded-[2rem] opacity-60" />
-
                                 <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10 bg-neutral-900/40 backdrop-blur-md p-6 flex flex-col justify-between">
                                     <div className="flex justify-between items-start">
                                         <div className="p-2 bg-neutral-100/5 rounded-lg">

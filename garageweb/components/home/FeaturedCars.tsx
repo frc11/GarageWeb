@@ -29,21 +29,21 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
     };
 
     return (
-        // CAMBIO 1: Quitamos 'border-t' para eliminar la línea dura.
-        <section className="pt-50 pb-25 bg-neutral-950 relative overflow-hidden">
+        // Mantenemos overflow-hidden y el bg oscuro
+        <section className="pt-24 pb-32 bg-neutral-950 relative overflow-hidden z-20">
 
-            {/* CAMBIO 2: EL PUENTE DE COLOR (Gradient Bridge) */}
-            {/* Este div crea una transición suave desde el negro sólido de arriba hacia la textura de abajo */}
+            {/* INTEGRACIÓN SUPERIOR (FlashPromo -> Featured) - SE MANTIENE */}
             <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-neutral-950 via-neutral-950/80 to-transparent z-10 pointer-events-none" />
 
-            {/* CAMBIO 3: Textura con FADE IN (Máscara) */}
-            {/* Usamos 'mask-image' para que los puntos no empiecen de golpe, sino que aparezcan suavemente */}
+            {/* TEXTURA DE PUNTOS (Modificada) */}
             <div className="absolute inset-0 z-0 opacity-[0.15]"
                 style={{
                     backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
                     backgroundSize: '32px 32px',
-                    // Esto hace que los puntos sean invisibles arriba y aparezcan gradualmente
-                    maskImage: 'linear-gradient(to bottom, transparent, black 150px)'
+                    // CAMBIO CLAVE: Fade IN arriba (para FlashPromo) y Fade OUT abajo (para AboutSection)
+                    // Esto evita que los puntos se corten feo contra el blanco de abajo.
+                    maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+                    WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
                 }}
             />
 
@@ -51,7 +51,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-950/90 via-neutral-950/80 to-neutral-950 pointer-events-none z-0" />
 
             <div className="container mx-auto px-6 relative z-20">
-                {/* Header - Editorial Style */}
+                {/* Header */}
                 <div className="flex flex-col items-center mb-20 text-center space-y-6">
                     <m.div
                         initial={{ opacity: 0, y: 20 }}
@@ -90,7 +90,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                     </m.div>
                 </div>
 
-                {/* Grid Container */}
+                {/* Grid */}
                 <m.div
                     variants={container}
                     initial="hidden"
@@ -118,11 +118,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                             <m.div
                                 key={car.id}
                                 variants={item}
-                                className={`
-                                    relative group
-                                    ${mdClass}
-                                    ${lgClass}
-                                `}
+                                className={`relative group ${mdClass} ${lgClass}`}
                             >
                                 <CarCard
                                     car={car}

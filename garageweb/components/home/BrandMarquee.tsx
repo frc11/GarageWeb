@@ -5,15 +5,20 @@ import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Settings2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export function BrandMarquee({ brands }: { brands: Brand[] }) {
     if (!brands || brands.length === 0) return null;
 
     return (
-        <section className="w-full py-20 bg-white overflow-hidden relative z-10">
+        // z-20: Debe estar DEBAJO del Hero.
+        // pt-32: Padding grande para que el contenido no quede tapado por la sombra negra de arriba.
+        <section className="w-full pt-50 pb-25 bg-white overflow-hidden relative z-20">
 
-            {/* INJECTED CSS ANIMATION */}
+            {/* === INTEGRACIÓN SUPERIOR (Hero -> Brand) === */}
+            {/* SOMBRA DE CAÍDA: Conecta el zinc-950 del Hero con el blanco de aquí. 
+                Usamos h-64 para que la sombra sea larga y suave. */}
+            <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-zinc-950 via-zinc-950/40 to-transparent z-30 pointer-events-none" />
+
             <style jsx>{`
                 @keyframes scroll {
                     0% { transform: translateX(0); }
@@ -27,7 +32,7 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
                 }
             `}</style>
 
-            {/* Header Section (Preserved) */}
+            {/* Header Content */}
             <div className="container mx-auto px-4 mb-16 text-center relative z-10">
                 <m.div
                     initial={{ opacity: 0, y: 20 }}
@@ -36,14 +41,12 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="flex flex-col items-center space-y-6"
                 >
-                    {/* Eyebrow */}
                     <div className="flex items-center space-x-4">
                         <span className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500 font-sans">
                             Nuestras Marcas
                         </span>
                     </div>
 
-                    {/* Main Title */}
                     <div className="overflow-hidden relative pb-2">
                         <m.h2
                             initial={{ y: "100%" }}
@@ -56,7 +59,6 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
                         </m.h2>
                     </div>
 
-                    {/* Ornamental Icon */}
                     <m.div
                         initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
                         whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -68,37 +70,28 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
                 </m.div>
             </div>
 
-            {/* Marquee Area */}
+            {/* Marquee Scroller */}
             <div className="relative w-full group">
-
-                {/* Vignette / Fade Masks */}
                 <div className="absolute left-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-                {/* Scrolling Container */}
                 <div className="flex w-fit animate-scroll">
-
-                    {/* First Copy */}
                     <div className="flex items-center shrink-0 gap-16 md:gap-32 px-8 md:px-16">
                         {brands.map((brand, i) => (
                             <BrandItem key={`a-${i}`} brand={brand} />
                         ))}
                     </div>
-
-                    {/* Second Copy (Duplicate for Loop) */}
                     <div className="flex items-center shrink-0 gap-16 md:gap-32 px-8 md:px-16">
                         {brands.map((brand, i) => (
                             <BrandItem key={`b-${i}`} brand={brand} />
                         ))}
                     </div>
-
                 </div>
             </div>
         </section>
     );
 }
 
-// Subcomponent for clean code
 function BrandItem({ brand }: { brand: Brand }) {
     return (
         <Link

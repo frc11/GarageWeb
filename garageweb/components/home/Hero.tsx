@@ -3,10 +3,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { SectionDivider } from "@/components/ui/SectionDivider";
 import { PremiumButton } from "@/components/ui/PremiumButton";
-import { ArrowRight, CarFront } from "lucide-react";
-import Car from "@/sanity/schemas/car";
+import { CarFront } from "lucide-react";
 
 export function Hero() {
     const videos = ["/hero-bg.mp4", "/location-bg.mp4"];
@@ -20,8 +18,11 @@ export function Hero() {
     }, [videos.length]);
 
     return (
-        <section className="relative w-full h-[90vh] overflow-hidden bg-zinc-950">
-            {/* CAPA 0: Fondo Animado (Video Ken Burns) */}
+        // Z-30 para estar POR ENCIMA del BrandMarquee
+        // shadow-2xl ayuda a que el borde físico proyecte un poco de sombra real
+        <section className="relative w-full h-[90vh] overflow-hidden  bg-zinc-950 z-30 ">
+
+            {/* CAPA 0: Fondo Animado */}
             <ScrollReveal animation="hero-zoom" className="absolute inset-0 z-0">
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -46,10 +47,10 @@ export function Hero() {
                 </AnimatePresence>
             </ScrollReveal>
 
-            {/* CAPA 1: Gradiente Cinemático (Vignette) */}
+            {/* CAPA 1: Gradiente */}
             <div className="absolute inset-0 z-10 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent" />
 
-            {/* CAPA 2: Contenido Editorial */}
+            {/* CAPA 2: Contenido */}
             <div className="relative z-20 container mx-auto h-full flex flex-col justify-end pb-32 px-6">
                 <ScrollReveal animation="text-reveal">
                     <div className="max-w-5xl">
@@ -70,10 +71,7 @@ export function Hero() {
                         </p>
 
                         <a href="/coleccion">
-                            <PremiumButton
-                                variant="primary"
-                                className="mt-10"
-                            >
+                            <PremiumButton variant="primary" className="mt-10">
                                 EXPLORAR COLECCIÓN
                                 <CarFront className="w-4 h-4" />
                             </PremiumButton>
@@ -82,21 +80,7 @@ export function Hero() {
                 </ScrollReveal>
             </div>
 
-            {/* CAPA 3: Transición Orgánica */}
-            <div className="absolute bottom-0 left-0 right-0 z-30 pointer-events-none translate-y-[1px]">
-                <SectionDivider
-                    variant="slant-aggressive"
-                    className="text-zinc-950 fill-current"
-                // height explicit prop is not defining height in styles, but SVG max-height is controlled by CSS/style. 
-                // Our SectionDivider component uses style={{ maxHeight: height }}.
-                // The prompt asked for height={120} but slant-aggressive is usually higher. 
-                // I will let it use default or pass height if strictly needed. 
-                // Slant aggressive default is 320. 120 might be too short for aggressive slant? 
-                // I'll stick to default 320 or just omit height to use default from data. 
-                // Actually, prompt reference code showed `height={120}`. 120px for slant-aggressive (1440w) is quite flat.
-                // The original data has 320. I will not override height to keep the aggressive slant.
-                />
-            </div>
+            {/* ELIMINADO EL DIVIDER: Dejamos el borde recto para que el degradado del siguiente componente haga el trabajo */}
         </section>
     );
 }

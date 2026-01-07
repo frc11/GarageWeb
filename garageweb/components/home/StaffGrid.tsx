@@ -79,9 +79,8 @@ export function StaffGrid() {
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                     {STAFF.map((member, i) => (
-                        <a href={member.whatsapp} target="_blank" rel="noopener noreferrer">
+                        <a href={member.whatsapp} target="_blank" rel="noopener noreferrer" key={member.id}>
                             <m.div
-                                key={member.id}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
@@ -103,7 +102,6 @@ export function StaffGrid() {
                                     {/* Interactive Content */}
                                     <div className="absolute inset-0 p-6 flex flex-col justify-end transform transition-transform duration-500 translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0">
                                         <div className="space-y-1">
-                                            {/* MODIFICADO: Se cambió el color a orange-400 y se añadió text-shadow */}
                                             <p className="text-[10px] tracking-widest uppercase text-orange-400 font-bold [text-shadow:0_1px_3px_rgba(0,0,0,0.9)] transition-opacity duration-500 delay-100 transform opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-2 lg:group-hover:opacity-100 lg:group-hover:translate-y-0">
                                                 {member.specialty}
                                             </p>

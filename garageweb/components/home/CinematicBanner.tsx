@@ -8,6 +8,12 @@ export function CinematicBanner() {
     return (
         <section className="w-full bg-black relative overflow-hidden">
 
+            {/* === CAMBIO CLAVE: PUENTE DE INTEGRACIÓN VISUAL === */}
+            {/* Este degradado conecta el color 'neutral-950' del componente anterior (StaffGrid)
+                con el 'black' de este componente. Crea una transición suave en los primeros 150px. */}
+            <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-neutral-950 via-neutral-950/60 to-transparent z-20 pointer-events-none" />
+
+
             {/* === MOBILE VIEW (Visible < 1024px) === */}
             <div className="flex lg:hidden flex-col items-center justify-center text-center px-6 py-24 min-h-[70vh] w-full relative z-10 gap-8">
 
@@ -30,12 +36,6 @@ export function CinematicBanner() {
 
                 {/* 2. The Line Effect (UNIVERSAL - VW) */}
                 <div className="relative w-full py-6">
-                    {/* Explicación de las clases del contenedor interno:
-                        - w-[120vw]: 120% del ancho de la VENTANA (no del padre).
-                        - -ml-[60vw]: Mueve el elemento a la izquierda la mitad de su ancho.
-                        - left-[50%]: Lo empuja al centro exacto.
-                        (Esta combinación centra un elemento gigante ignorando el padding del padre)
-                    */}
                     <div className="absolute left-1/2 -translate-x-1/2 w-[120vw] flex flex-col gap-8 top-0">
                         <motion.div
                             initial={{ scaleX: 0 }}
@@ -52,7 +52,6 @@ export function CinematicBanner() {
                             className="w-full h-12 bg-white shadow-[0_0_25px_rgba(255,255,255,0.8)] origin-center"
                         />
                     </div>
-                    {/* Espaciador invisible para mantener la altura vertical en el flujo del documento */}
                     <div className="h-24 w-full opacity-0" />
                 </div>
 
@@ -78,11 +77,7 @@ export function CinematicBanner() {
             {/* === DESKTOP VIEW (Visible >= 1024px) - OPTIMIZADO === */}
             <div className="hidden lg:flex w-full min-h-screen relative items-center justify-center overflow-hidden">
 
-                {/* 1. LAS LÍNEAS (FONDO ABSOLUTO)
-                    Truco: Las sacamos del flujo normal.
-                    - top-1/2 left-1/2 + translate: Las clava en el centro exacto.
-                    - h-[150vh]: Son más altas que la pantalla para que el skew no deje bordes vacíos.
-                */}
+                {/* 1. LAS LÍNEAS (FONDO ABSOLUTO) */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-8 z-0 pointer-events-none">
                     <motion.div
                         initial={{ scaleY: 0 }}
@@ -100,9 +95,7 @@ export function CinematicBanner() {
                     />
                 </div>
 
-                {/* 2. EL CONTENIDO (CAPA SUPERIOR) 
-                    Usamos un contenedor ancho con 'justify-between' para dejar el hueco en el medio
-                */}
+                {/* 2. EL CONTENIDO (CAPA SUPERIOR) */}
                 <div className="relative z-10 w-full max-w-[90%] xl:max-w-[80%] flex items-center justify-between">
 
                     {/* LADO IZQUIERDO */}
@@ -124,7 +117,7 @@ export function CinematicBanner() {
                         </motion.div>
                     </div>
 
-                    {/* ESPACIADOR CENTRAL (Invisible, solo para asegurar que el texto no toque las líneas) */}
+                    {/* ESPACIADOR CENTRAL */}
                     <div className="w-[200px] shrink-0" />
 
                     {/* LADO DERECHO */}
