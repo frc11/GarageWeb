@@ -2,10 +2,8 @@
 
 import { CarCard } from "@/components/cars/CarCard";
 import { Car } from "@/types/main";
-import { SectionDivider } from "@/components/ui/SectionDivider";
 import { m } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight, LayoutGrid } from "lucide-react";
+import { CarIcon, LayoutGrid } from "lucide-react";
 import { PremiumButton } from "../ui/PremiumButton";
 
 interface FeaturedCarsProps {
@@ -15,7 +13,6 @@ interface FeaturedCarsProps {
 export function FeaturedCars({ cars }: FeaturedCarsProps) {
     if (!cars || cars.length === 0) return null;
 
-    // Animation Variants
     const container = {
         hidden: { opacity: 0 },
         show: {
@@ -32,9 +29,26 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
     };
 
     return (
-        <section className="py-24 bg-neutral-950 relative overflow-hidden">
-            {/* Ambient Background Light - Suave y difuminado */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900/50 via-neutral-950/80 to-neutral-950 pointer-events-none" />
+        // CAMBIO 1: Quitamos 'border-t' para eliminar la línea dura.
+        <section className="pt-50 pb-25 bg-neutral-950 relative overflow-hidden">
+
+            {/* CAMBIO 2: EL PUENTE DE COLOR (Gradient Bridge) */}
+            {/* Este div crea una transición suave desde el negro sólido de arriba hacia la textura de abajo */}
+            <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-neutral-950 via-neutral-950/80 to-transparent z-10 pointer-events-none" />
+
+            {/* CAMBIO 3: Textura con FADE IN (Máscara) */}
+            {/* Usamos 'mask-image' para que los puntos no empiecen de golpe, sino que aparezcan suavemente */}
+            <div className="absolute inset-0 z-0 opacity-[0.15]"
+                style={{
+                    backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+                    backgroundSize: '32px 32px',
+                    // Esto hace que los puntos sean invisibles arriba y aparezcan gradualmente
+                    maskImage: 'linear-gradient(to bottom, transparent, black 150px)'
+                }}
+            />
+
+            {/* Ambient Background Light */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-950/90 via-neutral-950/80 to-neutral-950 pointer-events-none z-0" />
 
             <div className="container mx-auto px-6 relative z-20">
                 {/* Header - Editorial Style */}
@@ -76,7 +90,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                     </m.div>
                 </div>
 
-                {/* Asymmetric Grid */}
+                {/* Grid Container */}
                 <m.div
                     variants={container}
                     initial="hidden"
@@ -86,33 +100,17 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                 >
                     {cars.map((car, index) => {
                         const total = cars.length;
-
-                        // --- SMART GRID LOGIC ---
-
-                        // Default Base (Mobile): 1 col (automatic in grid-cols-1)
-                        // Default MD: 1 col (of 2) -> md:col-span-1
-                        // Default LG: 4 cols (of 12) -> lg:col-span-4
                         let mdClass = "md:col-span-1";
                         let lgClass = "lg:col-span-4";
 
-                        // MD: Handle Orphan (if total is odd, last one spans 2)
                         if (total % 2 !== 0 && index === total - 1) {
                             mdClass = "md:col-span-2";
                         }
 
-                        // LG: Handle Last Row (Remainder 1 or 2)
                         const remainder = total % 3;
-
-                        // Case: 1 Orphan at the end
                         if (remainder === 1 && index === total - 1) {
-                            // "Imponente y centrado" -> Full width (12) or Centered Half (6)?
-                            // User liked "Imponente" -> Let's go big but constrained? 
-                            // Actually, let's use col-span-12 for pure impact, usually looks best for "featured".
                             lgClass = "lg:col-span-12";
-                        }
-                        // Case: 2 Items at the end (e.g. 5 items)
-                        else if (remainder === 2 && index >= total - 2) {
-                            // "Centered or Stretched" -> Spanning 6 cols each (half width) fills the row perfectly.
+                        } else if (remainder === 2 && index >= total - 2) {
                             lgClass = "lg:col-span-6";
                         }
 
@@ -129,7 +127,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                                 <CarCard
                                     car={car}
                                     className="h-full border-neutral-800 hover:border-neutral-600 transition-colors bg-black"
-                                    priority={index <= 2} // First row gets priority
+                                    priority={index <= 2}
                                 />
                             </m.div>
                         );
@@ -141,7 +139,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                 <a href="/catalogo">
                     <PremiumButton variant="primary">
                         Ver Inventario
-                        <ArrowRight className="w-4 h-4" />
+                        <CarIcon className="w-4 h-4" />
                     </PremiumButton>
                 </a>
             </div>

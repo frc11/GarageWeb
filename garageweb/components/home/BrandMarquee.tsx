@@ -39,7 +39,7 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
                     {/* Eyebrow */}
                     <div className="flex items-center space-x-4">
                         <span className="text-xs font-medium uppercase tracking-[0.3em] text-neutral-500 font-sans">
-                            Nuestros Socios
+                            Nuestras Marcas
                         </span>
                     </div>
 
@@ -52,7 +52,7 @@ export function BrandMarquee({ brands }: { brands: Brand[] }) {
                             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
                             className="text-4xl md:text-6xl font-light tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-neutral-700 to-black font-display"
                         >
-                            ENGINEERING MASTERY
+                            DISPONIBLES
                         </m.h2>
                     </div>
 

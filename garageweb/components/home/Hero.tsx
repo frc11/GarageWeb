@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { PremiumButton } from "@/components/ui/PremiumButton";
+import { ArrowRight, CarFront } from "lucide-react";
+import Car from "@/sanity/schemas/car";
 
 export function Hero() {
     const videos = ["/hero-bg.mp4", "/location-bg.mp4"];
@@ -52,30 +54,30 @@ export function Hero() {
                 <ScrollReveal animation="text-reveal">
                     <div className="max-w-5xl">
                         <span className="inline-block mb-6 px-4 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm text-xs font-medium tracking-[0.2em] text-white uppercase">
-                            Est. 2024 — Luxury Showroom
+                            Est. 2024 — El Garage
                         </span>
 
-                        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white mb-8 leading-[0.9] uppercase">
-                            Exclusividad <br />
+                        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white mb-8 leading-[1] uppercase">
+                            El Garage <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/20">
-                                En Movimiento
+                                Automóviles
                             </span>
                         </h1>
 
                         <p className="text-lg md:text-xl text-white/70 max-w-xl leading-relaxed font-light tracking-wide">
-                            Descubre nuestra colección curada de vehículos de alto rendimiento.
+                            Descubre nuestra colección de vehículos de alto rendimiento.
                             Donde la ingeniería se encuentra con el arte.
                         </p>
 
-                        <PremiumButton
-                            variant="primary"
-                            className="mt-10 text-black"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.8 }}
-                        >
-                            EXPLORAR COLECCIÓN
-                        </PremiumButton>
+                        <a href="/coleccion">
+                            <PremiumButton
+                                variant="primary"
+                                className="mt-10"
+                            >
+                                EXPLORAR COLECCIÓN
+                                <CarFront className="w-4 h-4" />
+                            </PremiumButton>
+                        </a>
                     </div>
                 </ScrollReveal>
             </div>

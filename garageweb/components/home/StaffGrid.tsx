@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { m } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 
 const STAFF = [
     {
@@ -10,34 +10,38 @@ const STAFF = [
         name: "Carlos Rivera",
         role: "Director de Operaciones",
         specialty: "Coleccionismo Clásico",
-        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop",
+        whatsapp: "https://wa.me/5493814154708"
     },
     {
         id: 2,
         name: "Elena Vance",
         role: "Senior Brand Ambassador",
         specialty: "Superdeportivos Italianos",
-        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop",
+        whatsapp: "https://wa.me/5493815674738"
     },
     {
         id: 3,
         name: "Marco Rossi",
         role: "Head of Engineering",
         specialty: "Performance Tuning",
-        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=2070&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=2070&auto=format&fit=crop",
+        whatsapp: "https://wa.me/5493814154708"
     },
     {
         id: 4,
         name: "Sofia Chen",
         role: "Client Experience Manager",
         specialty: "Concierge VIP",
-        image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
+        whatsapp: "https://wa.me/5493815674738"
     }
 ];
 
 export function StaffGrid() {
     return (
-        <section className="py-24 md:py-32 bg-neutral-900 relative overflow-hidden">
+        <section className="py-24 md:py-32 bg-neutral-950 relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
                 style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}
@@ -75,7 +79,7 @@ export function StaffGrid() {
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                     {STAFF.map((member, i) => (
-                        <a href="https://wa.me/5493814154708">
+                        <a href={member.whatsapp} target="_blank" rel="noopener noreferrer">
                             <m.div
                                 key={member.id}
                                 initial={{ opacity: 0, y: 30 }}
@@ -115,7 +119,7 @@ export function StaffGrid() {
                                         <div className="mt-6 pt-6 border-t border-white/10 transition-all duration-500 delay-200 flex items-center justify-between opacity-100 lg:opacity-0 lg:group-hover:opacity-100">
                                             <span className="text-xs text-white/80 uppercase tracking-wider">Contactar</span>
                                             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm group-hover:bg-orange-400 group-hover:text-black transition-colors">
-                                                <ArrowUpRight className="w-4 h-4" />
+                                                <MessageCircle className="w-4 h-4" />
                                             </div>
                                         </div>
                                     </div>

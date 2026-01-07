@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { m } from "framer-motion";
-import { ArrowRight, Zap, TrendingDown } from "lucide-react";
+import { ArrowRight, Zap, TrendingDown, Percent } from "lucide-react";
 import { Car } from "@/types/main";
 import { cn, formatCurrency } from "@/lib/utils";
 import { PremiumButton } from "../ui/PremiumButton";
@@ -19,16 +19,16 @@ export function FlashPromo({ offers }: FlashPromoProps) {
     const runwayOffers = [...offers, ...offers, ...offers];
 
     return (
-        <section className="bg-neutral-950 relative overflow-hidden flex flex-col items-center z-20 pt-24 pb-5 -mt-24">
+        <section className="bg-neutral-950 relative overflow-hidden flex flex-col items-center z-20 py-25 -mt-24">
 
             {/* CSS Animation Injection */}
             <style jsx>{`
-                @keyframes scroll-left {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-33.33%); }
+                @keyframes scroll-right {
+                    0% { transform: translateX(-33.33%); }
+                    100% { transform: translateX(0); }
                 }
                 .animate-runway {
-                    animation: scroll-left 60s linear infinite;
+                    animation: scroll-right 60s linear infinite;
                 }
                 .group:hover .animate-runway {
                     animation-play-state: paused;
@@ -94,7 +94,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 <a href="/ofertas">
                     <PremiumButton variant="primary">
                         Ver Todas las Ofertas
-                        <ArrowRight className="w-4 h-4" />
+                        <Percent className="w-4 h-4" />
                     </PremiumButton>
                 </a>
             </m.div>

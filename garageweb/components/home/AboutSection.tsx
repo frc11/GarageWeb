@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { m } from "framer-motion";
 import { PremiumButton } from "@/components/ui/PremiumButton";
-import { ArrowUpRight, ShieldCheck, Award, Users } from "lucide-react";
+import { ArrowUpRight, ShieldCheck, Award, Users, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Stats Data
@@ -23,8 +23,11 @@ export function AboutSection() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-stretch">
 
                     {/* Left Column: Typographic & Editorial (5 Cols) */}
-                    {/* Mantenemos justify-center para que el texto esté centrado verticalmente */}
-                    <div className="lg:col-span-5 flex flex-col justify-center h-full space-y-12 pt-12">
+                    {/* CAMBIO 1: 
+                        - 'items-center text-center': Centra todo en Móvil.
+                        - 'lg:items-start lg:text-left': Restaura la alineación izquierda en Desktop.
+                    */}
+                    <div className="lg:col-span-5 flex flex-col justify-center h-full space-y-12 pt-12 items-center text-center lg:items-start lg:text-left">
                         <m.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -55,7 +58,8 @@ export function AboutSection() {
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="space-y-6 text-lg text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-md"
+                            // CAMBIO 2: 'mx-auto' centra el bloque de texto limitado en móvil, 'lg:mx-0' lo mueve a la izquierda en PC.
+                            className="space-y-6 text-lg text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-md mx-auto lg:mx-0"
                         >
                             <p>
                                 En <strong>El Garage</strong>, no solo comercializamos vehículos; curamos una colección.
@@ -78,6 +82,7 @@ export function AboutSection() {
                             <a href="/contacto">
                                 <PremiumButton variant="inverted">
                                     Conocé el Showroom
+                                    <MapPin className="w-4 h-4 color-neutral-900 dark:text-white" />
                                 </PremiumButton>
                             </a>
 
@@ -89,7 +94,6 @@ export function AboutSection() {
                     </div>
 
                     {/* Right Column: Visual Bento Layout (7 Cols) */}
-                    {/* MODIFICADO: Agregado 'flex flex-col justify-center' para centrar el bloque entero respecto al texto */}
                     <div className="lg:col-span-7 relative pt-12 lg:pt-0 flex flex-col justify-center h-full">
 
                         {/* Bento Grid Layer */}
@@ -101,7 +105,6 @@ export function AboutSection() {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
-                                // REMOVED: shadow-2xl, overflow-hidden directly on parent
                                 className="relative col-span-1 row-span-2 h-full min-h-[500px]"
                             >
                                 {/* Option B: Premium Glow (Behind) */}
@@ -126,7 +129,6 @@ export function AboutSection() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
-                                // REMOVED: shadow-xl, overflow-hidden directly on parent
                                 className="relative col-span-1 h-full min-h-[300px]"
                             >
                                 {/* Option B: Premium Glow (Behind) */}
@@ -159,14 +161,14 @@ export function AboutSection() {
                                         <div className="p-2 bg-neutral-100/5 rounded-lg">
                                             <Award className="w-6 h-6 text-white" />
                                         </div>
-                                        <span className="text-xs font-mono text-neutral-400 uppercase">Est. 2004</span>
+                                        <span className="text-xs font-mono text-white uppercase">Est. 2004</span>
                                     </div>
 
                                     <div>
                                         <div className="text-3xl font-bold font-serif text-white">
                                             +20
                                         </div>
-                                        <div className="text-sm text-neutral-400">
+                                        <div className="text-sm text-white">
                                             Años de excelencia automotriz.
                                         </div>
                                     </div>
