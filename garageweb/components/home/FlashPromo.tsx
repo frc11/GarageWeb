@@ -95,9 +95,13 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 className="relative z-20"
             >
                 <a href="/ofertas">
-                    <PremiumButton variant="primary">
+                    <PremiumButton
+                        variant="primary"
+                        // Visual: Change to Orange/Amber gradient
+                        className="bg-gradient-to-r from-amber-500 to-orange-600 text-black border-none hover:from-amber-400 hover:to-orange-500 shadow-[0_0_30px_rgba(245,158,11,0.3)]"
+                    >
                         Ver Todas las Ofertas
-                        <Percent className="w-4 h-4" />
+                        <Percent className="w-4 h-4 ml-1" />
                     </PremiumButton>
                 </a>
             </m.div>

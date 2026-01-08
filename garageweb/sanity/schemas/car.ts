@@ -18,6 +18,15 @@ export default defineType({
             validation: (rule) => rule.required(),
         }),
         defineField({
+            name: 'category',
+            title: 'Categoría',
+            type: 'string',
+            options: {
+                list: ['Deportivos', 'SUV', 'Sedán', 'Pick-up', 'Clásicos'],
+            },
+            validation: (rule) => rule.required(),
+        }),
+        defineField({
             name: 'slug',
             title: 'URL Slug',
             type: 'slug',
@@ -41,10 +50,18 @@ export default defineType({
         }),
         defineField({
             name: 'isOffer',
-            title: '¿Activar Oferta?',
+            title: '¿Es Oferta Flash?',
             type: 'boolean',
             initialValue: false,
-            description: "Activa el badge de oferta y el estilo de precio reducido.",
+            description: "Activa el badge de oferta y logic de descuento.",
+        }),
+        defineField({
+            name: 'discount',
+            title: 'Porcentaje de Descuento (0-100)',
+            type: 'number',
+            validation: (rule) => rule.min(0).max(100),
+            hidden: false,
+            description: 'Si se establece, anula el cálculo automático. Ejemplo: 15 para 15% OFF.',
         }),
         defineField({
             name: 'currency',

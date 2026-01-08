@@ -3,8 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PremiumButton } from "../ui/PremiumButton";
 import { m, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 
 export function Navbar() {
@@ -25,6 +26,7 @@ export function Navbar() {
     return (
         <>
             <m.nav
+                layout
                 initial="top"
                 animate={isScrolled ? "scrolled" : "top"}
                 variants={{
@@ -33,39 +35,39 @@ export function Navbar() {
                         width: "100%",
                         maxWidth: "100%",
                         top: 0,
-                        borderRadius: 0,
+                        borderRadius: "0px",
                         backgroundColor: "rgba(0, 0, 0, 0)",
-                        borderBottomColor: "rgba(255, 255, 255, 0.05)",
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
                         backdropFilter: "blur(0px)",
-                        paddingTop: "20px",
-                        paddingBottom: "20px",
-                        paddingLeft: "24px",
-                        paddingRight: "24px",
-                        marginTop: "-2px",
+                        paddingTop: "24px",
+                        paddingBottom: "24px",
+                        paddingLeft: "32px",
+                        paddingRight: "32px"
                     },
                     scrolled: {
                         y: 0,
-                        // CAMBIO: Aumentamos el width base en sticky para que tenga más aire a los lados
-                        // Antes: "90%", Ahora: "95%" (o calc(100% - 32px) para margen fijo)
-                        width: "calc(100% - 24px)",
-                        // CAMBIO: Aumentamos el maxWidth para que en pantallas grandes se expanda más
-                        maxWidth: "1280px", // max-w-7xl equivalente
-                        top: 20,
-                        borderRadius: "9999px",
-                        backgroundColor: "rgba(0, 0, 0, 0.8)",
-                        borderBottomColor: "rgba(255, 255, 255, 0.1)",
-                        backdropFilter: "blur(16px)",
-                        paddingTop: "12px",
-                        paddingBottom: "12px",
-                        // CAMBIO: Paddings laterales más generosos en sticky para centrar contenido visualmente
+                        width: "92%",
+                        maxWidth: "1000px",
+                        top: 12,
+                        borderRadius: "100px",
+                        backgroundColor: "rgba(10, 10, 10, 0.85)",
+                        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                        backdropFilter: "blur(12px)",
+                        paddingTop: "10px",
+                        paddingBottom: "10px",
                         paddingLeft: "32px",
                         paddingRight: "32px"
                     }
                 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="fixed left-1/2 -translate-x-1/2 z-50 border border-transparent shadow-2xl box-border" // Agregado box-border por seguridad
+                transition={{
+                    type: "spring",
+                    stiffness: 85,
+                    damping: 20,
+                    mass: 1
+                }}
+                className="fixed left-1/2 -translate-x-1/2 z-50 border border-transparent shadow-2xl box-border"
                 style={{
-                    background: isScrolled ? undefined : "linear-gradient(to bottom, rgba(0,0,0,0.8), transparent)"
+                    backgroundImage: isScrolled ? undefined : "linear-gradient(to bottom, rgba(0,0,0,0.8), transparent)"
                 }}
             >
                 {/* CAMBIO: Quitamos 'max-w-7xl' aquí porque ya limitamos el ancho en el motion.nav padre.
@@ -110,11 +112,13 @@ export function Navbar() {
 
                     {/* Contact Button & Mobile Toggle */}
                     <div className="flex items-center gap-6 shrink-0">
-                        <Link
-                            href="/contacto"
-                            className="hidden md:inline-flex items-center justify-center px-8 py-3 bg-white text-black rounded-full text-xs font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-                        >
-                            Contacto
+                        <Link href="/contacto">
+                            <PremiumButton
+                                className="h-10 px-6 py-0 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] transition-all duration-300 group"
+                            >
+                                <span>Contacto</span>
+                                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                            </PremiumButton>
                         </Link>
 
                         <button
@@ -163,12 +167,13 @@ export function Navbar() {
                             transition={{ delay: 0.3, duration: 0.5 }}
                             className="mt-8"
                         >
-                            <Link
-                                href="/contacto"
-                                className="px-10 py-4 bg-white text-black text-sm font-bold uppercase tracking-widest rounded-full hover:bg-neutral-200 transition-colors"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                Contacto
+                            <Link href="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
+                                <PremiumButton
+                                    className="w-full py-4 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] transition-all duration-300 group"
+                                >
+                                    <span>Contacto</span>
+                                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                </PremiumButton>
                             </Link>
                         </m.div>
                     </m.div>

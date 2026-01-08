@@ -5,6 +5,14 @@ import { Car, Brand } from "@/types/main";
 // Mapper helper to ensure strict type compliance
 // In our queries we are already projecting images->url, but we double check here
 function mapSanityCarToCar(raw: any): Car {
+    // Map Fuel to Spanish
+    const fuelMap: Record<string, string> = {
+        'Gasoline': 'Nafta',
+        'Diesel': 'Diesel',
+        'Hybrid': 'Híbrido',
+        'Electric': 'Eléctrico'
+    };
+
     return {
         id: raw.id || raw._id,
         slug: raw.slug,
@@ -14,8 +22,9 @@ function mapSanityCarToCar(raw: any): Car {
         price: raw.price,
         currency: raw.currency,
         mileage: raw.mileage,
-        transmission: raw.transmission,
-        fuelType: raw.fuelType,
+        transmission: raw.transmission, // Assuming Sanity matches 'Automatic' | 'Manual' | 'PDK'
+        fuelType: fuelMap[raw.fuelType] || raw.fuelType, // Fallback to raw if not mapped
+        category: raw.category, // Now fetched from query
         status: raw.status,
         images: Array.isArray(raw.images) ? raw.images : [], // Queries project this as strings
         description: raw.description,
@@ -52,12 +61,31 @@ export async function getCarBySlug(slug: string): Promise<Car | null> {
     return mapSanityCarToCar(rawCar);
 }
 
+import { BRAND_ASSETS_MAP } from "@/lib/brand-assets"; // ADDED
+
+// ... (existing code)
+
+function mapSanityBrandToBrand(raw: any): Brand {
+    const slug = raw.slug || raw.name.toLowerCase().replace(/\s+/g, "-");
+    // Priority: Local SVG > Sanity Upload > Placeholder
+    const localLogo = BRAND_ASSETS_MAP[slug] || BRAND_ASSETS_MAP[raw.name.toLowerCase()];
+
+    return {
+        id: raw.id || raw._id,
+        name: raw.name,
+        slug: slug,
+        logo: localLogo || raw.logo || ""
+    };
+}
+
 export async function getBrands(): Promise<Brand[]> {
-    return await client.fetch(BRANDS_QUERY);
+    const rawBrands = await client.fetch(BRANDS_QUERY);
+    return rawBrands.map(mapSanityBrandToBrand);
 }
 
 export async function getStockBrands(): Promise<Brand[]> {
-    return await client.fetch(STOCK_BRANDS_QUERY);
+    const rawBrands = await client.fetch(STOCK_BRANDS_QUERY);
+    return rawBrands.map(mapSanityBrandToBrand);
 }
 
 export async function getAvailableBrands(): Promise<string[]> {

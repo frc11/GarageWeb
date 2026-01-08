@@ -18,8 +18,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "El Garage | Autos de Lujo y Exóticos",
-    template: "%s | El Garage"
+    template: 'El Garage | %s',
+    default: 'El Garage | Vehículos Premium',
   },
   description: "Concesionaria premium en Tucumán. Comercialización de vehículos de alta gama, exclusividad y confianza.",
   keywords: ["autos de lujo", "concesionaria tucuman", "venta de autos", "audi", "bmw", "mercedes benz", "porsche"],

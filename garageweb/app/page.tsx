@@ -5,10 +5,9 @@ import { FlashPromo } from "@/components/home/FlashPromo";
 import { AboutSection } from "@/components/home/AboutSection";
 import { StaffGrid } from "@/components/home/StaffGrid";
 import { BrandMarquee } from "@/components/home/BrandMarquee";
+import { ReviewsSection } from "@/components/home/ReviewsSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { getFeaturedCars, getOfferCars, getAvailableBrands } from "@/sanity/lib/fetch";
-import { BRAND_ASSETS_MAP } from "@/lib/brand-assets";
-import { Brand } from "@/types/main";
+import { getFeaturedCars, getOfferCars, getStockBrands } from "@/sanity/lib/fetch";
 
 // Revalidate every 60 seconds (ISR)
 export const revalidate = 60;
@@ -16,28 +15,7 @@ export const revalidate = 60;
 export default async function Home() {
   const featuredCars = await getFeaturedCars();
   const offerCars = await getOfferCars();
-
-  // Hybrid Architecture: Fetch real inventory brands, map to local aesthetics
-  const availableBrandNames = await getAvailableBrands();
-
-  const brands: Brand[] = availableBrandNames
-    .map((name) => {
-      const slug = name.toLowerCase().replace(/\s+/g, "-");
-      // Check exact match or slug match in map
-      // The map keys are lowercased slugs mostly
-      // "Mercedes-Benz" -> "mercedes-benz"
-      const assetPath = BRAND_ASSETS_MAP[slug] || BRAND_ASSETS_MAP[name.toLowerCase()];
-
-      if (!assetPath) return null;
-
-      return {
-        id: slug,
-        name: name,
-        slug: slug,
-        logo: assetPath
-      };
-    })
-    .filter((b): b is Brand => b !== null);
+  const brands = await getStockBrands();
 
   return (
     <main>
@@ -49,7 +27,7 @@ export default async function Home() {
 
 
 
-        <BrandMarquee brands={brands} />
+        <BrandMarquee />
 
         {/* Bottom Fade */}
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
@@ -57,6 +35,7 @@ export default async function Home() {
 
       <FlashPromo offers={offerCars} />
       <FeaturedCars cars={featuredCars} />
+      <ReviewsSection />
       <AboutSection />
       <StaffGrid />
       <CinematicBanner />

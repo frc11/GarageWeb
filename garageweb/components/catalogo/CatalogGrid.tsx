@@ -1,186 +1,336 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Car, Brand } from "@/types/main";
+import { Car } from "@/types/main";
 import { CarCard } from "@/components/cars/CarCard";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Filter, X } from "lucide-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { ChevronDown, Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { BrandSelector } from "./BrandSelector";
+import { ViewAllButton } from "./ViewAllButton";
+import { PremiumDropdown } from "../ui/PremiumDropdown";
+
+import { client } from "@/sanity/lib/client";
+import { CARS_QUERY, CATALOG_BRANDS_QUERY } from "@/sanity/lib/queries";
 
 interface CatalogGridProps {
-    cars: Car[];
-    allBrands: Brand[];
+    initialBrandSlug?: string;
 }
 
-interface FilterState {
-    priceRange: [number, number]; // [min, max]
-    transmission: 'all' | 'Automatic' | 'Manual';
-}
+const ITEMS_PER_PAGE = 9;
 
-export function CatalogGrid({ cars, allBrands }: CatalogGridProps) {
-    const router = useRouter();
+export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const searchParams = useSearchParams();
-    const currentBrandSlug = searchParams.get('brand');
 
-    const maxPrice = useMemo(() => Math.max(...cars.map(c => c.price), 1000000), [cars]);
-    const minPrice = useMemo(() => Math.min(...cars.map(c => c.price), 0), [cars]);
+    // 1. State Management
+    const [cars, setCars] = useState<Car[]>([]);
+    const [allBrands, setAllBrands] = useState<{ id: string; name: string; slug: string }[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // 2. Filter State (Client side only for non-brand filters)
-    const [filters, setFilters] = useState<FilterState>({
-        priceRange: [minPrice, maxPrice],
-        transmission: 'all'
-    });
-    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState("Todos");
+    const [selectedBrand, setSelectedBrand] = useState("Todas");
+    const [selectedYear, setSelectedYear] = useState<string | null>(null);
+    const [selectedFuel, setSelectedFuel] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
 
-    // 3. Filter Logic (Schema Logic)
+    // Initial Fetching on Mount
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                // Fetch Cars and Brands in parallel
+                const [rawCars, brandNames] = await Promise.all([
+                    client.fetch(CARS_QUERY, { brandSlug: initialBrandSlug || null }),
+                    client.fetch(CATALOG_BRANDS_QUERY)
+                ]);
+
+                // Map raw Sanity data to Car interface
+                const mappedCars: Car[] = rawCars.map((raw: any) => ({
+                    id: raw.id || raw._id,
+                    slug: raw.slug,
+                    brand: raw.brand,
+                    model: raw.model,
+                    year: raw.year,
+                    price: raw.price,
+                    currency: raw.currency,
+                    mileage: raw.mileage,
+                    transmission: raw.transmission,
+                    fuelType: raw.fuelType === 'Gasoline' ? 'Nafta' : raw.fuelType === 'Diesel' ? 'Diesel' : raw.fuelType === 'Hybrid' ? 'Híbrido' : raw.fuelType,
+                    category: raw.category,
+                    status: raw.status,
+                    images: Array.isArray(raw.images) ? raw.images : [],
+                    description: raw.description,
+                    features: raw.features || [],
+                    isOffer: raw.isOffer,
+                    originalPrice: raw.originalPrice,
+                    discount: raw.discount
+                }));
+
+                setCars(mappedCars);
+
+                // Map brands
+                const mappedBrands = brandNames.map((name: string) => ({
+                    id: name.toLowerCase(),
+                    name: name,
+                    slug: name.toLowerCase()
+                }));
+                setAllBrands(mappedBrands);
+
+                // Set initial brand if provided via URL/Slug
+                if (initialBrandSlug && mappedBrands.length > 0) {
+                    const found = mappedBrands.find((b: any) => b.slug === initialBrandSlug);
+                    if (found) setSelectedBrand(found.name);
+                }
+
+            } catch (err: any) {
+                console.error("Error fetching catalog data:", err);
+                setError("No se pudo cargar el catálogo. Por favor, intenta de nuevo.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [initialBrandSlug]);
+
+    // Deriving unique values for Dropdowns
+    const availableYears = useMemo(() => {
+        const years = Array.from(new Set(cars.map(c => c.year))).sort((a, b) => b - a);
+        return years.map(String);
+    }, [cars]);
+
+    const availableFuels = useMemo(() => {
+        const fuels = Array.from(new Set(cars.map(c => c.fuelType))).sort();
+        return fuels;
+    }, [cars]);
+
+    const categories = ["Todos", "Deportivos", "SUV", "Sedán", "Pick-up", "Clásicos"];
+
+    // Build Brand Pills List (Add "Todas" at start)
+    const brandPills = useMemo(() => {
+        const uniqueBrands = allBrands.length > 0
+            ? allBrands.map(b => b.name)
+            : Array.from(new Set(cars.map(c => c.brand))).sort();
+        return ["Todas", ...uniqueBrands];
+    }, [allBrands, cars]);
+
+    // Sync URL Brand with Search (for navigation after mount)
+    useEffect(() => {
+        const brandParam = searchParams.get('brand');
+        if (brandParam) {
+            setSelectedBrand(brandParam);
+        }
+    }, [searchParams]);
+
+    // Reset page on filter change
+    useMemo(() => {
+        setCurrentPage(1);
+    }, [searchTerm, selectedCategory, selectedBrand, selectedYear, selectedFuel]);
+
+    // Scroll to top on page change
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [currentPage]);
+
+    // 2. Combined Filter Logic (WITH BRAND)
     const filteredCars = useMemo(() => {
         return cars.filter(car => {
-            // Brand is handled by Server/URL. We don't filter it here.
+            const term = searchTerm.toLowerCase();
 
-            // Price Logic
-            if (car.price < filters.priceRange[0] || car.price > filters.priceRange[1]) return false;
+            // Map transmission to Spanish for search
+            const transES = car.transmission === 'Automatic' ? 'automatica' :
+                car.transmission === 'Manual' ? 'manual' : 'pdk';
 
-            // Transmission Logic
-            if (filters.transmission !== 'all') {
-                if (car.transmission !== filters.transmission) return false;
-            }
+            const matchesSearch =
+                car.model.toLowerCase().includes(term) ||
+                car.brand.toLowerCase().includes(term) ||
+                car.transmission.toLowerCase().includes(term) ||
+                transES.includes(term.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
 
-            return true;
+            const matchesCategory = selectedCategory === "Todos" || car.category === selectedCategory;
+            const matchesBrand = selectedBrand === "Todas" || car.brand === selectedBrand;
+            const matchesYear = selectedYear ? String(car.year) === selectedYear : true;
+            const matchesFuel = selectedFuel ? car.fuelType === selectedFuel : true;
+
+            return matchesSearch && matchesCategory && matchesBrand && matchesYear && matchesFuel;
         });
-    }, [cars, filters]);
+    }, [cars, searchTerm, selectedCategory, selectedBrand, selectedYear, selectedFuel]);
 
-    // Handlers
-    const updateFilter = <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
-        setFilters(prev => ({ ...prev, [key]: value }));
+    // 3. Pagination Logic
+    const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
+
+    const currentCars = useMemo(() => {
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        return filteredCars.slice(start, start + ITEMS_PER_PAGE);
+    }, [filteredCars, currentPage]);
+
+    // Clear All Filters
+    const clearFilters = () => {
+        setSelectedCategory("Todos");
+        setSelectedBrand("Todas");
+        setSelectedYear(null);
+        setSelectedFuel(null);
+        setSearchTerm("");
     };
 
+    const hasActiveFilters = selectedCategory !== "Todos" || selectedBrand !== "Todas" || selectedYear || selectedFuel || searchTerm;
+
+    // --- RENDER LOADING STATE (SKELETON) ---
+    if (loading) {
+        return (
+            <div className="space-y-8 animate-pulse">
+                {/* Skeleton Filters */}
+                <div className="flex flex-col md:flex-row gap-4 max-w-3xl mx-auto">
+                    <div className="h-14 bg-white/5 rounded-2xl flex-1" />
+                    <div className="h-14 bg-white/5 rounded-2xl w-40" />
+                </div>
+                <div className="flex flex-wrap justify-center gap-3">
+                    {[...Array(6)].map((_, i) => (
+                        <div key={i} className="h-10 w-24 bg-white/5 rounded-full" />
+                    ))}
+                </div>
+                {/* Skeleton Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {[...Array(6)].map((_, i) => (
+                        <div key={i} className="aspect-[4/5] bg-white/5 rounded-3xl border border-white/10" />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // --- RENDER ERROR STATE ---
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center py-32 text-center space-y-6">
+                <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
+                    <X size={32} />
+                </div>
+                <h3 className="text-xl font-bold text-white">Error de conexión</h3>
+                <p className="text-zinc-500 max-w-xs mx-auto">{error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs border-b border-amber-500/30 pb-0.5"
+                >
+                    Reintentar
+                </button>
+            </div>
+        );
+    }
+
     return (
-        <div className="flex flex-col lg:flex-row gap-12">
-            {/* Mobile Filter Toggle */}
-            <button
-                onClick={() => setIsMobileFilterOpen(true)}
-                className="lg:hidden w-full flex items-center justify-between px-6 py-4 bg-zinc-900 border border-white/10 rounded-full text-white font-bold uppercase tracking-wider"
-            >
-                <span>Filtros</span>
-                <Filter size={18} />
-            </button>
+        <div className="space-y-8">
+            {/* --- 1. BRAND SELECTOR & CTA --- */}
+            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 max-w-3xl mx-auto">
+                <BrandSelector
+                    brands={brandPills}
+                    selectedBrand={selectedBrand}
+                    onBrandChange={setSelectedBrand}
+                    className="flex-1 md:min-w-[280px]"
+                />
+                <ViewAllButton
+                    onClick={() => {
+                        setSelectedBrand("Todas");
+                        clearFilters();
+                    }}
+                    className="md:flex-shrink-0"
+                />
+            </div>
 
-            {/* Sidebar Filters (Glassmorphic Sticky) */}
-            <aside className={cn(
-                "fixed inset-0 z-50 bg-black/90 backdrop-blur-xl lg:static lg:bg-transparent lg:backdrop-blur-none lg:z-0 lg:w-1/4 lg:block transition-transform duration-300",
-                isMobileFilterOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-            )}>
-                <div className="h-full overflow-y-auto lg:h-auto lg:overflow-visible p-8 lg:p-6 lg:bg-white/5 lg:backdrop-blur-xl lg:border lg:border-white/10 lg:rounded-3xl lg:sticky lg:top-32 space-y-8">
+            {/* --- 2. CATEGORY TABS --- */}
+            <div className="flex flex-wrap items-center justify-center gap-3">
+                {categories.map((cat) => (
+                    <button
+                        key={cat}
+                        onClick={() => setSelectedCategory(cat)}
+                        className={cn(
+                            "px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wide transition-all duration-300",
+                            selectedCategory === cat
+                                ? "bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105"
+                                : "bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white"
+                        )}
+                    >
+                        {cat}
+                    </button>
+                ))}
+            </div>
 
-                    <div className="flex items-center justify-between lg:hidden mb-8">
-                        <h2 className="text-2xl font-bold text-white">Filtros</h2>
-                        <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 text-white"><X /></button>
-                    </div>
+            {/* --- 3. CONTROL CENTER (Filters Bar) --- */}
+            <div className="flex flex-wrap gap-4 items-center">
 
-                    {/* Brand Filter */}
-                    <div className="space-y-4">
-                        <label className="text-xs font-bold uppercase tracking-widest text-zinc-500">Marca</label>
-                        <div className="space-y-2">
-                            {/* 'Todos' Option */}
-                            <Link
-                                href="/catalogo"
-                                className={cn(
-                                    "block w-full text-left px-4 py-3 rounded-xl text-sm transition-all",
-                                    !currentBrandSlug
-                                        ? "bg-white text-black font-bold shadow-lg shadow-white/10"
-                                        : "text-zinc-400 hover:bg-white/5 hover:text-white"
-                                )}
-                            >
-                                Todos
-                            </Link>
-
-                            {allBrands.map(brand => (
-                                <Link
-                                    key={brand.id}
-                                    href={`/catalogo?brand=${brand.slug}`}
-                                    className={cn(
-                                        "block w-full text-left px-4 py-3 rounded-xl text-sm transition-all",
-                                        currentBrandSlug === brand.slug
-                                            ? "bg-white text-black font-bold shadow-lg shadow-white/10"
-                                            : "text-zinc-400 hover:bg-white/5 hover:text-white"
-                                    )}
-                                >
-                                    {brand.name}
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Transmission Filter */}
-                    <div className="space-y-4">
-                        <label className="text-xs font-bold uppercase tracking-widest text-zinc-500">Transmisión</label>
-                        <div className="flex bg-black/40 rounded-lg p-1 border border-white/5">
-                            {(['all', 'Automatic', 'Manual'] as const).map(type => (
-                                <button
-                                    key={type}
-                                    onClick={() => updateFilter('transmission', type)}
-                                    className={cn(
-                                        "flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-md transition-all",
-                                        filters.transmission === type
-                                            ? "bg-zinc-800 text-white shadow-sm"
-                                            : "text-zinc-500 hover:text-zinc-300"
-                                    )}
-                                >
-                                    {type === 'all' ? 'Todas' : type === 'Automatic' ? 'Auto' : 'Man'}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Price Range (Simplified as min/max inputs for robustness) */}
-                    <div className="space-y-4">
-                        <label className="text-xs font-bold uppercase tracking-widest text-zinc-500">Precio (USD)</label>
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="number"
-                                min={0}
-                                placeholder="Min"
-                                value={filters.priceRange[0] === minPrice ? '' : filters.priceRange[0]}
-                                onChange={(e) => updateFilter('priceRange', [Number(e.target.value) || 0, filters.priceRange[1]])}
-                                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-700 focus:outline-none focus:border-white/30"
-                            />
-                            <span className="text-zinc-600">-</span>
-                            <input
-                                type="number"
-                                min={0}
-                                placeholder="Max"
-                                value={filters.priceRange[1] === maxPrice ? '' : filters.priceRange[1]}
-                                onChange={(e) => updateFilter('priceRange', [filters.priceRange[0], Number(e.target.value) || maxPrice])}
-                                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-700 focus:outline-none focus:border-white/30"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </aside>
-
-            {/* Main Grid */}
-            <div className="flex-1 min-h-[600px]">
-                <div className="mb-6 flex items-center justify-between">
-                    <p className="text-zinc-400 text-sm">
-                        Mostrando <span className="text-white font-bold">{filteredCars.length}</span> vehículos
-                    </p>
-                    {/* Could add Sort here */}
+                {/* Search Bar - Glass Pill */}
+                <div className="relative flex-1 min-w-[240px]">
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-amber-500 w-4 h-4" />
+                    <input
+                        type="text"
+                        placeholder="Buscar vehículo..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full bg-zinc-900/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+                    />
+                    {searchTerm && (
+                        <button
+                            onClick={() => setSearchTerm("")}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                        >
+                            <X size={14} />
+                        </button>
+                    )}
                 </div>
 
-                {filteredCars.length > 0 ? (
-                    <ScrollReveal animation="fade-up-stagger" className="grid grid-cols-1 md:grid-cols-2 gap-8 xl:gap-8">
+                {/* Year Dropdown - Premium */}
+                <PremiumDropdown
+                    options={availableYears}
+                    value={selectedYear}
+                    onChange={setSelectedYear}
+                    placeholder="Año"
+                    className="min-w-[140px]"
+                />
+
+                {/* Fuel Dropdown - Premium */}
+                <PremiumDropdown
+                    options={availableFuels}
+                    value={selectedFuel}
+                    onChange={setSelectedFuel}
+                    placeholder="Combustible"
+                    className="min-w-[160px]"
+                />
+            </div>
+
+            {/* --- 4. RESULTS COUNT & CLEAR --- */}
+            <div className="flex justify-between items-center px-2">
+                <p className="text-zinc-400 text-xs uppercase tracking-widest font-semibold">
+                    {filteredCars.length} Vehículo{filteredCars.length !== 1 ? 's' : ''}
+                </p>
+                {hasActiveFilters && (
+                    <button
+                        onClick={clearFilters}
+                        className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-2 group"
+                    >
+                        <X size={12} className="group-hover:rotate-90 transition-transform" />
+                        Limpiar
+                    </button>
+                )}
+            </div>
+
+            {/* --- GRID --- */}
+            <div className="min-h-[600px]">
+                {currentCars.length > 0 ? (
+                    <ScrollReveal animation="fade-up-stagger" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <AnimatePresence mode="popLayout">
-                            {filteredCars.map((car) => (
+                            {currentCars.map((car) => (
                                 <motion.div
                                     key={car.id}
                                     layout
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
-                                    transition={{ duration: 0.4 }}
+                                    transition={{ duration: 0.3 }}
                                 >
                                     <CarCard car={car} />
                                 </motion.div>
@@ -188,17 +338,14 @@ export function CatalogGrid({ cars, allBrands }: CatalogGridProps) {
                         </AnimatePresence>
                     </ScrollReveal>
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-32 text-center space-y-6 border border-white/5 rounded-3xl bg-white/5 backdrop-blur-sm">
+                    <div className="flex flex-col items-center justify-center py-32 text-center space-y-6 border border-dashed border-white/10 rounded-3xl bg-white/5">
                         <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-white/50">
-                            <Filter size={32} />
+                            <Search size={32} />
                         </div>
-                        <h3 className="text-xl font-bold text-white">No se encontraron resultados</h3>
-                        <p className="text-zinc-400 max-w-xs mx-auto">Prueba ajustando los filtros de búsqueda.</p>
+                        <h3 className="text-xl font-bold text-white">Sin resultados</h3>
+                        <p className="text-zinc-500 max-w-xs mx-auto">No encontramos vehículos que coincidan con tu búsqueda.</p>
                         <button
-                            onClick={() => {
-                                setFilters({ priceRange: [minPrice, maxPrice], transmission: 'all' });
-                                router.push('/catalogo');
-                            }}
+                            onClick={clearFilters}
                             className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs border-b border-amber-500/30 pb-0.5"
                         >
                             Limpiar Filtros
@@ -206,6 +353,31 @@ export function CatalogGrid({ cars, allBrands }: CatalogGridProps) {
                     </div>
                 )}
             </div>
+
+            {/* --- PAGINATION --- */}
+            {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 py-8">
+                    <button
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors"
+                    >
+                        <ChevronLeft size={20} />
+                    </button>
+
+                    <span className="text-sm font-medium text-zinc-400">
+                        Página <span className="text-white">{currentPage}</span> de <span className="text-white">{totalPages}</span>
+                    </span>
+
+                    <button
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors"
+                    >
+                        <ChevronRight size={20} />
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

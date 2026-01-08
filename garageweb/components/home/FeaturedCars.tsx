@@ -52,42 +52,73 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
 
             <div className="container mx-auto px-6 relative z-20">
                 {/* Header */}
-                <div className="flex flex-col items-center mb-20 text-center space-y-6">
+                <div className="flex flex-col items-center mb-20 text-center space-y-8">
+
+                    {/* 1. The Dots Wave */}
                     <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial="hidden"
+                        whileInView="show"
                         viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="flex items-center gap-4"
+                        variants={{
+                            hidden: { opacity: 0 },
+                            show: {
+                                opacity: 1,
+                                transition: {
+                                    staggerChildren: 0.1,
+                                    delayChildren: 0.2
+                                }
+                            }
+                        }}
+                        className="flex gap-3"
                     >
-                        <div className="h-px w-8 bg-neutral-700" />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-500">
-                            Nuestra Colección
-                        </span>
-                        <div className="h-px w-8 bg-neutral-700" />
+                        {[...Array(5)].map((_, i) => (
+                            <m.span
+                                key={i}
+                                variants={{
+                                    hidden: { opacity: 0.3, scale: 1 },
+                                    show: {
+                                        opacity: [0.3, 1, 0.3],
+                                        scale: [1, 1.2, 1],
+                                        transition: {
+                                            duration: 1.5,
+                                            ease: "easeInOut",
+                                            repeat: Infinity,
+                                            repeatType: "mirror"
+                                        }
+                                    }
+                                }}
+                                className="w-2 h-2 rounded-full bg-amber-500"
+                            />
+                        ))}
                     </m.div>
 
+                    {/* 2. The Reveal Subtitle */}
+                    <div className="overflow-hidden">
+                        <m.h3
+                            initial={{ y: "100%", opacity: 0 }}
+                            whileInView={{ y: 0, opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                            className="text-sm font-serif font-medium tracking-[0.2em] text-amber-500/80 uppercase"
+                        >
+                            Nuevos Ingresos
+                        </m.h3>
+                    </div>
+
+                    {/* 3. Main Title */}
                     <m.h2
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.1 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
                         className="text-5xl md:text-7xl font-serif font-medium text-white tracking-tight leading-[0.9]"
                     >
-                        OBRAS <br />
+                        ÚLTIMOS <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-600">
-                            MAESTRAS
+                            INGRESOS
                         </span>
                     </m.h2>
 
-                    <m.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.3 }}
-                    >
-                        <LayoutGrid className="w-5 h-5 text-neutral-600 mt-4" strokeWidth={1.5} />
-                    </m.div>
                 </div>
 
                 {/* Grid */}
@@ -98,36 +129,50 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                     viewport={{ once: true, margin: "-100px" }}
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 auto-rows-[450px]"
                 >
-                    {cars.map((car, index) => {
-                        const total = cars.length;
-                        let mdClass = "md:col-span-1";
-                        let lgClass = "lg:col-span-4";
+                    {/* Sort by ID desc (assuming higher ID is newer) or by Year desc, then take top 4 */}
+                    {cars
+                        .sort((a, b) => Number(b.id) - Number(a.id)) // Mock 'latest' logic
+                        .slice(0, 4)
+                        .map((car, index) => {
+                            const total = 4; // We force 4
+                            let mdClass = "md:col-span-1";
+                            let lgClass = "lg:col-span-4"; // Default 3 cols? No 12/4 = 3 columns.
+                            // Actually the design system here (lg:col-span-X) depends on the layout intended.
+                            // If we want 4 items, we can do 2x2 grid in desktop? Or 4 items in one row?
+                            // 12 columns. 4 items -> span 3 each? Or span 6 (2 rows)?
+                            // User manual said "top 4".
+                            // Previous logic had masonry-like spans.
 
-                        if (total % 2 !== 0 && index === total - 1) {
-                            mdClass = "md:col-span-2";
-                        }
+                            // Let's do a uniform 2x2 grid for "Latest Arrivals" or a nice asymmetric one if indices match.
+                            // Let's stick to the previous dynamic span logic but applied to only 4 items.
 
-                        const remainder = total % 3;
-                        if (remainder === 1 && index === total - 1) {
-                            lgClass = "lg:col-span-12";
-                        } else if (remainder === 2 && index >= total - 2) {
-                            lgClass = "lg:col-span-6";
-                        }
+                            if (index === 0 || index === 3) lgClass = "lg:col-span-8"; // Big
+                            else lgClass = "lg:col-span-4"; // Small
+                            // Wait, 8+4 = 12 (Row 1). 4+8 = 12 (Row 2).
+                            // If index 0 is 8, index 1 is 4. -> Row 1 full.
+                            // If index 2 is 4, index 3 is 8. -> Row 2 full.
+                            // Looks good for 4 items.
 
-                        return (
-                            <m.div
-                                key={car.id}
-                                variants={item}
-                                className={`relative group ${mdClass} ${lgClass}`}
-                            >
-                                <CarCard
-                                    car={car}
-                                    className="h-full border-neutral-800 hover:border-neutral-600 transition-colors bg-black"
-                                    priority={index <= 2}
-                                />
-                            </m.div>
-                        );
-                    })}
+                            // Override previous logic for clear 2-row layout
+                            if (index === 0) lgClass = "lg:col-span-8";
+                            if (index === 1) lgClass = "lg:col-span-4";
+                            if (index === 2) lgClass = "lg:col-span-4";
+                            if (index === 3) lgClass = "lg:col-span-8";
+
+                            return (
+                                <m.div
+                                    key={car.id}
+                                    variants={item}
+                                    className={`relative group md:col-span-1 ${lgClass}`}
+                                >
+                                    <CarCard
+                                        car={car}
+                                        className="h-full border-neutral-800 hover:border-neutral-600 transition-colors bg-black"
+                                        priority={index <= 2}
+                                    />
+                                </m.div>
+                            );
+                        })}
                 </m.div>
             </div>
 

@@ -12,6 +12,7 @@ export const CARS_QUERY = defineQuery(`*[_type == "car" && (!defined($brandSlug)
   mileage,
   transmission,
   fuelType,
+  category,
   status,
   "images": images[].asset->url,
   description,
@@ -31,6 +32,7 @@ export const FEATURED_CARS_QUERY = defineQuery(`*[_type == "car" && isFeatured =
   mileage,
   transmission,
   fuelType,
+  category,
   status,
   "images": images[].asset->url,
   description,
@@ -51,11 +53,33 @@ export const OFFER_CARS_QUERY = defineQuery(`*[_type == "car" && isOffer == true
   mileage,
   transmission,
   fuelType,
+  category,
   status,
   "images": images[].asset->url,
   description,
   features,
   isOffer
+}`);
+
+export const OFFERS_QUERY = defineQuery(`*[_type == "car" && (isOffer == true || discount > 0) && status != "sold"] | order(_createdAt desc) {
+  "id": _id,
+  "slug": slug.current,
+  brand,
+  model,
+  year,
+  price,
+  originalPrice,
+  currency,
+  mileage,
+  transmission,
+  fuelType,
+  category,
+  status,
+  "images": images[].asset->url,
+  description,
+  features,
+  isOffer,
+  discount
 }`);
 
 export const ALL_OFFERS_QUERY = defineQuery(`*[_type == "car" && isOffer == true] | order(_createdAt desc) {
@@ -70,11 +94,13 @@ export const ALL_OFFERS_QUERY = defineQuery(`*[_type == "car" && isOffer == true
   mileage,
   transmission,
   fuelType,
+  category,
   status,
   "images": images[].asset->url,
   description,
   features,
-  isOffer
+  isOffer,
+  discount
 }`);
 
 export const CAR_BY_SLUG_QUERY = defineQuery(`*[_type == "car" && slug.current == $slug][0] {
@@ -89,6 +115,7 @@ export const CAR_BY_SLUG_QUERY = defineQuery(`*[_type == "car" && slug.current =
   mileage,
   transmission,
   fuelType,
+  category,
   status,
   "images": images[].asset->url,
   description,
@@ -110,4 +137,10 @@ export const STOCK_BRANDS_QUERY = defineQuery(`*[_type == "brand" && count(*[_ty
   "logo": logo.asset->url
 }`);
 
-export const AVAILABLE_BRANDS_QUERY = defineQuery(`*[_type == "car"].brand`);
+export const AVAILABLE_BRANDS_QUERY = defineQuery(`array::unique(*[_type == "car" && status != "sold"].brand)`);
+
+// Catalog-specific queries for filter data
+export const CATALOG_BRANDS_QUERY = defineQuery(`array::unique(*[_type == "car" && status != "sold"].brand) | order(@)`);
+
+export const CATALOG_CATEGORIES_QUERY = defineQuery(`array::unique(*[_type == "car" && status != "sold" && defined(category)].category) | order(@)`);
+

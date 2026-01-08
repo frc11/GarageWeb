@@ -2,113 +2,121 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Gauge, Calendar, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Fuel, Calendar, Settings2 } from "lucide-react";
 import { Car } from "@/types/main";
 import { formatCurrency, cn } from "@/lib/utils";
-import { m } from "framer-motion";
 
 interface CarCardProps {
     car: Car;
     className?: string;
     priority?: boolean;
+    isOffer?: boolean; // Keep for compatibility if used elsewhere
+    discountPercentage?: number;
 }
 
-export function CarCard({ car, className, priority = false }: CarCardProps) {
+export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage }: CarCardProps) {
+    // Logic to determine if it's an offer 
+    const isOfferActive = isOffer || car.isOffer;
+    const isSold = car.status === 'sold';
+
+    // Price Logic (Simplified for consistency)
+    const currentPrice = car.price;
+    const originalPrice = car.originalPrice;
+
+    // Discount Calculation for Badge
+    const discount = discountPercentage || (originalPrice && originalPrice > currentPrice
+        ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
+        : 0);
+
     return (
         <Link
             href={`/autos/${car.slug}`}
             className={cn(
-                "block group relative h-full w-full overflow-hidden bg-neutral-900 border border-white/5",
+                "block relative group overflow-hidden rounded-2xl bg-neutral-900/40 backdrop-blur-md transition-all duration-500",
+                "border border-white/5 hover:border-amber-500/50",
+                "hover:shadow-[0_0_30px_rgba(245,158,11,0.15)]",
+                isOfferActive && "border-amber-500/30",
                 className
             )}
         >
-            {/* Image Container */}
-            <div className="absolute inset-0 z-0">
-                <Image
-                    src={car.images[0]}
-                    alt={`${car.brand} ${car.model}`}
-                    fill
-                    className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority={priority}
-                />
+            {/* --- Image Area --- */}
+            <div className="relative aspect-[4/3] overflow-hidden">
+                {car.images && car.images.length > 0 ? (
+                    <Image
+                        src={car.images[0]}
+                        alt={`${car.brand} ${car.model}`}
+                        fill
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={priority}
+                    />
+                ) : (
+                    <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center">
+                        <span className="text-zinc-600 text-xs uppercase tracking-widest">Sin Imagen</span>
+                    </div>
+                )}
 
-                {/* Gradient Overlays */}
-                {/* CAMBIO: En móvil la opacidad base es mayor para asegurar legibilidad del texto siempre visible */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 lg:opacity-60 lg:group-hover:opacity-80 transition-opacity duration-500" />
+                {/* Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-                {/* Overlay oscuro extra para hover en desktop */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500" />
-            </div>
-
-            {/* Offer Badge */}
-            {car.isOffer && (
-                <div className="absolute top-4 right-4 z-20">
-                    <span className="bg-amber-500 text-black text-[10px] font-bold uppercase tracking-widest px-2 py-1">
-                        OFERTA
-                    </span>
-                </div>
-            )}
-
-            {/* Content Layer */}
-            <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-8">
-
-                {/* CAMBIO CRÍTICO: 
-                    - Mobile: translate-y-0 (posición final, siempre visible)
-                    - Desktop (lg): translate-y-4 + group-hover:translate-y-0 (animación original)
-                */}
-                <div className="transform transition-transform duration-500 ease-out translate-y-0 lg:translate-y-4 lg:group-hover:translate-y-0">
-
-                    {/* Brand & Arrow */}
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
+                {/* Top Badges */}
+                <div className="absolute top-0 left-0 p-4 w-full flex justify-between items-start z-10">
+                    {/* Brand Badge */}
+                    <div className="px-2 py-1 bg-black/50 backdrop-blur-sm border border-white/10 rounded-md">
+                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">
                             {car.brand}
                         </span>
-                        {/* Flecha: Visible siempre en móvil, oculta y animada en desktop */}
-                        <div className="bg-white/10 p-1.5 rounded-full opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 translate-x-0 lg:-translate-x-2 lg:group-hover:translate-x-0">
-                            <ArrowUpRight className="w-3 h-3 text-white" />
-                        </div>
                     </div>
 
-                    {/* Model Name */}
-                    <h2 className="text-2xl md:text-3xl font-serif text-white mb-2 leading-none tracking-tight">
-                        {car.model}
-                    </h2>
+                    {/* Status / Offer Badge */}
+                    {isSold ? (
+                        <div className="px-2 py-1 bg-red-900/80 backdrop-blur-sm border border-red-500/30 rounded-md">
+                            <span className="text-[10px] font-bold text-white uppercase tracking-widest">Vendido</span>
+                        </div>
+                    ) : discount > 0 ? (
+                        <div className="px-2 py-1 bg-amber-500 text-black rounded-md shadow-lg">
+                            <span className="text-[10px] font-extrabold uppercase tracking-wider">
+                                -{discount}%
+                            </span>
+                        </div>
+                    ) : null}
+                </div>
+            </div>
 
-                    {/* Price */}
-                    <div className="mb-4">
-                        {car.originalPrice && car.originalPrice > car.price ? (
-                            <div className="flex items-center gap-3">
-                                <span className="text-white text-xl font-bold">
-                                    {formatCurrency(car.price, car.currency)}
-                                </span>
-                                <span className="text-gray-500 text-sm line-through">
-                                    {formatCurrency(car.originalPrice, car.currency)}
-                                </span>
-                            </div>
-                        ) : (
-                            <span className="text-white/90 text-lg font-light">
-                                {formatCurrency(car.price, car.currency)}
+            {/* --- Content Area --- */}
+            <div className="p-5 flex flex-col gap-4">
+
+                {/* Titles */}
+                <div>
+                    <h3 className="font-serif text-xl text-white leading-tight group-hover:text-amber-500 transition-colors duration-300">
+                        {car.model}
+                    </h3>
+                    {/* Specs Row */}
+                    <div className="flex items-center gap-2 mt-2 text-[10px] sm:text-xs text-zinc-500 uppercase tracking-wider font-medium">
+                        <span>{car.year}</span>
+                        <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                        <span>{car.transmission}</span>
+                        <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                        <span>{car.fuelType}</span>
+                    </div>
+                </div>
+
+                {/* Price & Action */}
+                <div className="flex items-end justify-between pt-2 border-t border-white/5 mt-auto">
+                    <div className="flex flex-col">
+                        {originalPrice && originalPrice > currentPrice && (
+                            <span className="text-zinc-600 text-[10px] line-through font-medium">
+                                {formatCurrency(originalPrice, car.currency)}
                             </span>
                         )}
+                        <span className="text-white text-lg sm:text-xl font-bold tracking-tight">
+                            {formatCurrency(currentPrice, car.currency)}
+                        </span>
                     </div>
 
-                    {/* Tech Specs */}
-                    {/* CAMBIO CRÍTICO:
-                        - Mobile: opacity-100 (siempre visible)
-                        - Desktop (lg): opacity-0 + group-hover:opacity-100 (hover effect)
-                    */}
-                    <div className="flex items-center gap-6 border-t border-white/10 pt-4 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500 delay-75">
-                        <div className="flex items-center gap-2 text-neutral-400" title="Año">
-                            <Calendar strokeWidth={1.5} size={12} />
-                            <span className="text-[10px] font-bold tracking-wider uppercase">{car.year}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-neutral-400" title="Kilometraje">
-                            <Gauge strokeWidth={1.5} size={12} />
-                            <span className="text-[10px] font-bold tracking-wider uppercase">
-                                {car.mileage > 0 ? `${(car.mileage / 1000).toFixed(0)}k KM` : 'Nuevo'}
-                            </span>
-                        </div>
+                    {/* Minimal Arrow Button */}
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-amber-500 group-hover:text-black transition-all duration-300">
+                        <ArrowUpRight size={16} strokeWidth={2} />
                     </div>
                 </div>
             </div>

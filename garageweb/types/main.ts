@@ -16,6 +16,8 @@ export interface Car {
     isFeatured?: boolean;
     isOffer?: boolean;
     originalPrice?: number;
+    discount?: number;
+    category?: 'Deportivos' | 'SUV' | 'Sedán' | 'Pick-up' | 'Clásicos'; // Added for Catalog Filter
 }
 
 export interface FilterState {
