@@ -53,6 +53,7 @@ export const metadata: Metadata = {
 
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { MotionProvider } from "@/components/providers/MotionProvider";
+import { Preloader } from "@/components/ui/Preloader";
 
 // ... (imports)
 
@@ -67,6 +68,7 @@ export default function RootLayout({
         <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
         <SmoothScroll>
           <MotionProvider>
+            <Preloader />
             <Navbar />
             {children}
             <Footer />
