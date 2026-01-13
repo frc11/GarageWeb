@@ -7,10 +7,29 @@ import { formatCurrency, cn } from "@/lib/utils";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import Image from "next/image";
 
+
 interface CarPageProps {
     params: Promise<{
         slug: string;
     }>;
+}
+import { Metadata } from "next";
+
+export async function generateMetadata(props: CarPageProps): Promise<Metadata> {
+    const params = await props.params;
+    const car = await getCarBySlug(params.slug);
+
+    if (!car) {
+        return {
+            title: "Vehículo no encontrado",
+            description: "El vehículo que buscas no está disponible."
+        };
+    }
+
+    return {
+        title: `${car.brand} ${car.model}`,
+        description: `Conoce el ${car.brand} ${car.model} ${car.year}. ${car.description?.slice(0, 150)}...`,
+    };
 }
 
 // Revalidate every minute
@@ -28,7 +47,7 @@ export default async function CarPage(props: CarPageProps) {
     const whatsappUrl = `https://wa.me/5493814154708?text=${encodeURIComponent(whatsappMessage)}`;
 
     return (
-        <main className="bg-zinc-950 min-h-screen pt-22">
+        <main className="bg-zinc-950 min-h-screen pt-24.5">
 
             {/* 1. HERO SECTION (Full Screen) */}
             <div className="relative h-screen w-full overflow-hidden">

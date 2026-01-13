@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Vender mi Auto | El Garage",
+    title: "Vender",
     description: "Consigna tu vehículo exótico con nosotros. Tasación profesional y máxima confidencialidad.",
 };
 

@@ -16,7 +16,7 @@ const STAFF = [
     {
         id: 2,
         name: "Elena Vance",
-        role: "Senior Brand Ambassador",
+        role: "Embajadora de marcas senior",
         specialty: "Superdeportivos Italianos",
         image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888&auto=format&fit=crop",
         whatsapp: "https://wa.me/5493815674738"
@@ -24,16 +24,16 @@ const STAFF = [
     {
         id: 3,
         name: "Marco Rossi",
-        role: "Head of Engineering",
-        specialty: "Performance Tuning",
+        role: "Ingeniero",
+        specialty: "Asegurador de calidad",
         image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=2070&auto=format&fit=crop",
         whatsapp: "https://wa.me/5493814154708"
     },
     {
         id: 4,
         name: "Sofia Chen",
-        role: "Client Experience Manager",
-        specialty: "Concierge VIP",
+        role: "Encargada de ventas",
+        specialty: "Negociadora profesional",
         image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
         whatsapp: "https://wa.me/5493815674738"
     }

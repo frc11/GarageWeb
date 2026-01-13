@@ -19,7 +19,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: {
     template: 'El Garage | %s',
-    default: 'El Garage | Vehículos Premium',
+    default: 'El Garage Automóviles',
   },
   description: "Concesionaria premium en Tucumán. Comercialización de vehículos de alta gama, exclusividad y confianza.",
   keywords: ["autos de lujo", "concesionaria tucuman", "venta de autos", "audi", "bmw", "mercedes benz", "porsche"],
@@ -64,7 +64,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${manrope.variable} ${inter.variable} font-sans bg-black text-white antialiased selection:bg-white selection:text-black`}>
+      <body className={`${manrope.variable} ${inter.variable} font-sans bg-black text-white antialiased selection:bg-amber-500 selection:text-black`}>
         <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
         <SmoothScroll>
           <MotionProvider>

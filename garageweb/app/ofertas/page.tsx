@@ -7,7 +7,7 @@ import Link from "next/link";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 
 export const metadata = {
-    title: "Oportunidades Exclusivas | El Garage",
+    title: "Ofertas",
     description: "Selección de vehículos premium con condiciones extraordinarias y entrega inmediata.",
 };
 
@@ -55,7 +55,7 @@ export default async function OffersPage() {
                 <div className="container mx-auto px-6 relative z-10 text-center">
                     <div className="flex flex-col items-center space-y-6">
                         <span className="text-amber-500 font-bold tracking-[0.3em] text-xs uppercase opacity-80">
-                            The Collection
+                            Rebajas
                         </span>
 
                         <h1 className="text-5xl md:text-8xl font-serif font-medium tracking-tight text-white drop-shadow-2xl">

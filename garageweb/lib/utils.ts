@@ -6,10 +6,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number, currency: string = "USD"): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency,
+export const formatCurrency = (price: number) => {
+  const numero = new Intl.NumberFormat('es-AR', {
+    style: 'decimal',
+    minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount);
-}
+  }).format(price);
+
+  return `U$S ${numero}`;
+};

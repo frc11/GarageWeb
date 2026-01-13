@@ -7,7 +7,7 @@ import { m } from "framer-motion";
 
 export default function SellPage() {
     return (
-        <main className="min-h-screen pt-22 bg-black text-white selection:bg-amber-500/30">
+        <main className="min-h-screen pt-24.5 bg-black text-white selection:bg-amber-500/30">
             <div className="flex flex-col lg:flex-row min-h-screen">
 
                 {/* Left Column: Immersive Visual (Sticky) */}
@@ -36,7 +36,7 @@ export default function SellPage() {
                             >
                                 <ShieldCheck className="w-4 h-4 text-amber-500" />
                                 <span className="text-[10px] font-bold tracking-widest uppercase text-white/80">
-                                    The Vault • Consignment
+                                    El Garage • Consecionaria
                                 </span>
                             </m.div>
 

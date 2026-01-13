@@ -6,6 +6,7 @@ import { m } from "framer-motion";
 import { ArrowRight, Zap, TrendingDown, Percent } from "lucide-react";
 import { Car } from "@/types/main";
 import { formatCurrency } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils";
 import { PremiumButton } from "../ui/PremiumButton";
 
 interface FlashPromoProps {
@@ -110,7 +111,9 @@ export function FlashPromo({ offers }: FlashPromoProps) {
     );
 }
 
+
 function DealCard({ car }: { car: Car }) {
+    // Tu lógica de porcentaje se queda igual (normalmente los % son enteros)
     const discountPercent = (car.isOffer && car.originalPrice && car.price < car.originalPrice)
         ? Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100)
         : null;

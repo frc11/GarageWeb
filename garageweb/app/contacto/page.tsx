@@ -32,14 +32,19 @@ export default function ContactPage() {
         // Simulate network request
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        const text = `*SOLICITUD DE CITA - CONCIERGE*\n\n*INTERÉS:* ${interest}\n\n*CONTACTO:*\n• Nombre: ${formData.name}\n• Tel: ${formData.phone}\n• Email: ${formData.email}\n\n*MENSAJE:*\n${formData.message}`;
+        const text = `*SOLICITUD DE CITA - CONSENCIONARIA*\n\n*INTERÉS:* ${interest}\n\n*CONTACTO:*\n• Nombre: ${formData.name}\n• Tel: ${formData.phone}\n• Email: ${formData.email}\n\n*MENSAJE:*\n${formData.message || "Sin mensaje adicional"}`;
         const encodedText = encodeURIComponent(text);
         window.open(`https://wa.me/5493814154708?text=${encodedText}`, '_blank');
         setIsLoading(false);
     };
 
+    // CLASE CSS PERSONALIZADA PARA AUTOFILL
+    // Esta cadena inyecta una sombra interior del color #0a0a0a (neutral-950)
+    // y fuerza el texto a blanco cuando el navegador autocompleta.
+    const autofillClass = "[&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_#0d0d0d] [&:-webkit-autofill]:[-webkit-text-fill-color:white] [&:-webkit-autofill]:transition-[background-color_5000s_ease-in-out_0s]";
+
     return (
-        <main className="min-h-screen pt-22 bg-neutral-950 text-white selection:bg-amber-500/30">
+        <main className="min-h-screen pt-24.5 bg-neutral-950 text-white selection:bg-amber-500/30">
             <div className="flex flex-col lg:flex-row min-h-screen">
 
                 {/* Visual Column (Sticky) */}
@@ -64,7 +69,7 @@ export default function ContactPage() {
                             className="mt-20 lg:mt-0"
                         >
                             <span className="inline-block px-3 py-1 mb-6 text-[10px] font-bold tracking-widest uppercase border border-white/20 rounded-full bg-black/20 backdrop-blur-md">
-                                The Concierge
+                                La Consecionaria
                             </span>
                             <h1 className="text-5xl lg:text-7xl font-serif tracking-tight leading-[0.9]">
                                 VISITA <br />
@@ -100,7 +105,7 @@ export default function ContactPage() {
                             >
                                 <div className="space-y-4">
                                     <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/80 flex items-center gap-2">
-                                        <MapPin className="w-3 h-3" /> Flagship Store
+                                        <MapPin className="w-3 h-3" /> Casa central
                                     </h3>
                                     <p className="text-3xl font-serif leading-tight text-white/90">
                                         Av. Aconquija 2450,<br />
@@ -181,7 +186,8 @@ export default function ContactPage() {
                                             value={formData.name}
                                             onChange={handleChange}
                                             required
-                                            className="bg-transparent border-0 border-b border-white/10 rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:border-white transition-colors text-lg placeholder:text-neutral-700"
+                                            // AQUI APLICAMOS LA CLASE PERSONALIZADA
+                                            className={`bg-transparent border-0 border-b border-white/10 rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:border-white transition-colors text-lg placeholder:text-neutral-700 ${autofillClass}`}
                                             placeholder="Ingrese su nombre"
                                         />
                                     </div>
@@ -194,7 +200,8 @@ export default function ContactPage() {
                                                 value={formData.phone}
                                                 onChange={handleChange}
                                                 required
-                                                className="bg-transparent border-0 border-b border-white/10 rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:border-white transition-colors text-lg placeholder:text-neutral-700"
+                                                // AQUI APLICAMOS LA CLASE PERSONALIZADA
+                                                className={`bg-transparent border-0 border-b border-white/10 rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:border-white transition-colors text-lg placeholder:text-neutral-700 ${autofillClass}`}
                                                 placeholder="+54 9..."
                                             />
                                         </div>
@@ -205,7 +212,9 @@ export default function ContactPage() {
                                                 type="email"
                                                 value={formData.email}
                                                 onChange={handleChange}
-                                                className="bg-transparent border-0 border-b border-white/10 rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:border-white transition-colors text-lg placeholder:text-neutral-700"
+                                                required
+                                                // AQUI APLICAMOS LA CLASE PERSONALIZADA
+                                                className={`bg-transparent border-0 border-b border-white/10 rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:border-white transition-colors text-lg placeholder:text-neutral-700 ${autofillClass}`}
                                                 placeholder="correo@ejemplo.com"
                                             />
                                         </div>
@@ -216,7 +225,8 @@ export default function ContactPage() {
                                             id="message"
                                             value={formData.message}
                                             onChange={handleChange}
-                                            className="bg-transparent border-0 border-b border-white/10 rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:border-white transition-colors text-lg placeholder:text-neutral-700 min-h-[80px] resize-none"
+                                            // AQUI APLICAMOS LA CLASE PERSONALIZADA
+                                            className={`bg-transparent border-0 border-b border-white/10 rounded-none px-0 py-4 focus-visible:ring-0 focus-visible:border-white transition-colors text-lg placeholder:text-neutral-700 min-h-[80px] resize-none ${autofillClass}`}
                                             placeholder="Detalles sobre su visita..."
                                         />
                                     </div>

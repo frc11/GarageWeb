@@ -28,7 +28,7 @@ export function SellForm() {
         // Simulate network delay for effect
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        const message = `*SOLICITUD DE TASACIÓN - THE VAULT*\n\n*VEHÍCULO:*\n• Marca: ${formData.brand}\n• Modelo: ${formData.model}\n• Año: ${formData.year}\n• Km: ${formData.mileage}\n\n*CONTACTO:*\n• Nombre: ${formData.name}\n• Tel: ${formData.phone}\n• Email: ${formData.email}\n\n*NOTAS:*\n${formData.message || "Sin notas adicionales"}`;
+        const message = `*SOLICITUD DE TASACIÓN - EL GARAGE*\n\n*VEHÍCULO:*\n• Marca: ${formData.brand}\n• Modelo: ${formData.model}\n• Año: ${formData.year}\n• Km: ${formData.mileage}\n\n*CONTACTO:*\n• Nombre: ${formData.name}\n• Tel: ${formData.phone}\n• Email: ${formData.email}\n\n*NOTAS:*\n${formData.message || "Sin notas adicionales"}`;
 
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/+5493814154708?text=${encodedMessage}`;
@@ -41,7 +41,7 @@ export function SellForm() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const inputClasses = "bg-neutral-100 dark:bg-white/5 border-0 focus-visible:ring-1 focus-visible:ring-amber-500 text-base py-6 transition-all duration-300 placeholder:text-neutral-500/50";
+    const inputClasses = "bg-neutral-100 dark:bg-white/5 border-0 focus-visible:ring-1 focus-visible:ring-amber-500 text-black py-6 transition-all duration-300 placeholder:text-neutral-500/50";
     const labelClasses = "text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500 mb-2 block";
 
     return (
@@ -56,7 +56,7 @@ export function SellForm() {
             <div className="space-y-8">
                 <div className="flex items-center gap-4">
                     <span className="flex items-center justify-center w-6 h-6 rounded-full border border-neutral-700 text-[10px] text-neutral-400 font-mono">01</span>
-                    <h3 className="text-sm font-bold text-white uppercase tracking-widest">El Activo</h3>
+                    <h3 className="text-sm font-bold text-white uppercase tracking-widest">Vehículo</h3>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-10">
@@ -117,7 +117,7 @@ export function SellForm() {
             <div className="space-y-8">
                 <div className="flex items-center gap-4">
                     <span className="flex items-center justify-center w-6 h-6 rounded-full border border-neutral-700 text-[10px] text-neutral-400 font-mono">02</span>
-                    <h3 className="text-sm font-bold text-white uppercase tracking-widest">El Propietario</h3>
+                    <h3 className="text-sm font-bold text-white uppercase tracking-widest">Propietario</h3>
                 </div>
 
                 <div className="space-y-6 pl-10">
@@ -155,6 +155,7 @@ export function SellForm() {
                                 name="email"
                                 type="email"
                                 placeholder="juan@ejemplo.com"
+                                required
                                 value={formData.email}
                                 onChange={handleChange}
                                 className={inputClasses}

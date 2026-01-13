@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Car } from "@/types/main";
 
 export const metadata = {
-    title: "Catálogo Completo | El Garage",
+    title: "Catálogo",
     description: "Explora nuestro inventario exclusivo de vehículos de alta gama.",
 };
 
@@ -29,7 +29,7 @@ export default async function CatalogPage(props: {
                 <div className="flex flex-col items-center space-y-8">
                     <SectionHeading
                         title="NUESTRO INVENTARIO"
-                        subtitle="Colección Curada"
+                        subtitle="Nuestra Colección"
                         align="center"
                     />
                 </div>
