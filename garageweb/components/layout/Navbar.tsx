@@ -7,11 +7,15 @@ import { Menu, X, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PremiumButton } from "../ui/PremiumButton";
 import { m, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { scrollY } = useScroll();
+    const pathname = usePathname();
+
+    const isStudio = pathname?.startsWith("/studio");
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         setIsScrolled(latest > 50);
@@ -28,7 +32,7 @@ export function Navbar() {
             <m.nav
                 layout
                 initial="top"
-                animate={isScrolled ? "scrolled" : "top"}
+                animate={!isStudio && isScrolled ? "scrolled" : "top"}
                 variants={{
                     top: {
                         y: 0,
@@ -65,7 +69,10 @@ export function Navbar() {
                     damping: 20,
                     mass: 1
                 }}
-                className="fixed left-1/2 -translate-x-1/2 z-50 border border-transparent shadow-2xl box-border"
+                className={cn(
+                    "left-1/2 -translate-x-1/2 z-50 border border-transparent box-border",
+                    isStudio ? "absolute" : "fixed shadow-2xl"
+                )}
                 style={{
                     backgroundImage: isScrolled ? undefined : "linear-gradient(to bottom, rgba(0,0,0,0.8), transparent)"
                 }}

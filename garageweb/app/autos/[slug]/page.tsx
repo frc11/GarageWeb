@@ -132,14 +132,14 @@ export default async function CarPage(props: CarPageProps) {
                                         <div className="flex items-baseline gap-4">
                                             {car.isOffer && car.originalPrice && (
                                                 <span className="text-xl line-through text-zinc-600 font-medium">
-                                                    {formatCurrency(car.originalPrice, car.currency)}
+                                                    {formatCurrency(car.originalPrice)}
                                                 </span>
                                             )}
                                             <span className={cn(
                                                 "text-5xl font-bold tracking-tight",
                                                 car.isOffer ? "text-amber-500" : "text-white"
                                             )}>
-                                                {formatCurrency(car.price, car.currency)}
+                                                {formatCurrency(car.price)}
                                             </span>
                                         </div>
                                     </div>

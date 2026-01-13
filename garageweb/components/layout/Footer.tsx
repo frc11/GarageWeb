@@ -3,8 +3,15 @@
 import Link from "next/link";
 import { Instagram, Facebook, MapPin, Mail } from "lucide-react";
 import { DeveloperBadge } from "./DeveloperBadge";
+import { usePathname } from "next/navigation";
 
 export function Footer() {
+    const pathname = usePathname();
+
+    if (pathname?.startsWith("/studio")) {
+        return null;
+    }
+
     return (
         // z-50 para que la sombra tape el corte de la sección anterior
         <footer className="relative bg-zinc-950 pt-20 pb-10 overflow-visible z-50">

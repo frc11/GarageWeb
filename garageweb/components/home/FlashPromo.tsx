@@ -6,7 +6,6 @@ import { m } from "framer-motion";
 import { ArrowRight, Zap, TrendingDown, Percent } from "lucide-react";
 import { Car } from "@/types/main";
 import { formatCurrency } from "@/lib/utils";
-import { formatPrice } from "@/lib/utils";
 import { PremiumButton } from "../ui/PremiumButton";
 
 interface FlashPromoProps {
@@ -163,11 +162,11 @@ function DealCard({ car }: { car: Car }) {
                         <div className="flex flex-col items-start gap-1">
                             {car.isOffer && car.originalPrice && (
                                 <span className="text-xs md:text-sm text-neutral-500 line-through font-mono decoration-neutral-600">
-                                    {formatCurrency(car.originalPrice, car.currency)}
+                                    {formatCurrency(car.originalPrice)}
                                 </span>
                             )}
                             <span className="text-2xl md:text-3xl font-bold text-orange-500 font-serif tracking-tight drop-shadow-sm">
-                                {formatCurrency(car.price, car.currency)}
+                                {formatCurrency(car.price)}
                             </span>
                         </div>
                         <div className="bg-white/5 h-8 w-8 md:h-10 md:w-10 flex items-center justify-center rounded-full group-hover/card:bg-orange-500 group-hover/card:text-black transition-all duration-300 text-neutral-400">
