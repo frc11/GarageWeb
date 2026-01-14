@@ -6,11 +6,12 @@ import { Car } from "@/types/main";
 import { CarCard } from "@/components/cars/CarCard";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { BrandSelector } from "./BrandSelector";
 import { ViewAllButton } from "./ViewAllButton";
 import { PremiumDropdown } from "../ui/PremiumDropdown";
+import { YearRangeFilter } from "./YearRangeFilter";
 
 import { client } from "@/sanity/lib/client";
 import { CARS_QUERY, CATALOG_BRANDS_QUERY } from "@/sanity/lib/queries";
@@ -32,8 +33,13 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
     const [selectedCategory, setSelectedCategory] = useState("Todos");
     const [selectedBrand, setSelectedBrand] = useState("Todas");
-    const [selectedYear, setSelectedYear] = useState<string | null>(null);
-    const [selectedFuel, setSelectedFuel] = useState<string | null>(null);
+
+    // Range State
+    const [yearRange, setYearRange] = useState<[number, number]>([1990, 2025]);
+    const [globalMinMax, setGlobalMinMax] = useState<[number, number]>([1990, 2025]);
+
+    // CAMBIO: Inicializar en 'Todos' en lugar de null para evitar placeholder cursiva
+    const [selectedFuel, setSelectedFuel] = useState<string>("Todos");
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,13 +49,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             setLoading(true);
             setError(null);
             try {
-                // Fetch Cars and Brands in parallel
                 const [rawCars, brandNames] = await Promise.all([
                     client.fetch(CARS_QUERY, { brandSlug: initialBrandSlug || null }),
                     client.fetch(CATALOG_BRANDS_QUERY)
                 ]);
 
-                // Map raw Sanity data to Car interface
                 const mappedCars: Car[] = rawCars.map((raw: any) => ({
                     id: raw.id || raw._id,
                     slug: raw.slug,
@@ -73,7 +77,17 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
                 setCars(mappedCars);
 
-                // Map brands
+                // Calculate Dynamic Min/Max Years
+                if (mappedCars.length > 0) {
+                    const years = mappedCars.map(c => c.year).filter(y => !isNaN(y));
+                    if (years.length > 0) {
+                        const minYear = Math.min(...years);
+                        const maxYear = Math.max(...years);
+                        setGlobalMinMax([minYear, maxYear]);
+                        setYearRange([minYear, maxYear]);
+                    }
+                }
+
                 const mappedBrands = brandNames.map((name: string) => ({
                     id: name.toLowerCase(),
                     name: name,
@@ -81,7 +95,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                 }));
                 setAllBrands(mappedBrands);
 
-                // Set initial brand if provided via URL/Slug
                 if (initialBrandSlug && mappedBrands.length > 0) {
                     const found = mappedBrands.find((b: any) => b.slug === initialBrandSlug);
                     if (found) setSelectedBrand(found.name);
@@ -98,20 +111,14 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         fetchData();
     }, [initialBrandSlug]);
 
-    // Deriving unique values for Dropdowns
-    const availableYears = useMemo(() => {
-        const years = Array.from(new Set(cars.map(c => c.year))).sort((a, b) => b - a);
-        return years.map(String);
-    }, [cars]);
-
     const availableFuels = useMemo(() => {
         const fuels = Array.from(new Set(cars.map(c => c.fuelType))).sort();
-        return fuels;
+        // CAMBIO: Agregar 'Todos' explícitamente a las opciones
+        return ["Todos", ...fuels];
     }, [cars]);
 
     const categories = ["Todos", "Deportivos", "SUV", "Sedán", "Pick-up", "Clásicos"];
 
-    // Build Brand Pills List (Add "Todas" at start)
     const brandPills = useMemo(() => {
         const uniqueBrands = allBrands.length > 0
             ? allBrands.map(b => b.name)
@@ -119,7 +126,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         return ["Todas", ...uniqueBrands];
     }, [allBrands, cars]);
 
-    // Sync URL Brand with Search (for navigation after mount)
     useEffect(() => {
         const brandParam = searchParams.get('brand');
         if (brandParam) {
@@ -127,22 +133,18 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         }
     }, [searchParams]);
 
-    // Reset page on filter change
     useMemo(() => {
         setCurrentPage(1);
-    }, [searchTerm, selectedCategory, selectedBrand, selectedYear, selectedFuel]);
+    }, [searchTerm, selectedCategory, selectedBrand, yearRange, selectedFuel]);
 
-    // Scroll to top on page change
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
 
-    // 2. Combined Filter Logic (WITH BRAND)
+    // 2. Combined Filter Logic
     const filteredCars = useMemo(() => {
         return cars.filter(car => {
             const term = searchTerm.toLowerCase();
-
-            // Map transmission to Spanish for search
             const transES = car.transmission === 'Automatic' ? 'automatica' :
                 car.transmission === 'Manual' ? 'manual' : 'pdk';
 
@@ -154,14 +156,16 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
             const matchesCategory = selectedCategory === "Todos" || car.category === selectedCategory;
             const matchesBrand = selectedBrand === "Todas" || car.brand === selectedBrand;
-            const matchesYear = selectedYear ? String(car.year) === selectedYear : true;
-            const matchesFuel = selectedFuel ? car.fuelType === selectedFuel : true;
+
+            const matchesYear = car.year >= yearRange[0] && car.year <= yearRange[1];
+
+            // CAMBIO: Lógica ajustada para 'Todos'
+            const matchesFuel = selectedFuel === "Todos" || car.fuelType === selectedFuel;
 
             return matchesSearch && matchesCategory && matchesBrand && matchesYear && matchesFuel;
         });
-    }, [cars, searchTerm, selectedCategory, selectedBrand, selectedYear, selectedFuel]);
+    }, [cars, searchTerm, selectedCategory, selectedBrand, yearRange, selectedFuel]);
 
-    // 3. Pagination Logic
     const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
 
     const currentCars = useMemo(() => {
@@ -169,22 +173,24 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         return filteredCars.slice(start, start + ITEMS_PER_PAGE);
     }, [filteredCars, currentPage]);
 
-    // Clear All Filters
     const clearFilters = () => {
         setSelectedCategory("Todos");
         setSelectedBrand("Todas");
-        setSelectedYear(null);
-        setSelectedFuel(null);
+        setYearRange(globalMinMax);
+        setSelectedFuel("Todos"); // Reset to "Todos"
         setSearchTerm("");
     };
 
-    const hasActiveFilters = selectedCategory !== "Todos" || selectedBrand !== "Todas" || selectedYear || selectedFuel || searchTerm;
+    const hasActiveFilters =
+        selectedCategory !== "Todos" ||
+        selectedBrand !== "Todas" ||
+        (yearRange[0] !== globalMinMax[0] || yearRange[1] !== globalMinMax[1]) ||
+        selectedFuel !== "Todos" ||
+        searchTerm !== "";
 
-    // --- RENDER LOADING STATE (SKELETON) ---
     if (loading) {
         return (
             <div className="space-y-8 animate-pulse">
-                {/* Skeleton Filters */}
                 <div className="flex flex-col md:flex-row gap-4 max-w-3xl mx-auto">
                     <div className="h-14 bg-white/5 rounded-2xl flex-1" />
                     <div className="h-14 bg-white/5 rounded-2xl w-40" />
@@ -194,7 +200,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         <div key={i} className="h-10 w-24 bg-white/5 rounded-full" />
                     ))}
                 </div>
-                {/* Skeleton Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {[...Array(6)].map((_, i) => (
                         <div key={i} className="aspect-[4/5] bg-white/5 rounded-3xl border border-white/10" />
@@ -204,7 +209,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         );
     }
 
-    // --- RENDER ERROR STATE ---
     if (error) {
         return (
             <div className="flex flex-col items-center justify-center py-32 text-center space-y-6">
@@ -261,49 +265,60 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             </div>
 
             {/* --- 3. CONTROL CENTER (Filters Bar) --- */}
-            <div className="flex flex-wrap gap-4 items-center">
+            {/* CAMBIO: Agregado z-40 para arreglar bug de click y solapamiento */}
+            <div className="relative z-40 flex flex-wrap justify-center gap-6 items-start w-full max-w-5xl mx-auto bg-zinc-900/40 p-6 rounded-3xl border border-white/5 backdrop-blur-sm">
 
                 {/* Search Bar - Glass Pill */}
-                <div className="relative flex-1 min-w-[240px]">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-amber-500 w-4 h-4" />
-                    <input
-                        type="text"
-                        placeholder="Buscar vehículo..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-zinc-900/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
-                    />
-                    {searchTerm && (
-                        <button
-                            onClick={() => setSearchTerm("")}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
-                        >
-                            <X size={14} />
-                        </button>
-                    )}
+                <div className="flex flex-col gap-1 flex-1 min-w-[240px] w-full">
+                    <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2 mb-2">
+                        Búsqueda
+                    </span>
+                    <div className="relative">
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-amber-500 w-4 h-4" />
+                        <input
+                            type="text"
+                            placeholder="Buscar vehículo..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+                        />
+                        {searchTerm && (
+                            <button
+                                onClick={() => setSearchTerm("")}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                            >
+                                <X size={14} />
+                            </button>
+                        )}
+                    </div>
                 </div>
 
-                {/* Year Dropdown - Premium */}
-                <PremiumDropdown
-                    options={availableYears}
-                    value={selectedYear}
-                    onChange={setSelectedYear}
-                    placeholder="Año"
-                    className="min-w-[140px]"
-                />
+                {/* Year Range Slider */}
+                <div className="w-full md:w-auto flex-1 min-w-[220px]">
+                    <YearRangeFilter
+                        min={globalMinMax[0]}
+                        max={globalMinMax[1]}
+                        onChange={setYearRange}
+                    />
+                </div>
 
-                {/* Fuel Dropdown - Premium */}
-                <PremiumDropdown
-                    options={availableFuels}
-                    value={selectedFuel}
-                    onChange={setSelectedFuel}
-                    placeholder="Combustible"
-                    className="min-w-[160px]"
-                />
+                {/* CAMBIO: Fuel Dropdown - Con Label explícito y opción Todos */}
+                <div className="flex flex-col gap-1 min-w-[160px] w-full md:w-auto">
+                    <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2 mb-2">
+                        Combustible
+                    </span>
+                    <PremiumDropdown
+                        options={availableFuels}
+                        value={selectedFuel}
+                        onChange={setSelectedFuel}
+                        allowClear={false}
+                        className="w-full"
+                    />
+                </div>
             </div>
 
             {/* --- 4. RESULTS COUNT & CLEAR --- */}
-            <div className="flex justify-between items-center px-2">
+            <div className="flex justify-between items-center px-2 container mx-auto max-w-5xl">
                 <p className="text-zinc-400 text-xs uppercase tracking-widest font-semibold">
                     {filteredCars.length} Vehículo{filteredCars.length !== 1 ? 's' : ''}
                 </p>
@@ -319,7 +334,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             </div>
 
             {/* --- GRID --- */}
-            <div className="min-h-[600px]">
+            <div className="min-h-[600px] relative z-10"> {/* z-10 para quedar debajo de los filtros */}
                 {currentCars.length > 0 ? (
                     <ScrollReveal animation="fade-up-stagger" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <AnimatePresence mode="popLayout">
@@ -356,7 +371,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
             {/* --- PAGINATION --- */}
             {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-4 py-8">
+                <div className="flex justify-center items-center gap-4 py-8 relative z-10">
                     <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}

@@ -9,7 +9,7 @@ interface PremiumDropdownProps {
     options: string[];
     value: string | null;
     onChange: (value: string | null) => void;
-    placeholder: string;
+    placeholder?: string;
     className?: string;
     allowClear?: boolean;
 }
@@ -18,7 +18,7 @@ export function PremiumDropdown({
     options,
     value,
     onChange,
-    placeholder,
+    placeholder = "Select...",
     className,
     allowClear = true
 }: PremiumDropdownProps) {

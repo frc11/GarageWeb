@@ -22,7 +22,8 @@ const BRAND_ASSETS: Record<string, string> = {
     "mitsubishi": "/brands/mitsubishi.svg",
     "nissan": "/brands/nissan.svg",
     "porsche": "/brands/porsche.svg",
-    "toyota": "/brands/toyota.svg"
+    "toyota": "/brands/toyota.svg",
+    "peugeot": "/brands/peugeot.svg"
 };
 
 // --- Helper ---

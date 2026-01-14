@@ -106,11 +106,11 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                     <div className="flex flex-col">
                         {originalPrice && originalPrice > currentPrice && (
                             <span className="text-zinc-600 text-[10px] line-through font-medium">
-                                {formatCurrency(originalPrice, car.currency)}
+                                {formatCurrency(originalPrice)}
                             </span>
                         )}
                         <span className="text-white text-lg sm:text-xl font-bold tracking-tight">
-                            {formatCurrency(currentPrice, car.currency)}
+                            {formatCurrency(currentPrice)}
                         </span>
                     </div>
 
