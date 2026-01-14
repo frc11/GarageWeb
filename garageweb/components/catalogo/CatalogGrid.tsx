@@ -51,7 +51,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             setError(null);
             try {
                 const [rawCars, brandNames] = await Promise.all([
-                    client.fetch(CARS_QUERY, { brandSlug: initialBrandSlug || null }),
+                    client.fetch(CARS_QUERY, { brandSlug: null }), // Load ALL cars first for client-side filtering
                     client.fetch(CATALOG_BRANDS_QUERY)
                 ]);
 

@@ -7,12 +7,14 @@ import { ArrowRight, Zap, TrendingDown, Percent } from "lucide-react";
 import { Car } from "@/types/main";
 import { formatCurrency, cn } from "@/lib/utils";
 import { PremiumButton } from "../ui/PremiumButton";
+import { useRouter } from "next/navigation";
 
 interface FlashPromoProps {
     offers: Car[];
 }
 
 export function FlashPromo({ offers }: FlashPromoProps) {
+    const router = useRouter();
     if (!offers || offers.length === 0) return null;
 
     // Lógica Condicional: Solo activar carrusel si hay 5 o más autos
@@ -109,15 +111,14 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 transition={{ duration: 0.6 }}
                 className="relative z-20"
             >
-                <a href="/ofertas">
-                    <PremiumButton
-                        variant="primary"
-                        className="bg-gradient-to-r from-amber-500 to-orange-600 text-black border-none hover:from-amber-400 hover:to-orange-500 shadow-[0_0_30px_rgba(245,158,11,0.3)]"
-                    >
-                        Ver Todas las Ofertas
-                        <Percent className="w-4 h-4 ml-1" />
-                    </PremiumButton>
-                </a>
+                <PremiumButton
+                    variant="primary"
+                    className="bg-gradient-to-r from-amber-500 to-orange-600 text-black border-none hover:from-amber-400 hover:to-orange-500 shadow-[0_0_30px_rgba(245,158,11,0.3)]"
+                    onClick={() => router.push("/ofertas")}
+                >
+                    Ver Todas las Ofertas
+                    <Percent className="w-4 h-4 ml-1" />
+                </PremiumButton>
             </m.div>
 
         </section>

@@ -5,6 +5,7 @@ import { getCarBySlug } from "@/sanity/lib/fetch";
 import { formatCurrency, cn } from "@/lib/utils";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { ShareButton } from "@/components/ui/ShareButton";
+import { BackButton } from "@/components/ui/BackButton";
 import { TeamSelector } from "@/components/cars/TeamSelector"; // Correct Import
 import Image from "next/image";
 import { Metadata } from "next";
@@ -71,10 +72,7 @@ export default async function CarPage(props: CarPageProps) {
 
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-24 z-20">
                     <div className="container mx-auto">
-                        <Link href="/catalogo" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 backdrop-blur-md bg-black/30 px-4 py-2 rounded-full border border-white/10 transition-colors text-sm font-medium uppercase tracking-wider">
-                            <ArrowLeft size={16} />
-                            Volver
-                        </Link>
+                        <BackButton />
 
                         <h1 className="text-5xl md:text-7xl lg:text-9xl font-black text-white tracking-tighter uppercase mb-4 leading-none">
                             {car.brand} <br />

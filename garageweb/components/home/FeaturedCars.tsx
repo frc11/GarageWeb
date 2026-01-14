@@ -6,6 +6,7 @@ import { m } from "framer-motion";
 import { CarIcon } from "lucide-react";
 import { PremiumButton } from "../ui/PremiumButton";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface FeaturedCarsProps {
     cars: Car[];
@@ -37,6 +38,7 @@ function getClassForIndex(index: number, total: number): string {
 }
 
 export function FeaturedCars({ cars }: FeaturedCarsProps) {
+    const router = useRouter();
     if (!cars || cars.length === 0) return null;
 
     // Remove limits (up to 10 as requested)
@@ -184,12 +186,10 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
             </div>
 
             <div className="mt-24 text-center relative z-20">
-                <a href="/catalogo">
-                    <PremiumButton variant="primary">
-                        Ver Inventario
-                        <CarIcon className="w-4 h-4" />
-                    </PremiumButton>
-                </a>
+                <PremiumButton variant="primary" onClick={() => router.push("/catalogo")}>
+                    Ver Inventario
+                    <CarIcon className="w-4 h-4" />
+                </PremiumButton>
             </div>
         </section>
     );

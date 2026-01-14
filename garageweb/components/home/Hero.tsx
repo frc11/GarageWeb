@@ -5,8 +5,10 @@ import { useState, useEffect } from "react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { CarFront } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function Hero() {
+    const router = useRouter();
     const videos = ["/hero-bg.mp4", "/location-bg.mp4"];
     const [index, setIndex] = useState(0);
 
@@ -72,12 +74,10 @@ export function Hero() {
                             Donde la ingeniería se encuentra con el arte.
                         </p>
 
-                        <a href="/coleccion" className="inline-block">
-                            <PremiumButton variant="primary" className="mt-8 md:mt-10">
-                                EXPLORAR COLECCIÓN
-                                <CarFront className="w-4 h-4" />
-                            </PremiumButton>
-                        </a>
+                        <PremiumButton variant="primary" className="mt-8 md:mt-10" onClick={() => router.push("/catalogo")}>
+                            EXPLORAR COLECCIÓN
+                            <CarFront className="w-4 h-4" />
+                        </PremiumButton>
                     </div>
                 </ScrollReveal>
             </div>

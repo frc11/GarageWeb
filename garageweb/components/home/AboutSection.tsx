@@ -5,6 +5,7 @@ import { m } from "framer-motion";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { ArrowUpRight, ShieldCheck, Award, Users, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 // Stats Data
 const stats = [
@@ -14,6 +15,7 @@ const stats = [
 ];
 
 export function AboutSection() {
+    const router = useRouter();
     return (
         <section className="relative py-50  bg-neutral-50 dark:bg-zinc-950 overflow-hidden z-10">
 
@@ -84,12 +86,10 @@ export function AboutSection() {
                             transition={{ duration: 0.6, delay: 0.4 }}
                             className="flex flex-col sm:flex-row items-center gap-8 pt-4"
                         >
-                            <a href="/contacto">
-                                <PremiumButton variant="inverted">
-                                    Conocé el Showroom
-                                    <MapPin className="w-4 h-4 color-neutral-900 dark:text-white" />
-                                </PremiumButton>
-                            </a>
+                            <PremiumButton variant="inverted" onClick={() => router.push("/contacto")}>
+                                Conocé el Showroom
+                                <MapPin className="w-4 h-4 color-neutral-900 dark:text-white" />
+                            </PremiumButton>
 
                             <div className="flex items-center gap-3 text-sm font-medium text-neutral-500">
                                 <ShieldCheck className="w-5 h-5 text-neutral-900 dark:text-white" />
