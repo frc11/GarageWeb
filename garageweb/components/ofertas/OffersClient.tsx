@@ -82,28 +82,34 @@ export function OffersClient({ cars }: OffersClientProps) {
                 animate="show"
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12"
             >
-                {currentCars.map((car) => (
-                    <motion.div
-                        key={car.id}
-                        variants={item}
-                        className="group relative"
-                    >
-                        {/* Offers Badge Overlay */}
-                        <div className="absolute top-4 right-4 z-20 overflow-hidden">
-                            <div className="bg-amber-500 text-black text-xs font-bold px-3 py-1.5 uppercase tracking-widest shadow-lg flex items-center gap-1.5">
-                                <BadgePercent size={14} strokeWidth={2.5} />
-                                <span>Oferta</span>
-                            </div>
-                        </div>
+                {currentCars.map((car) => {
+                    const discount = car.originalPrice && car.originalPrice > car.price
+                        ? Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100)
+                        : 0;
 
-                        {/* Card Container with Glow */}
-                        <div className="h-full rounded-[2rem] p-1 bg-transparent transition-all duration-500 hover:bg-gradient-to-br hover:from-amber-500/20 hover:to-transparent hover:shadow-[0_0_40px_rgba(245,158,11,0.1)]">
-                            <div className="h-full rounded-[1.8rem] overflow-hidden bg-zinc-950 border border-white/5 group-hover:border-amber-500/30 transition-colors duration-500">
-                                <CarCard car={car} />
+                    return (
+                        <motion.div
+                            key={car.id}
+                            variants={item}
+                            className="group relative"
+                        >
+                            {/* Offers Badge Overlay */}
+                            <div className="absolute top-6 right-6 z-20 overflow-hidden">
+                                <div className="bg-amber-500 text-black text-xs font-bold px-3 py-1.5 uppercase tracking-widest shadow-lg flex items-center gap-1.5">
+                                    <BadgePercent size={14} strokeWidth={2.5} />
+                                    <span>{discount}% OFF</span>
+                                </div>
                             </div>
-                        </div>
-                    </motion.div>
-                ))}
+
+                            {/* Card Container with Glow */}
+                            <div className="h-full rounded-[2rem] p-1 bg-transparent transition-all duration-500 hover:bg-gradient-to-br hover:from-amber-500/20 hover:to-transparent hover:shadow-[0_0_40px_rgba(245,158,11,0.1)]">
+                                <div className="h-full rounded-[1.8rem] overflow-hidden bg-zinc-950 border border-white/5 group-hover:border-amber-500/30 transition-colors duration-500">
+                                    <CarCard car={car} hideStatusBadge={true} />
+                                </div>
+                            </div>
+                        </motion.div>
+                    );
+                })}
             </motion.div>
 
             {/* --- PAGINATION --- */}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Fuel, Calendar, Settings2 } from "lucide-react";
+import { ArrowUpRight, Fuel, Calendar, Settings2, BadgePercent } from "lucide-react";
 import { Car } from "@/types/main";
 import { formatCurrency, cn } from "@/lib/utils";
 
@@ -10,11 +10,12 @@ interface CarCardProps {
     car: Car;
     className?: string;
     priority?: boolean;
-    isOffer?: boolean; // Keep for compatibility if used elsewhere
+    isOffer?: boolean;
     discountPercentage?: number;
+    hideStatusBadge?: boolean;
 }
 
-export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage }: CarCardProps) {
+export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage, hideStatusBadge = false }: CarCardProps) {
     // Logic to determine if it's an offer 
     const isOfferActive = isOffer || car.isOffer;
     const isSold = car.status === 'sold';
@@ -69,17 +70,20 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                     </div>
 
                     {/* Status / Offer Badge */}
-                    {isSold ? (
-                        <div className="px-2 py-1 bg-red-900/80 backdrop-blur-sm border border-red-500/30 rounded-md">
-                            <span className="text-[10px] font-bold text-white uppercase tracking-widest">Vendido</span>
-                        </div>
-                    ) : discount > 0 ? (
-                        <div className="px-2 py-1 bg-amber-500 text-black rounded-md shadow-lg">
-                            <span className="text-[10px] font-extrabold uppercase tracking-wider">
-                                -{discount}%
-                            </span>
-                        </div>
-                    ) : null}
+                    {!hideStatusBadge && (
+                        isSold ? (
+                            <div className="px-2 py-1 bg-red-900/80 backdrop-blur-sm border border-red-500/30 rounded-md">
+                                <span className="text-[10px] font-bold text-white uppercase tracking-widest">Vendido</span>
+                            </div>
+                        ) : discount > 0 ? (
+                            <div className="px-2 py-1 bg-amber-500 text-black rounded-md shadow-lg flex items-center gap-1.5">
+                                <BadgePercent size={12} strokeWidth={3} />
+                                <span className="text-[10px] font-extrabold uppercase tracking-wider">
+                                    OFERTA
+                                </span>
+                            </div>
+                        ) : null
+                    )}
                 </div>
             </div>
 
