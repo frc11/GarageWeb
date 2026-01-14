@@ -11,6 +11,16 @@ interface CarGalleryProps {
 }
 
 export function CarGallery({ images, alt }: CarGalleryProps) {
+    if (!images || images.length === 0) {
+        return (
+            <div className="relative aspect-[4/3] md:aspect-[16/9] w-full bg-zinc-900 rounded-lg border border-white/10 flex items-center justify-center">
+                <p className="text-zinc-500 text-sm uppercase tracking-widest font-medium">
+                    No hay fotos del vehículo por el momento
+                </p>
+            </div>
+        );
+    }
+
     const [selectedImage, setSelectedImage] = useState(images[0]);
 
     return (

@@ -1,19 +1,19 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, MessageCircle, Calendar, Gauge, Zap, Fuel, Activity, Share2 } from "lucide-react";
+import { ArrowLeft, Calendar, Gauge, Zap, Fuel, Activity } from "lucide-react";
 import { getCarBySlug } from "@/sanity/lib/fetch";
-import { CarGallery } from "@/components/cars/CarGallery";
 import { formatCurrency, cn } from "@/lib/utils";
 import { PremiumButton } from "@/components/ui/PremiumButton";
+import { ShareButton } from "@/components/ui/ShareButton";
+import { TeamSelector } from "@/components/cars/TeamSelector"; // Correct Import
 import Image from "next/image";
-
+import { Metadata } from "next";
 
 interface CarPageProps {
     params: Promise<{
         slug: string;
     }>;
 }
-import { Metadata } from "next";
 
 export async function generateMetadata(props: CarPageProps): Promise<Metadata> {
     const params = await props.params;
@@ -45,6 +45,12 @@ export default async function CarPage(props: CarPageProps) {
 
     const whatsappMessage = `Hola, me interesa el ${car.brand} ${car.model} que vi en la web.`;
     const whatsappUrl = `https://wa.me/5493814154708?text=${encodeURIComponent(whatsappMessage)}`;
+
+    const testDriveMessage = `Hola, ¡quiero hacer un test drive del ${car.brand} ${car.model} que vi en su pagina!`;
+    const testDriveUrl = `https://wa.me/5493814154708?text=${encodeURIComponent(testDriveMessage)}`;
+
+    const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://elgarage.com'}/autos/${car.slug}`;
+    const shareText = `¡Mira este auto que vi en la página de El Garage!`;
 
     return (
         <main className="bg-zinc-950 min-h-screen pt-24.5">
@@ -88,21 +94,31 @@ export default async function CarPage(props: CarPageProps) {
                         <div className="space-y-4">
                             <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-8">Galería Visual</h3>
                             <div className="grid grid-cols-1 gap-4">
-                                {car.images.slice(1).map((img, idx) => (
-                                    <div key={idx} className="relative aspect-video rounded-3xl overflow-hidden border border-white/5">
-                                        <Image src={img} alt={`${car.model} view ${idx}`} fill className="object-cover" />
+                                {car.images.length > 1 ? (
+                                    car.images.slice(1).map((img, idx) => (
+                                        <div key={idx} className="relative aspect-video rounded-3xl overflow-hidden border border-white/5">
+                                            <Image src={img} alt={`${car.model} view ${idx}`} fill className="object-cover" />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="flex items-center justify-center aspect-video rounded-3xl bg-zinc-900/30 border border-white/5 p-12">
+                                        <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-zinc-600 text-center">
+                                            No hay fotos del vehículo por el momento
+                                        </p>
                                     </div>
-                                ))}
+                                )}
                             </div>
                         </div>
 
                         {/* Narrative Description */}
-                        <div className="space-y-8">
-                            <h2 className="text-3xl md:text-4xl font-serif text-white">Ingeniería y Diseño</h2>
-                            <div className="prose prose-invert prose-lg text-gray-400 font-light leading-relaxed">
-                                <p>{car.description}</p>
+                        {car.description && (
+                            <div className="space-y-8">
+                                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Descripción</h3>
+                                <div className="prose prose-invert prose-lg text-gray-400 font-light leading-relaxed">
+                                    <p>{car.description}</p>
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Features Grid */}
                         {car.features && car.features.length > 0 && (
@@ -129,23 +145,25 @@ export default async function CarPage(props: CarPageProps) {
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className="text-xs uppercase tracking-widest text-zinc-500 mb-2">Precio de Lista</p>
-                                        <div className="flex items-baseline gap-4">
+                                        <div className="flex flex-col items-start gap-1">
                                             {car.isOffer && car.originalPrice && (
-                                                <span className="text-xl line-through text-zinc-600 font-medium">
+                                                <span className="text-xl line-through text-zinc-600 font-medium order-1">
                                                     {formatCurrency(car.originalPrice)}
                                                 </span>
                                             )}
                                             <span className={cn(
-                                                "text-5xl font-bold tracking-tight",
+                                                "text-4xl md:text-5xl font-bold tracking-tight order-2 whitespace-nowrap",
                                                 car.isOffer ? "text-amber-500" : "text-white"
                                             )}>
                                                 {formatCurrency(car.price)}
                                             </span>
                                         </div>
                                     </div>
-                                    <button className="p-3 rounded-full bg-white/5 text-white hover:bg-white hover:text-black transition-colors">
-                                        <Share2 size={20} />
-                                    </button>
+                                    <ShareButton
+                                        title={`${car.brand} ${car.model}`}
+                                        text={shareText}
+                                        url={shareUrl}
+                                    />
                                 </div>
 
                                 {/* Tech Specs 2x2 */}
@@ -177,29 +195,21 @@ export default async function CarPage(props: CarPageProps) {
                                 </div>
 
                                 {/* Actions */}
-                                <div className="space-y-4 pt-4 border-t border-white/5">
-                                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block w-full">
-                                        <PremiumButton variant="primary" className="w-full h-14 text-base">
-                                            {car.isOffer ? "SOLICITAR OFERTA" : "CONSULTAR COMPRA"}
-                                        </PremiumButton>
-                                    </a>
+                                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block w-full">
+                                    <PremiumButton variant="primary" className="w-full h-14 text-base">
+                                        {car.isOffer ? "SOLICITAR OFERTA" : "CONSULTAR COMPRA"}
+                                    </PremiumButton>
+                                </a>
 
-                                    <button className="w-full py-4 rounded-full border border-white/10 text-white font-bold uppercase tracking-wider text-xs hover:bg-white hover:text-black transition-all">
+                                <a href={testDriveUrl} target="_blank" rel="noopener noreferrer" className="block w-full">
+                                    <button className="w-full py-4 rounded-full border text-white font-bold uppercase tracking-wider text-xs transition-all border-amber-500/50 shadow-[0_0_20px_rgba(245,158,11,0.2)] lg:border-white/10 lg:shadow-none lg:hover:bg-white lg:hover:text-black">
                                         Agendar Test Drive
                                     </button>
-                                </div>
+                                </a>
                             </div>
 
-                            {/* Consultant Card */}
-                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
-                                <div className="w-12 h-12 bg-zinc-700 rounded-full flex items-center justify-center text-xs font-bold text-white">
-                                    EG
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold text-white">Asesor de Ventas</p>
-                                    <p className="text-xs text-zinc-400">Disponible ahora para consultas.</p>
-                                </div>
-                            </div>
+                            {/* Consultant Card replaced by Team Selector */}
+                            <TeamSelector carName={`${car.brand} ${car.model}`} />
 
                         </div>
                     </div>
