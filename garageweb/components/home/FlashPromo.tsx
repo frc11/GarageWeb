@@ -5,7 +5,7 @@ import Link from "next/link";
 import { m } from "framer-motion";
 import { ArrowRight, Zap, TrendingDown, Percent } from "lucide-react";
 import { Car } from "@/types/main";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, cn } from "@/lib/utils";
 import { PremiumButton } from "../ui/PremiumButton";
 
 interface FlashPromoProps {
@@ -15,7 +15,11 @@ interface FlashPromoProps {
 export function FlashPromo({ offers }: FlashPromoProps) {
     if (!offers || offers.length === 0) return null;
 
-    const runwayOffers = [...offers, ...offers, ...offers];
+    // Lógica Condicional: Solo activar carrusel si hay 5 o más autos
+    const enableCarousel = offers.length >= 5;
+
+    // Si es carrusel, triplicamos para el loop. Si no, usamos el array original.
+    const displayOffers = enableCarousel ? [...offers, ...offers, ...offers] : offers;
 
     return (
         <section className="bg-neutral-950 relative overflow-hidden flex flex-col items-center z-10 pt-50 pb-25 -mt-25">
@@ -29,7 +33,6 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                     100% { transform: translateX(0); }
                 }
                 .animate-runway {
-                    /* CAMBIO 1: Velocidad variable. 30s en móvil (rápido), 60s en desktop (lento/elegante) */
                     animation: scroll-right 30s linear infinite;
                 }
                 @media (min-width: 768px) {
@@ -77,11 +80,23 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 </m.p>
             </div>
 
-            {/* The Runway (Carousel) */}
-            <div className="w-full relative group z-20 mb-16">
-                <div className="flex animate-runway w-fit hover:cursor-grab active:cursor-grabbing pl-4 md:pl-0">
-                    {runwayOffers.map((car, index) => (
-                        <DealCard key={`${car.id}-${index}`} car={car} />
+            {/* 
+                Layout Switcher: 
+                - Si enableCarousel (>=5): Usa el layout de "Runway" con animación.
+                - Si NO (!enableCarousel): Usa un layout Flex centrado que se adapta (4, 3, 2, 1 columnas implícitas).
+            */}
+            <div className={cn("w-full relative group z-20 mb-16", !enableCarousel && "container mx-auto px-4")}>
+                <div className={cn(
+                    enableCarousel
+                        ? "flex animate-runway w-fit hover:cursor-grab active:cursor-grabbing pl-4 md:pl-0"
+                        : "flex flex-wrap justify-center gap-6" // Layout estático centrado
+                )}>
+                    {displayOffers.map((car, index) => (
+                        <DealCard
+                            key={`${car.id}-${index}`}
+                            car={car}
+                            isCarousel={enableCarousel}
+                        />
                     ))}
                 </div>
             </div>
@@ -97,7 +112,6 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 <a href="/ofertas">
                     <PremiumButton
                         variant="primary"
-                        // Visual: Change to Orange/Amber gradient
                         className="bg-gradient-to-r from-amber-500 to-orange-600 text-black border-none hover:from-amber-400 hover:to-orange-500 shadow-[0_0_30px_rgba(245,158,11,0.3)]"
                     >
                         Ver Todas las Ofertas
@@ -110,9 +124,8 @@ export function FlashPromo({ offers }: FlashPromoProps) {
     );
 }
 
-
-function DealCard({ car }: { car: Car }) {
-    // Tu lógica de porcentaje se queda igual (normalmente los % son enteros)
+// Componente auxiliar actualizado para manejar estilos dinámicos
+function DealCard({ car, isCarousel = true }: { car: Car, isCarousel?: boolean }) {
     const discountPercent = (car.isOffer && car.originalPrice && car.price < car.originalPrice)
         ? Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100)
         : null;
@@ -120,16 +133,18 @@ function DealCard({ car }: { car: Car }) {
     return (
         <Link
             href={`/autos/${car.slug}`}
-            // CAMBIO 2: Ancho Responsive
-            // w-[85vw]: En móvil ocupa el 85% del ancho de la pantalla (se ve la tarjeta de al lado un poco).
-            // sm:w-[320px]: En tablets pequeñas.
-            // md:w-[420px]: En desktop.
-            className="flex-shrink-0 w-[85vw] sm:w-[320px] md:w-[420px] mx-3 md:mx-4 relative group/card h-full"
+            className={cn(
+                "relative group/card h-full block transition-transform hover:-translate-y-1 duration-300",
+                // Si es carrusel, usamos los anchos fijos y márgenes originales
+                isCarousel
+                    ? "flex-shrink-0 w-[85vw] sm:w-[320px] md:w-[420px] mx-3 md:mx-4"
+                    // Si es estático, usamos un ancho máximo pero permitimos que flex lo acomode
+                    : "w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(25%-1.5rem)] max-w-[420px]"
+            )}
         >
             <div className="relative bg-neutral-900 rounded-xl overflow-hidden border border-transparent transition-all duration-300 group-hover/card:border-orange-500/40 group-hover/card:shadow-[0_0_40px_rgba(249,115,22,0.15)] flex flex-col h-full">
 
                 {/* Image Area */}
-                {/* Ajustamos la altura en móvil también para que no sea tan alta */}
                 <div className="relative h-[200px] md:h-[240px] overflow-hidden bg-neutral-800 shrink-0">
                     <Image
                         src={car.images[0]}
