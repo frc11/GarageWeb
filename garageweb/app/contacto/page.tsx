@@ -54,7 +54,7 @@ export default function ContactPage() {
                             src="/showroom-facade.png"
                             alt="Garage Showroom Ambience"
                             fill
-                            className="object-cover opacity-60 grayscale transition-all duration-300 ease-in-out group-hover:grayscale-0 "
+                            className="object-cover opacity-60 lg:grayscale transition-all duration-300 ease-in-out group-hover:grayscale-0 "
                             priority
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-neutral-950/40" />

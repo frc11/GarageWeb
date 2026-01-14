@@ -7,7 +7,7 @@ import { CarCard } from "@/components/cars/CarCard";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { cn } from "@/lib/utils";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { BrandSelector } from "./BrandSelector";
 import { ViewAllButton } from "./ViewAllButton";
 import { PremiumDropdown } from "../ui/PremiumDropdown";
@@ -24,6 +24,7 @@ const ITEMS_PER_PAGE = 9;
 
 export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const searchParams = useSearchParams();
+    const router = useRouter(); // Initialize router
 
     // 1. State Management
     const [cars, setCars] = useState<Car[]>([]);
@@ -238,10 +239,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     className="flex-1 md:min-w-[280px]"
                 />
                 <ViewAllButton
-                    onClick={() => {
-                        setSelectedBrand("Todas");
-                        clearFilters();
-                    }}
+                    onClick={() => router.push("/ofertas")}
                     className="md:flex-shrink-0"
                 />
             </div>

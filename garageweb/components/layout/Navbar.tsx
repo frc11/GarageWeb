@@ -119,7 +119,7 @@ export function Navbar() {
 
                     {/* Contact Button & Mobile Toggle */}
                     <div className="flex items-center gap-6 shrink-0">
-                        <Link href="/contacto">
+                        <Link href="/contacto" className="hidden md:block">
                             <PremiumButton
                                 className="h-10 px-6 py-0 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] transition-all duration-300 group"
                             >

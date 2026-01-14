@@ -19,7 +19,7 @@ export default function SellPage() {
                             src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2669&auto=format&fit=crop"
                             alt="Luxury Car Detail"
                             fill
-                            className="object-cover opacity-60 grayscale transition-all duration-300 ease-in-out group-hover:grayscale-0 "
+                            className="object-cover opacity-60 lg:grayscale transition-all duration-300 ease-in-out group-hover:grayscale-0 "
                             priority
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
