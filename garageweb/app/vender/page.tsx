@@ -11,7 +11,7 @@ export default function SellPage() {
             <div className="flex flex-col lg:flex-row min-h-screen">
 
                 {/* Left Column: Immersive Visual (Sticky) */}
-                <div className="lg:w-1/2 relative min-h-[50vh] lg:h-screen lg:sticky lg:top-0 overflow-hidden bg-neutral-900 border-r border-white/10">
+                <div className="group lg:w-1/2 relative min-h-[50vh] lg:h-screen lg:sticky lg:top-0 overflow-hidden bg-neutral-900 border-r border-white/10">
 
                     {/* Dynamic Background Image */}
                     <div className="absolute inset-0">
@@ -19,7 +19,7 @@ export default function SellPage() {
                             src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2669&auto=format&fit=crop"
                             alt="Luxury Car Detail"
                             fill
-                            className="object-cover opacity-60 mix-blend-overlay grayscale"
+                            className="object-cover opacity-60 grayscale transition-all duration-300 ease-in-out group-hover:grayscale-0 "
                             priority
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />

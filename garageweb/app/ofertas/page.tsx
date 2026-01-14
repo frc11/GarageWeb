@@ -1,10 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { OFFERS_QUERY } from "@/sanity/lib/queries";
-import { OfferCard } from "@/components/offers/OfferCard";
+import { OffersClient } from "@/components/ofertas/OffersClient";
 import { Car } from "@/types/main";
-import { Tag } from "lucide-react";
-import Link from "next/link";
-import { PremiumButton } from "@/components/ui/PremiumButton";
 
 export const metadata = {
     title: "Ofertas",
@@ -76,32 +73,7 @@ export default async function OffersPage() {
 
             {/* 2. Offers Grid */}
             <section className="container mx-auto px-6 pb-32">
-                {!offers || offers.length === 0 ? (
-                    // Empty State
-                    <div className="flex flex-col items-center justify-center py-24 text-center space-y-8 animate-in fade-in zoom-in duration-700">
-                        <div className="w-24 h-24 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                            <Tag className="w-10 h-10 text-zinc-600" />
-                        </div>
-                        <div className="space-y-4 max-w-md mx-auto">
-                            <h3 className="text-3xl font-serif text-white">Sin ofertas activas</h3>
-                            <p className="text-zinc-500 font-light leading-relaxed">
-                                En este momento no contamos con vehículos en liquidación. Visita nuestro catálogo completo para ver todas las unidades disponibles.
-                            </p>
-                        </div>
-                        <Link href="/catalogo">
-                            <PremiumButton variant="primary">
-                                Explorar Catálogo
-                            </PremiumButton>
-                        </Link>
-                    </div>
-                ) : (
-                    // Grid
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {offers.map((car) => (
-                            <OfferCard key={car.id} car={car} />
-                        ))}
-                    </div>
-                )}
+                <OffersClient cars={offers} />
             </section>
 
         </main>

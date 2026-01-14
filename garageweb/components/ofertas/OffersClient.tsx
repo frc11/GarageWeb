@@ -1,15 +1,18 @@
 "use client";
 
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Car } from "@/types/main";
 import { CarCard } from "@/components/cars/CarCard";
-import { BadgePercent, Tag } from "lucide-react";
+import { BadgePercent, Tag, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { PremiumButton } from "../ui/PremiumButton";
 
 interface OffersClientProps {
     cars: Car[];
 }
+
+const ITEMS_PER_PAGE = 9;
 
 export function OffersClient({ cars }: OffersClientProps) {
     if (!cars || cars.length === 0) {
@@ -38,6 +41,19 @@ export function OffersClient({ cars }: OffersClientProps) {
         );
     }
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const totalPages = Math.ceil(cars.length / ITEMS_PER_PAGE);
+
+    const currentCars = useMemo(() => {
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        return cars.slice(start, start + ITEMS_PER_PAGE);
+    }, [cars, currentPage]);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [currentPage]);
+
     const container = {
         hidden: { opacity: 0 },
         show: {
@@ -58,34 +74,62 @@ export function OffersClient({ cars }: OffersClientProps) {
     };
 
     return (
-        <motion.div
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12"
-        >
-            {cars.map((car) => (
-                <motion.div
-                    key={car.id}
-                    variants={item}
-                    className="group relative"
-                >
-                    {/* Offers Badge Overlay */}
-                    <div className="absolute top-4 right-4 z-20 overflow-hidden">
-                        <div className="bg-amber-500 text-black text-xs font-bold px-3 py-1.5 uppercase tracking-widest shadow-lg flex items-center gap-1.5">
-                            <BadgePercent size={14} strokeWidth={2.5} />
-                            <span>Oferta</span>
+        <div className="space-y-12">
+            <motion.div
+                key={currentPage}
+                variants={container}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12"
+            >
+                {currentCars.map((car) => (
+                    <motion.div
+                        key={car.id}
+                        variants={item}
+                        className="group relative"
+                    >
+                        {/* Offers Badge Overlay */}
+                        <div className="absolute top-4 right-4 z-20 overflow-hidden">
+                            <div className="bg-amber-500 text-black text-xs font-bold px-3 py-1.5 uppercase tracking-widest shadow-lg flex items-center gap-1.5">
+                                <BadgePercent size={14} strokeWidth={2.5} />
+                                <span>Oferta</span>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Card Container with Glow */}
-                    <div className="h-full rounded-[2rem] p-1 bg-transparent transition-all duration-500 hover:bg-gradient-to-br hover:from-amber-500/20 hover:to-transparent hover:shadow-[0_0_40px_rgba(245,158,11,0.1)]">
-                        <div className="h-full rounded-[1.8rem] overflow-hidden bg-zinc-950 border border-white/5 group-hover:border-amber-500/30 transition-colors duration-500">
-                            <CarCard car={car} />
+                        {/* Card Container with Glow */}
+                        <div className="h-full rounded-[2rem] p-1 bg-transparent transition-all duration-500 hover:bg-gradient-to-br hover:from-amber-500/20 hover:to-transparent hover:shadow-[0_0_40px_rgba(245,158,11,0.1)]">
+                            <div className="h-full rounded-[1.8rem] overflow-hidden bg-zinc-950 border border-white/5 group-hover:border-amber-500/30 transition-colors duration-500">
+                                <CarCard car={car} />
+                            </div>
                         </div>
-                    </div>
-                </motion.div>
-            ))}
-        </motion.div>
+                    </motion.div>
+                ))}
+            </motion.div>
+
+            {/* --- PAGINATION --- */}
+            {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 py-8 relative z-10">
+                    <button
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors"
+                    >
+                        <ChevronLeft size={20} className="text-white" />
+                    </button>
+
+                    <span className="text-sm font-medium text-zinc-400">
+                        Página <span className="text-white">{currentPage}</span> de <span className="text-white">{totalPages}</span>
+                    </span>
+
+                    <button
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors"
+                    >
+                        <ChevronRight size={20} className="text-white" />
+                    </button>
+                </div>
+            )}
+        </div>
     );
 }

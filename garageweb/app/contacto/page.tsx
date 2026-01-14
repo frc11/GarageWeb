@@ -48,13 +48,13 @@ export default function ContactPage() {
             <div className="flex flex-col lg:flex-row min-h-screen">
 
                 {/* Visual Column (Sticky) */}
-                <div className="lg:w-[45%] relative h-[50vh] lg:h-screen lg:sticky lg:top-0 overflow-hidden border-r border-white/5">
+                <div className="group lg:w-[45%] relative h-[50vh] lg:h-screen lg:sticky lg:top-0 overflow-hidden border-r border-white/5">
                     <div className="absolute inset-0 z-0">
                         <Image
                             src="/showroom-facade.png"
                             alt="Garage Showroom Ambience"
                             fill
-                            className="object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out"
+                            className="object-cover opacity-60 grayscale transition-all duration-300 ease-in-out group-hover:grayscale-0 "
                             priority
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-neutral-950/40" />
