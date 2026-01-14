@@ -12,6 +12,7 @@ import { BrandSelector } from "./BrandSelector";
 import { ViewAllButton } from "./ViewAllButton";
 import { PremiumDropdown } from "../ui/PremiumDropdown";
 import { YearRangeFilter } from "./YearRangeFilter";
+import { PriceRangeFilter } from "./PriceRangeFilter";
 
 import { client } from "@/sanity/lib/client";
 import { CARS_QUERY, CATALOG_BRANDS_QUERY } from "@/sanity/lib/queries";
@@ -39,6 +40,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const [yearRange, setYearRange] = useState<[number, number]>([1990, 2025]);
     const [globalMinMax, setGlobalMinMax] = useState<[number, number]>([1990, 2025]);
 
+    // Price State
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
+    const [globalPriceMinMax, setGlobalPriceMinMax] = useState<[number, number]>([0, 1000000]);
+
+    const [selectedTransmission, setSelectedTransmission] = useState<string>("Todos");
     // CAMBIO: Inicializar en 'Todos' en lugar de null para evitar placeholder cursiva
     const [selectedFuel, setSelectedFuel] = useState<string>("Todos");
     const [searchTerm, setSearchTerm] = useState("");
@@ -78,7 +84,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
                 setCars(mappedCars);
 
-                // Calculate Dynamic Min/Max Years
+                // Calculate Dynamic Min/Max Years and Prices
                 if (mappedCars.length > 0) {
                     const years = mappedCars.map(c => c.year).filter(y => !isNaN(y));
                     if (years.length > 0) {
@@ -87,12 +93,20 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         setGlobalMinMax([minYear, maxYear]);
                         setYearRange([minYear, maxYear]);
                     }
+
+                    const prices = mappedCars.map(c => c.price).filter(p => !isNaN(p));
+                    if (prices.length > 0) {
+                        const minPrice = Math.min(...prices);
+                        const maxPrice = Math.max(...prices);
+                        setGlobalPriceMinMax([minPrice, maxPrice]);
+                        setPriceRange([minPrice, maxPrice]);
+                    }
                 }
 
                 const mappedBrands = brandNames.map((name: string) => ({
                     id: name.toLowerCase(),
                     name: name,
-                    slug: name.toLowerCase()
+                    slug: name.toLowerCase().trim().replace(/\s+/g, '-')
                 }));
                 setAllBrands(mappedBrands);
 
@@ -118,6 +132,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         return ["Todos", ...fuels];
     }, [cars]);
 
+    const availableTransmissions = useMemo(() => {
+        const transmissions = Array.from(new Set(cars.map(c => c.transmission))).sort();
+        return ["Todos", ...transmissions];
+    }, [cars]);
+
     const categories = ["Todos", "Deportivos", "SUV", "Sedán", "Pick-up", "Clásicos"];
 
     const brandPills = useMemo(() => {
@@ -136,7 +155,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
     useMemo(() => {
         setCurrentPage(1);
-    }, [searchTerm, selectedCategory, selectedBrand, yearRange, selectedFuel]);
+    }, [searchTerm, selectedCategory, selectedBrand, yearRange, selectedFuel, priceRange, selectedTransmission]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -159,13 +178,15 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             const matchesBrand = selectedBrand === "Todas" || car.brand === selectedBrand;
 
             const matchesYear = car.year >= yearRange[0] && car.year <= yearRange[1];
+            const matchesPrice = car.price >= priceRange[0] && car.price <= priceRange[1];
 
             // CAMBIO: Lógica ajustada para 'Todos'
             const matchesFuel = selectedFuel === "Todos" || car.fuelType === selectedFuel;
+            const matchesTransmission = selectedTransmission === "Todos" || car.transmission === selectedTransmission;
 
-            return matchesSearch && matchesCategory && matchesBrand && matchesYear && matchesFuel;
+            return matchesSearch && matchesCategory && matchesBrand && matchesYear && matchesFuel && matchesPrice && matchesTransmission;
         });
-    }, [cars, searchTerm, selectedCategory, selectedBrand, yearRange, selectedFuel]);
+    }, [cars, searchTerm, selectedCategory, selectedBrand, yearRange, selectedFuel, priceRange, selectedTransmission]);
 
     const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
 
@@ -177,8 +198,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const clearFilters = () => {
         setSelectedCategory("Todos");
         setSelectedBrand("Todas");
+        setSelectedBrand("Todas");
         setYearRange(globalMinMax);
+        setPriceRange(globalPriceMinMax);
         setSelectedFuel("Todos"); // Reset to "Todos"
+        setSelectedTransmission("Todos");
         setSearchTerm("");
     };
 
@@ -186,7 +210,9 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         selectedCategory !== "Todos" ||
         selectedBrand !== "Todas" ||
         (yearRange[0] !== globalMinMax[0] || yearRange[1] !== globalMinMax[1]) ||
+        (priceRange[0] !== globalPriceMinMax[0] || priceRange[1] !== globalPriceMinMax[1]) ||
         selectedFuel !== "Todos" ||
+        selectedTransmission !== "Todos" ||
         searchTerm !== "";
 
     if (loading) {
@@ -263,55 +289,89 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             </div>
 
             {/* --- 3. CONTROL CENTER (Filters Bar) --- */}
-            {/* CAMBIO: Agregado z-40 para arreglar bug de click y solapamiento */}
-            <div className="relative z-40 flex flex-wrap justify-center gap-6 items-start w-full max-w-5xl mx-auto bg-zinc-900/40 p-6 rounded-3xl border border-white/5 backdrop-blur-sm">
+            {/* --- 3. CONTROL CENTER (Filters Bar) --- */}
+            {/* CAMBIO: Layout estructurado en Grid para mejor alineación visual */}
+            <div className="relative z-40 w-full max-w-5xl mx-auto bg-zinc-900/40 p-6 md:p-8 rounded-3xl border border-white/5 backdrop-blur-sm flex flex-col gap-8">
 
-                {/* Search Bar - Glass Pill */}
-                <div className="flex flex-col gap-1 flex-1 min-w-[240px] w-full">
-                    <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2 mb-2">
-                        Búsqueda
-                    </span>
-                    <div className="relative">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-amber-500 w-4 h-4" />
-                        <input
-                            type="text"
-                            placeholder="Buscar vehículo..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+                {/* ROW 1: SEARCH + DROPDOWNS */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+                    {/* Search Bar (Span 6 - 50% width) */}
+                    <div className="md:col-span-6 flex flex-col gap-2">
+                        <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2">
+                            Búsqueda
+                        </span>
+                        <div className="relative">
+                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-amber-500 w-4 h-4" />
+                            <input
+                                type="text"
+                                placeholder="Buscar vehículo..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+                            />
+                            {searchTerm && (
+                                <button
+                                    onClick={() => setSearchTerm("")}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                                >
+                                    <X size={14} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Transmission (Span 3 - 25% width) */}
+                    <div className="md:col-span-3 flex flex-col gap-2">
+                        <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2">
+                            Transmisión
+                        </span>
+                        <PremiumDropdown
+                            options={availableTransmissions}
+                            value={selectedTransmission}
+                            onChange={(val) => setSelectedTransmission(val || "Todos")}
+                            allowClear={false}
+                            className="w-full"
                         />
-                        {searchTerm && (
-                            <button
-                                onClick={() => setSearchTerm("")}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
-                            >
-                                <X size={14} />
-                            </button>
-                        )}
+                    </div>
+
+                    {/* Fuel (Span 3 - 25% width) */}
+                    <div className="md:col-span-3 flex flex-col gap-2">
+                        <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2">
+                            Combustible
+                        </span>
+                        <PremiumDropdown
+                            options={availableFuels}
+                            value={selectedFuel}
+                            onChange={(val) => setSelectedFuel(val || "Todos")}
+                            allowClear={false}
+                            className="w-full"
+                        />
                     </div>
                 </div>
 
-                {/* Year Range Slider */}
-                <div className="w-full md:w-auto flex-1 min-w-[220px]">
-                    <YearRangeFilter
-                        min={globalMinMax[0]}
-                        max={globalMinMax[1]}
-                        onChange={setYearRange}
-                    />
-                </div>
+                {/* DIVIDER */}
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-                {/* CAMBIO: Fuel Dropdown - Con Label explícito y opción Todos */}
-                <div className="flex flex-col gap-1 min-w-[160px] w-full md:w-auto">
-                    <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2 mb-2">
-                        Combustible
-                    </span>
-                    <PremiumDropdown
-                        options={availableFuels}
-                        value={selectedFuel}
-                        onChange={setSelectedFuel}
-                        allowClear={false}
-                        className="w-full"
-                    />
+                {/* ROW 2: SLIDERS */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 px-2">
+                    {/* Year Range Slider */}
+                    <div className="w-full">
+                        <YearRangeFilter
+                            min={globalMinMax[0]}
+                            max={globalMinMax[1]}
+                            onChange={setYearRange}
+                        />
+                    </div>
+
+                    {/* Price Range Slider */}
+                    <div className="w-full">
+                        <PriceRangeFilter
+                            min={globalPriceMinMax[0]}
+                            max={globalPriceMinMax[1]}
+                            onChange={setPriceRange}
+                        />
+                    </div>
                 </div>
             </div>
 
