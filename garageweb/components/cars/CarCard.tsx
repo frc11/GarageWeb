@@ -13,9 +13,10 @@ interface CarCardProps {
     isOffer?: boolean;
     discountPercentage?: number;
     hideStatusBadge?: boolean;
+    imageAspectClassName?: string;
 }
 
-export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage, hideStatusBadge = false }: CarCardProps) {
+export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage, hideStatusBadge = false, imageAspectClassName }: CarCardProps) {
     // Logic to determine if it's an offer 
     const isOfferActive = isOffer || car.isOffer;
     const isSold = car.status === 'sold';
@@ -41,7 +42,7 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
             )}
         >
             {/* --- Image Area --- */}
-            <div className="relative aspect-[4/3] overflow-hidden">
+            <div className={cn("relative overflow-hidden", imageAspectClassName || "aspect-[4/3]")}>
                 {car.images && car.images.length > 0 ? (
                     <Image
                         src={car.images[0]}

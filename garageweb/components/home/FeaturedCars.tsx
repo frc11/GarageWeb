@@ -3,15 +3,48 @@
 import { CarCard } from "@/components/cars/CarCard";
 import { Car } from "@/types/main";
 import { m } from "framer-motion";
-import { CarIcon, LayoutGrid } from "lucide-react";
+import { CarIcon } from "lucide-react";
 import { PremiumButton } from "../ui/PremiumButton";
+import { cn } from "@/lib/utils";
 
 interface FeaturedCarsProps {
     cars: Car[];
 }
 
+function getClassForIndex(index: number, total: number): string {
+    // 1 Item: Full width
+    if (total === 1) return "md:col-span-12";
+
+    // 2 Items: Split 50/50
+    if (total === 2) return "md:col-span-6";
+
+    // 3 Items: Two split top, one hero bottom (User Request: Last uses all space)
+    if (total === 3) return index === 2 ? "md:col-span-12" : "md:col-span-6";
+
+    // 4 Items: Zig Zag (Hero + Small, Small + Hero)
+    if (total === 4) return (index === 0 || index === 3) ? "md:col-span-8" : "md:col-span-4";
+
+    // 5+ Items: Mosaic Pattern
+    // If total (5, 7, 9) is odd, last item MUST be full width
+    if (total % 2 !== 0 && index === total - 1) {
+        return "md:col-span-12";
+    }
+
+    // Pattern for the rest: [8, 4] -> [4, 8] -> [6, 6] -> Repeat
+    const pattern = [8, 4, 4, 8, 6, 6];
+    const span = pattern[index % pattern.length];
+    return `md:col-span-${span}`;
+}
+
 export function FeaturedCars({ cars }: FeaturedCarsProps) {
     if (!cars || cars.length === 0) return null;
+
+    // Remove limits (up to 10 as requested)
+    const displayCars = cars
+        .sort((a, b) => Number(b.id) - Number(a.id))
+        .slice(0, 10);
+
+    const totalItems = displayCars.length;
 
     const container = {
         hidden: { opacity: 0 },
@@ -25,23 +58,20 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
 
     const item = {
         hidden: { opacity: 0, y: 30 },
-        show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }
+        show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } }
     };
 
     return (
-        // Mantenemos overflow-hidden y el bg oscuro
         <section className="py-25 bg-neutral-950 relative overflow-hidden z-20">
 
-            {/* INTEGRACIÓN SUPERIOR (FlashPromo -> Featured) - SE MANTIENE */}
+            {/* INTEGRACIÓN SUPERIOR */}
             <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-neutral-950 via-neutral-950/80 to-transparent z-10 pointer-events-none" />
 
-            {/* TEXTURA DE PUNTOS (Modificada) */}
+            {/* TEXTURA DE PUNTOS */}
             <div className="absolute inset-0 z-0 opacity-[0.15]"
                 style={{
                     backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
                     backgroundSize: '32px 32px',
-                    // CAMBIO CLAVE: Fade IN arriba (para FlashPromo) y Fade OUT abajo (para AboutSection)
-                    // Esto evita que los puntos se corten feo contra el blanco de abajo.
                     maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
                     WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
                 }}
@@ -121,58 +151,35 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
 
                 </div>
 
-                {/* Grid */}
+                {/* Dynamic Bento Grid */}
                 <m.div
                     variants={container}
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 auto-rows-[450px]"
+                    className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[400px]"
                 >
-                    {/* Sort by ID desc (assuming higher ID is newer) or by Year desc, then take top 4 */}
-                    {cars
-                        .sort((a, b) => Number(b.id) - Number(a.id)) // Mock 'latest' logic
-                        .slice(0, 4)
-                        .map((car, index) => {
-                            const total = 4; // We force 4
-                            let mdClass = "md:col-span-1";
-                            let lgClass = "lg:col-span-4"; // Default 3 cols? No 12/4 = 3 columns.
-                            // Actually the design system here (lg:col-span-X) depends on the layout intended.
-                            // If we want 4 items, we can do 2x2 grid in desktop? Or 4 items in one row?
-                            // 12 columns. 4 items -> span 3 each? Or span 6 (2 rows)?
-                            // User manual said "top 4".
-                            // Previous logic had masonry-like spans.
+                    {displayCars.map((car, index) => {
+                        const colSpanClass = getClassForIndex(index, totalItems);
 
-                            // Let's do a uniform 2x2 grid for "Latest Arrivals" or a nice asymmetric one if indices match.
-                            // Let's stick to the previous dynamic span logic but applied to only 4 items.
-
-                            if (index === 0 || index === 3) lgClass = "lg:col-span-8"; // Big
-                            else lgClass = "lg:col-span-4"; // Small
-                            // Wait, 8+4 = 12 (Row 1). 4+8 = 12 (Row 2).
-                            // If index 0 is 8, index 1 is 4. -> Row 1 full.
-                            // If index 2 is 4, index 3 is 8. -> Row 2 full.
-                            // Looks good for 4 items.
-
-                            // Override previous logic for clear 2-row layout
-                            if (index === 0) lgClass = "lg:col-span-8";
-                            if (index === 1) lgClass = "lg:col-span-4";
-                            if (index === 2) lgClass = "lg:col-span-4";
-                            if (index === 3) lgClass = "lg:col-span-8";
-
-                            return (
-                                <m.div
-                                    key={car.id}
-                                    variants={item}
-                                    className={`relative group md:col-span-1 ${lgClass}`}
-                                >
-                                    <CarCard
-                                        car={car}
-                                        className="h-full border-neutral-800 hover:border-neutral-600 transition-colors bg-black"
-                                        priority={index <= 2}
-                                    />
-                                </m.div>
-                            );
-                        })}
+                        return (
+                            <m.div
+                                key={car.id}
+                                variants={item}
+                                className={cn(
+                                    "relative group md:col-span-12", // Default to full width on mobile/base
+                                    colSpanClass
+                                )}
+                            >
+                                <CarCard
+                                    car={car}
+                                    className="h-full border-neutral-800 hover:border-neutral-600 transition-colors bg-black flex flex-col"
+                                    imageAspectClassName="flex-1 w-full"
+                                    priority={index <= 2}
+                                />
+                            </m.div>
+                        );
+                    })}
                 </m.div>
             </div>
 
