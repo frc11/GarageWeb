@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { UI_ANIMATIONS } from "@/lib/ui-data";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ export function ScrollReveal({ children, animation, className, duration }: Scrol
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={config}
+            variants={config as unknown as Variants}
             {...(duration ? { transition: { duration } } : {})}
         >
             {children}
