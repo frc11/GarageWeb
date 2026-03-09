@@ -65,10 +65,13 @@ export default defineType({
         }),
         defineField({
             name: 'currency',
-            title: 'Currency',
+            title: 'Moneda',
             type: 'string',
             options: {
-                list: ['USD', 'EUR', 'ARS'],
+                list: [
+                    { title: 'Dólares (USD)', value: 'USD' },
+                    { title: 'Pesos (ARS)', value: 'ARS' },
+                ],
             },
             initialValue: 'USD',
             validation: (rule) => rule.required(),
@@ -132,11 +135,10 @@ export default defineType({
             title: 'Miniatura del Auto (Catálogo)',
             type: 'array',
             of: [
-                { type: 'image', options: { hotspot: true } },
-                { type: 'file', options: { accept: 'video/mp4,video/webm' } }
+                { type: 'image', options: { hotspot: true } }
             ],
             validation: (rule) => rule.required().max(1),
-            description: 'Imagen o video (silenciado) que servirá de previsualización en la lista principal de autos.'
+            description: 'Foto compacta que se muestra en las listas. SOLO se permiten imágenes.'
         }),
         defineField({
             name: 'gallery',

@@ -116,6 +116,7 @@ export default async function CarPage(props: CarPageProps) {
                                                 <video
                                                     src={media}
                                                     controls
+                                                    playsInline
                                                     className="w-full h-full object-cover"
                                                     preload="metadata"
                                                 />
@@ -172,14 +173,14 @@ export default async function CarPage(props: CarPageProps) {
                                         <div className="flex flex-col items-start gap-1">
                                             {car.isOffer && car.originalPrice && (
                                                 <span className="text-xl line-through text-zinc-600 font-medium order-1">
-                                                    {formatCurrency(car.originalPrice)}
+                                                    {formatCurrency(car.originalPrice, car.currency)}
                                                 </span>
                                             )}
                                             <span className={cn(
                                                 "text-4xl md:text-5xl font-bold tracking-tight order-2 whitespace-nowrap",
                                                 car.isOffer ? "text-amber-500" : "text-white"
                                             )}>
-                                                {formatCurrency(car.price)}
+                                                {formatCurrency(car.price, car.currency)}
                                             </span>
                                         </div>
                                     </div>

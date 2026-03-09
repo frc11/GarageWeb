@@ -44,25 +44,14 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
             {/* --- Image/Video Area --- */}
             <div className={cn("relative overflow-hidden", imageAspectClassName || "aspect-[4/3]")}>
                 {car.thumbnailImage ? (
-                    car.thumbnailImage.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
-                        <video
-                            src={car.thumbnailImage}
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                        />
-                    ) : (
-                        <Image
-                            src={car.thumbnailImage}
-                            alt={`${car.brand} ${car.model}`}
-                            fill
-                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            priority={priority}
-                        />
-                    )
+                    <Image
+                        src={car.thumbnailImage}
+                        alt={`${car.brand} ${car.model}`}
+                        fill
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={priority}
+                    />
                 ) : (
                     <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center">
                         <span className="text-zinc-600 text-xs uppercase tracking-widest">Sin Imagen</span>
@@ -122,11 +111,11 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                     <div className="flex flex-col">
                         {originalPrice && originalPrice > currentPrice && (
                             <span className="text-zinc-600 text-[10px] line-through font-medium">
-                                {formatCurrency(originalPrice)}
+                                {formatCurrency(originalPrice, car.currency)}
                             </span>
                         )}
                         <span className="text-white text-lg sm:text-xl font-bold tracking-tight">
-                            {formatCurrency(currentPrice)}
+                            {formatCurrency(currentPrice, car.currency)}
                         </span>
                     </div>
 
