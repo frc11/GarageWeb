@@ -168,22 +168,29 @@ export default async function CarPage(props: CarPageProps) {
                             {/* Price Block */}
                             <div className="p-8 rounded-3xl bg-zinc-900/80 backdrop-blur-xl border border-white/10 space-y-8">
                                 <div className="flex justify-between items-start">
-                                    <div>
-                                        <p className="text-xs uppercase tracking-widest text-zinc-500 mb-2">Precio de Lista</p>
-                                        <div className="flex flex-col items-start gap-1">
-                                            {car.isOffer && car.originalPrice && (
-                                                <span className="text-xl line-through text-zinc-600 font-medium order-1">
-                                                    {formatCurrency(car.originalPrice, car.currency)}
+                                    {car.price ? (
+                                        <div>
+                                            <p className="text-xs uppercase tracking-widest text-zinc-500 mb-2">Precio de Lista</p>
+                                            <div className="flex flex-col items-start gap-1">
+                                                {car.isOffer && car.originalPrice && (
+                                                    <span className="text-xl line-through text-zinc-600 font-medium order-1">
+                                                        {formatCurrency(car.originalPrice, car.currency)}
+                                                    </span>
+                                                )}
+                                                <span className={cn(
+                                                    "text-4xl md:text-5xl font-bold tracking-tight order-2 whitespace-nowrap",
+                                                    car.isOffer ? "text-amber-500" : "text-white"
+                                                )}>
+                                                    {formatCurrency(car.price, car.currency)}
                                                 </span>
-                                            )}
-                                            <span className={cn(
-                                                "text-4xl md:text-5xl font-bold tracking-tight order-2 whitespace-nowrap",
-                                                car.isOffer ? "text-amber-500" : "text-white"
-                                            )}>
-                                                {formatCurrency(car.price, car.currency)}
-                                            </span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div>
+                                            <p className="text-xs uppercase tracking-widest text-zinc-500 mb-2">Valor</p>
+                                            <span className="text-2xl md:text-3xl font-bold text-white tracking-tight">Consultar</span>
+                                        </div>
+                                    )}
                                     <ShareButton
                                         title={`${car.brand} ${car.model}`}
                                         text={shareText}
@@ -193,18 +200,22 @@ export default async function CarPage(props: CarPageProps) {
 
                                 {/* Tech Specs 2x2 */}
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div className="bg-black/40 p-4 rounded-xl border border-white/5">
-                                        <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Año</p>
-                                        <p className="text-lg font-bold text-white flex items-center gap-2">
-                                            <Calendar size={14} /> {car.year}
-                                        </p>
-                                    </div>
-                                    <div className="bg-black/40 p-4 rounded-xl border border-white/5">
-                                        <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Kilometraje</p>
-                                        <p className="text-lg font-bold text-white flex items-center gap-2">
-                                            <Gauge size={14} /> {car.mileage.toLocaleString()}
-                                        </p>
-                                    </div>
+                                    {car.year && (
+                                        <div className="bg-black/40 p-4 rounded-xl border border-white/5">
+                                            <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Año</p>
+                                            <p className="text-lg font-bold text-white flex items-center gap-2">
+                                                <Calendar size={14} /> {car.year}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {car.mileage !== undefined && car.mileage !== null && (
+                                        <div className="bg-black/40 p-4 rounded-xl border border-white/5">
+                                            <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Kilometraje</p>
+                                            <p className="text-lg font-bold text-white flex items-center gap-2">
+                                                <Gauge size={14} /> {car.mileage.toLocaleString()}
+                                            </p>
+                                        </div>
+                                    )}
                                     <div className="bg-black/40 p-4 rounded-xl border border-white/5">
                                         <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Transmisión</p>
                                         <p className="text-lg font-bold text-white flex items-center gap-2">

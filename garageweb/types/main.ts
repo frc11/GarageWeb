@@ -3,10 +3,10 @@ export interface Car {
     slug: string;
     brand: string;
     model: string;
-    year: number;
-    price: number;
+    year?: number;
+    price?: number;
     currency: 'USD' | 'ARS';
-    mileage: number;
+    mileage?: number;
     transmission: 'Automática' | 'Manual';
     thumbnailImage?: string;
     coverImage?: string;

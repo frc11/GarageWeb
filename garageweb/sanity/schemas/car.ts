@@ -46,7 +46,7 @@ export default defineType({
             name: 'price',
             title: 'Price',
             type: 'number',
-            validation: (rule) => rule.required().positive(),
+            validation: (rule) => rule.positive(),
         }),
         defineField({
             name: 'originalPrice',
@@ -86,13 +86,13 @@ export default defineType({
             name: 'year',
             title: 'Year',
             type: 'number',
-            validation: (rule) => rule.required().min(1900).max(new Date().getFullYear() + 1),
+            validation: (rule) => rule.min(1900).max(new Date().getFullYear() + 1),
         }),
         defineField({
             name: 'mileage',
             title: 'Kilometraje',
             type: 'number',
-            validation: (rule) => rule.required().min(0),
+            validation: (rule) => rule.min(0),
         }),
         defineField({
             name: 'transmission',

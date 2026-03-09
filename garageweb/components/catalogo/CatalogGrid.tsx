@@ -98,18 +98,18 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
                 // Calculate Dynamic Min/Max Years and Prices
                 if (mappedCars.length > 0) {
-                    const years = mappedCars.map(c => c.year).filter(y => !isNaN(y));
-                    if (years.length > 0) {
-                        const minYear = Math.min(...years);
-                        const maxYear = Math.max(...years);
+                    const validYears = mappedCars.map(c => c.year).filter((y): y is number => y !== undefined && y !== null && !isNaN(y));
+                    if (validYears.length > 0) {
+                        const minYear = Math.min(...validYears);
+                        const maxYear = Math.max(...validYears);
                         setGlobalMinMax([minYear, maxYear]);
                         setYearRange([minYear, maxYear]);
                     }
 
-                    const prices = mappedCars.map(c => c.price).filter(p => !isNaN(p));
-                    if (prices.length > 0) {
-                        const minPrice = Math.min(...prices);
-                        const maxPrice = Math.max(...prices);
+                    const validPrices = mappedCars.map(c => c.price).filter((p): p is number => p !== undefined && p !== null && !isNaN(p));
+                    if (validPrices.length > 0) {
+                        const minPrice = Math.min(...validPrices);
+                        const maxPrice = Math.max(...validPrices);
                         setGlobalPriceMinMax([minPrice, maxPrice]);
                         setPriceRange([minPrice, maxPrice]);
                     }
@@ -180,8 +180,8 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             const matchesCategory = selectedCategory === "Todos" || car.category === selectedCategory;
             const matchesBrand = selectedBrand === "Todas" || car.brand === selectedBrand;
 
-            const matchesYear = car.year >= yearRange[0] && car.year <= yearRange[1];
-            const matchesPrice = car.price >= priceRange[0] && car.price <= priceRange[1];
+            const matchesYear = !car.year || (car.year >= yearRange[0] && car.year <= yearRange[1]);
+            const matchesPrice = !car.price || (car.price >= priceRange[0] && car.price <= priceRange[1]);
 
             const matchesTransmission = selectedTransmission === "Todos" || car.transmission === selectedTransmission;
 

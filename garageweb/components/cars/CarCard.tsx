@@ -25,7 +25,7 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
     const originalPrice = car.originalPrice;
 
     // Discount Calculation for Badge
-    const discount = discountPercentage || (originalPrice && originalPrice > currentPrice
+    const discount = discountPercentage || (originalPrice && currentPrice && originalPrice > currentPrice
         ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
         : 0);
 
@@ -84,23 +84,39 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                     </h3>
                     {/* Specs Row */}
                     <div className="flex items-center gap-2 mt-2 text-[10px] sm:text-xs text-zinc-500 uppercase tracking-wider font-medium">
-                        <span>{car.year}</span>
-                        <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                        {car.year && (
+                            <>
+                                <span>{car.year}</span>
+                                <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                            </>
+                        )}
                         <span>{car.transmission}</span>
+                        {car.mileage !== undefined && car.mileage !== null && (
+                            <>
+                                <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                                <span>{car.mileage.toLocaleString()} KM</span>
+                            </>
+                        )}
                     </div>
                 </div>
 
                 {/* Price & Action */}
                 <div className="flex items-end justify-between pt-2 border-t border-white/5 mt-auto">
-                    <div className="flex flex-col">
-                        {originalPrice && originalPrice > currentPrice && (
-                            <span className="text-zinc-600 text-[10px] line-through font-medium">
-                                {formatCurrency(originalPrice, car.currency)}
-                            </span>
+                    <div className="flex flex-col min-h-[44px] justify-end">
+                        {car.price ? (
+                            <>
+                                {originalPrice && currentPrice && originalPrice > currentPrice && (
+                                    <span className="text-zinc-600 text-[10px] line-through font-medium leading-none mb-1">
+                                        {formatCurrency(originalPrice, car.currency)}
+                                    </span>
+                                )}
+                                <span className="text-white text-lg sm:text-xl font-bold tracking-tight leading-none">
+                                    {formatCurrency(car.price, car.currency)}
+                                </span>
+                            </>
+                        ) : (
+                            <span className="text-zinc-500 text-xs font-medium uppercase tracking-widest">Consultar</span>
                         )}
-                        <span className="text-white text-lg sm:text-xl font-bold tracking-tight">
-                            {formatCurrency(currentPrice, car.currency)}
-                        </span>
                     </div>
 
                     {/* Minimal Arrow Button */}
