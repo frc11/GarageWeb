@@ -7,14 +7,12 @@ export interface Car {
     price: number;
     currency: 'USD' | 'ARS';
     mileage: number;
-    transmission: 'Automatic' | 'Manual' | 'PDK';
-    fuelType: string;
+    transmission: 'Automática' | 'Manual';
     thumbnailImage?: string;
     coverImage?: string;
     gallery?: string[];
     description: string;
     features: string[];
-    status: 'available' | 'reserved' | 'sold';
     isFeatured?: boolean;
     isOffer?: boolean;
     originalPrice?: number;

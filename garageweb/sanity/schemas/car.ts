@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+﻿import { defineField, defineType } from 'sanity'
 
 export default defineType({
     name: 'car',
@@ -22,7 +22,13 @@ export default defineType({
             title: 'Categoría',
             type: 'string',
             options: {
-                list: ['Deportivos', 'SUV', 'Sedán', 'Pick-up', 'Clásicos'],
+                list: [
+                    { title: 'Deportivos', value: 'Deportivos' },
+                    { title: 'SUV', value: 'SUV' },
+                    { title: 'Sedán', value: 'Sedán' },
+                    { title: 'Pick-up', value: 'Pick-up' },
+                    { title: 'Clásicos', value: 'Clásicos' },
+                ],
             },
             validation: (rule) => rule.required(),
         }),
@@ -90,34 +96,15 @@ export default defineType({
         }),
         defineField({
             name: 'transmission',
-            title: 'Transmission',
-            type: 'string',
-            options: {
-                list: ['Automatic', 'Manual', 'PDK', 'Tiptronic'],
-            },
-            validation: (rule) => rule.required(),
-        }),
-        defineField({
-            name: 'fuelType',
-            title: 'Fuel Type',
-            type: 'string',
-            options: {
-                list: ['Gasoline', 'Diesel', 'Hybrid', 'Electric'],
-            },
-            initialValue: 'Gasoline',
-        }),
-        defineField({
-            name: 'status',
-            title: 'Status',
+            title: 'Transmisión',
             type: 'string',
             options: {
                 list: [
-                    { title: 'Available', value: 'available' },
-                    { title: 'Reserved', value: 'reserved' },
-                    { title: 'Sold', value: 'sold' },
+                    { title: 'Automática', value: 'Automática' },
+                    { title: 'Manual', value: 'Manual' },
                 ],
             },
-            initialValue: 'available',
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'coverImage',

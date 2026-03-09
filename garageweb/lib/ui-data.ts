@@ -1,4 +1,4 @@
-// garageweb/lib/ui-data.ts
+﻿// garageweb/lib/ui-data.ts
 import { SectionDivider, AnimationConfig } from '@/types/ui';
 import { Car } from '@/types/main';
 
@@ -93,13 +93,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2024,
         mileage: 180,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Deportivos',
         thumbnailImage: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: true,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -113,13 +113,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2024,
         mileage: 500,
-        fuelType: 'Nafta',
-        transmission: 'PDK',
+        
+        transmission: 'Automática',
         category: 'Deportivos',
         thumbnailImage: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: true,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -133,13 +133,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2023,
         mileage: 0,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Deportivos',
         thumbnailImage: 'https://images.unsplash.com/photo-1603584173870-7b23139f9746?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1603584173870-7b23139f9746?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: true,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -154,13 +154,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2024,
         mileage: 1500,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Deportivos',
         thumbnailImage: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: true,
         isOffer: true,
         description: MOCK_DESC,
@@ -175,13 +175,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2022,
         mileage: 12000,
-        fuelType: 'Híbrido',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'SUV',
         thumbnailImage: 'https://images.unsplash.com/photo-1609520505218-742124508683?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1609520505218-742124508683?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -195,13 +195,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2021,
         mileage: 5000,
-        fuelType: 'Nafta',
+        
         transmission: 'Manual',
         category: 'Deportivos',
         thumbnailImage: 'https://images.unsplash.com/photo-1549729828-5690b271d182?q=80&w=1974&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1549729828-5690b271d182?q=80&w=1974&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -215,13 +215,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2023,
         mileage: 8500,
-        fuelType: 'Híbrido',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'SUV',
         thumbnailImage: 'https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'sold',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -235,13 +235,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2024,
         mileage: 0,
-        fuelType: 'Diesel',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Pick-up',
         thumbnailImage: 'https://images.unsplash.com/photo-1626077388041-33311632349b?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1626077388041-33311632349b?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -256,13 +256,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2020,
         mileage: 3200,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Deportivos',
         thumbnailImage: 'https://images.unsplash.com/photo-1618349275069-7d04f55562d9?q=80&w=2015&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1618349275069-7d04f55562d9?q=80&w=2015&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: true,
         isOffer: true,
         description: MOCK_DESC,
@@ -277,13 +277,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2022,
         mileage: 18000,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Pick-up',
         thumbnailImage: 'https://images.unsplash.com/photo-1574167576202-6c3df2d41443?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1574167576202-6c3df2d41443?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -297,13 +297,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2018,
         mileage: 45000,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Sedán',
         thumbnailImage: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'sold',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -317,13 +317,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2023,
         mileage: 12000,
-        fuelType: 'Diesel',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Pick-up',
         thumbnailImage: 'https://images.unsplash.com/photo-1626857640428-21d4c20f4c3f?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1626857640428-21d4c20f4c3f?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -337,13 +337,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2019,
         mileage: 28000,
-        fuelType: 'Nafta',
+        
         transmission: 'Manual',
         category: 'Deportivos',
         thumbnailImage: 'https://images.unsplash.com/photo-1605816988081-0a67117c2436?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1605816988081-0a67117c2436?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -357,13 +357,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2021,
         mileage: 9000,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'SUV',
         thumbnailImage: 'https://images.unsplash.com/photo-1520031441872-dd5996434771?q=80&w=2071&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1520031441872-dd5996434771?q=80&w=2071&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: true,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -377,13 +377,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2017,
         mileage: 60000,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Sedán',
         thumbnailImage: 'https://images.unsplash.com/photo-1606152421811-996d5ea14c72?q=80&w=1974&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1606152421811-996d5ea14c72?q=80&w=1974&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -397,13 +397,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 2023,
         mileage: 5000,
-        fuelType: 'Diesel',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'SUV',
         thumbnailImage: 'https://images.unsplash.com/photo-1601666687352-78d16723c310?q=80&w=2070&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1601666687352-78d16723c310?q=80&w=2070&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES
@@ -417,13 +417,13 @@ export const CARS_DATA: Car[] = [
         currency: 'USD',
         year: 1995,
         mileage: 120000,
-        fuelType: 'Nafta',
-        transmission: 'Automatic',
+        
+        transmission: 'Automática',
         category: 'Clásicos',
         thumbnailImage: 'https://images.unsplash.com/photo-1616788494707-ec307b2787c8?q=80&w=2072&auto=format&fit=crop',
         coverImage: 'https://images.unsplash.com/photo-1616788494707-ec307b2787c8?q=80&w=2072&auto=format&fit=crop',
         gallery: [],
-        status: 'available',
+        
         isFeatured: false,
         description: MOCK_DESC,
         features: MOCK_FEATURES

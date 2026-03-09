@@ -45,8 +45,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const [globalPriceMinMax, setGlobalPriceMinMax] = useState<[number, number]>([0, 1000000]);
 
     const [selectedTransmission, setSelectedTransmission] = useState<string>("Todos");
-    // CAMBIO: Inicializar en 'Todos' en lugar de null para evitar placeholder cursiva
-    const [selectedFuel, setSelectedFuel] = useState<string>("Todos");
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -61,28 +59,40 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     client.fetch(CATALOG_BRANDS_QUERY)
                 ]);
 
-                const mappedCars: Car[] = rawCars.map((raw: any) => ({
-                    id: raw.id || raw._id,
-                    slug: raw.slug,
-                    brand: raw.brand,
-                    model: raw.model,
-                    year: raw.year,
-                    price: raw.price,
-                    currency: raw.currency,
-                    mileage: raw.mileage,
-                    transmission: raw.transmission,
-                    fuelType: raw.fuelType === 'Gasoline' ? 'Nafta' : raw.fuelType === 'Diesel' ? 'Diesel' : raw.fuelType === 'Hybrid' ? 'Híbrido' : raw.fuelType === 'Electric' ? 'Eléctrico' : raw.fuelType,
-                    category: raw.category,
-                    thumbnailImage: raw.thumbnailImage,
-                    coverImage: raw.coverImage,
-                    gallery: Array.isArray(raw.gallery) ? raw.gallery : [],
-                    description: raw.description,
-                    features: raw.features || [],
-                    isFeatured: raw.isFeatured,
-                    isOffer: raw.isOffer,
-                    originalPrice: raw.originalPrice,
-                    discount: raw.discount
-                }));
+                const mappedCars: Car[] = rawCars.map((raw: any) => {
+                    // Normalize transmission
+                    let transmission = raw.transmission;
+                    const lowerTrans = (transmission || '').toLowerCase();
+                    if (['automatic', 'pdk', 'tiptronic'].includes(lowerTrans)) {
+                        transmission = 'Automática';
+                    } else if (lowerTrans === 'manual') {
+                        transmission = 'Manual';
+                    } else if (!transmission) {
+                        transmission = 'Automática';
+                    }
+
+                    return {
+                        id: raw.id || raw._id,
+                        slug: raw.slug,
+                        brand: raw.brand,
+                        model: raw.model,
+                        year: raw.year,
+                        price: raw.price,
+                        currency: raw.currency,
+                        mileage: raw.mileage,
+                        transmission: transmission as 'Automática' | 'Manual',
+                        category: raw.category,
+                        thumbnailImage: raw.thumbnailImage,
+                        coverImage: raw.coverImage,
+                        gallery: Array.isArray(raw.gallery) ? raw.gallery : [],
+                        description: raw.description,
+                        features: raw.features || [],
+                        isFeatured: raw.isFeatured,
+                        isOffer: raw.isOffer,
+                        originalPrice: raw.originalPrice,
+                        discount: raw.discount
+                    };
+                });
 
                 setCars(mappedCars);
 
@@ -128,12 +138,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         fetchData();
     }, [initialBrandSlug]);
 
-    const availableFuels = useMemo(() => {
-        const fuels = Array.from(new Set(cars.map(c => c.fuelType))).sort();
-        // CAMBIO: Agregar 'Todos' explícitamente a las opciones
-        return ["Todos", ...fuels];
-    }, [cars]);
-
     const availableTransmissions = useMemo(() => {
         const transmissions = Array.from(new Set(cars.map(c => c.transmission))).sort();
         return ["Todos", ...transmissions];
@@ -157,7 +161,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
     useMemo(() => {
         setCurrentPage(1);
-    }, [searchTerm, selectedCategory, selectedBrand, yearRange, selectedFuel, priceRange, selectedTransmission]);
+    }, [searchTerm, selectedCategory, selectedBrand, yearRange, priceRange, selectedTransmission]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -167,14 +171,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const filteredCars = useMemo(() => {
         return cars.filter(car => {
             const term = searchTerm.toLowerCase();
-            const transES = car.transmission === 'Automatic' ? 'automatica' :
-                car.transmission === 'Manual' ? 'manual' : 'pdk';
 
             const matchesSearch =
                 car.model.toLowerCase().includes(term) ||
                 car.brand.toLowerCase().includes(term) ||
-                car.transmission.toLowerCase().includes(term) ||
-                transES.includes(term.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+                car.transmission.toLowerCase().includes(term);
 
             const matchesCategory = selectedCategory === "Todos" || car.category === selectedCategory;
             const matchesBrand = selectedBrand === "Todas" || car.brand === selectedBrand;
@@ -182,13 +183,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             const matchesYear = car.year >= yearRange[0] && car.year <= yearRange[1];
             const matchesPrice = car.price >= priceRange[0] && car.price <= priceRange[1];
 
-            // CAMBIO: Lógica ajustada para 'Todos'
-            const matchesFuel = selectedFuel === "Todos" || car.fuelType === selectedFuel;
             const matchesTransmission = selectedTransmission === "Todos" || car.transmission === selectedTransmission;
 
-            return matchesSearch && matchesCategory && matchesBrand && matchesYear && matchesFuel && matchesPrice && matchesTransmission;
+            return matchesSearch && matchesCategory && matchesBrand && matchesYear && matchesPrice && matchesTransmission;
         });
-    }, [cars, searchTerm, selectedCategory, selectedBrand, yearRange, selectedFuel, priceRange, selectedTransmission]);
+    }, [cars, searchTerm, selectedCategory, selectedBrand, yearRange, priceRange, selectedTransmission]);
 
     const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
 
@@ -203,7 +202,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         setSelectedBrand("Todas");
         setYearRange(globalMinMax);
         setPriceRange(globalPriceMinMax);
-        setSelectedFuel("Todos"); // Reset to "Todos"
         setSelectedTransmission("Todos");
         setSearchTerm("");
     };
@@ -213,7 +211,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         selectedBrand !== "Todas" ||
         (yearRange[0] !== globalMinMax[0] || yearRange[1] !== globalMinMax[1]) ||
         (priceRange[0] !== globalPriceMinMax[0] || priceRange[1] !== globalPriceMinMax[1]) ||
-        selectedFuel !== "Todos" ||
         selectedTransmission !== "Todos" ||
         searchTerm !== "";
 
@@ -323,8 +320,8 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         </div>
                     </div>
 
-                    {/* Transmission (Span 3 - 25% width) */}
-                    <div className="md:col-span-3 flex flex-col gap-2">
+                    {/* Transmission (Span 6 - 50% width) */}
+                    <div className="md:col-span-6 flex flex-col gap-2">
                         <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2">
                             Transmisión
                         </span>
@@ -332,20 +329,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                             options={availableTransmissions}
                             value={selectedTransmission}
                             onChange={(val) => setSelectedTransmission(val || "Todos")}
-                            allowClear={false}
-                            className="w-full"
-                        />
-                    </div>
-
-                    {/* Fuel (Span 3 - 25% width) */}
-                    <div className="md:col-span-3 flex flex-col gap-2">
-                        <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 text-left pl-2">
-                            Combustible
-                        </span>
-                        <PremiumDropdown
-                            options={availableFuels}
-                            value={selectedFuel}
-                            onChange={(val) => setSelectedFuel(val || "Todos")}
                             allowClear={false}
                             className="w-full"
                         />

@@ -5,13 +5,17 @@ import { Car, Brand } from "@/types/main";
 // Mapper helper to ensure strict type compliance
 // In our queries we are already projecting images->url, but we double check here
 function mapSanityCarToCar(raw: any): Car {
-    // Map Fuel to Spanish
-    const fuelMap: Record<string, string> = {
-        'Gasoline': 'Nafta',
-        'Diesel': 'Diesel',
-        'Hybrid': 'Híbrido',
-        'Electric': 'Eléctrico'
-    };
+    // Transmisión sanitization (normalize legacy values)
+    let transmission = raw.transmission;
+    const lowerTrans = (transmission || '').toLowerCase();
+
+    if (['automatic', 'pdk', 'tiptronic'].includes(lowerTrans)) {
+        transmission = 'Automática';
+    } else if (lowerTrans === 'manual') {
+        transmission = 'Manual';
+    } else if (!transmission) {
+        transmission = 'Automática'; // Default
+    }
 
     return {
         id: raw.id || raw._id,
@@ -22,15 +26,13 @@ function mapSanityCarToCar(raw: any): Car {
         price: raw.price,
         currency: raw.currency,
         mileage: raw.mileage,
-        transmission: raw.transmission, // Assuming Sanity matches 'Automatic' | 'Manual' | 'PDK'
-        fuelType: fuelMap[raw.fuelType] || raw.fuelType, // Fallback to raw if not mapped
-        category: raw.category, // Now fetched from query
+        transmission: transmission as 'Automática' | 'Manual',
+        category: raw.category,
         thumbnailImage: raw.thumbnailImage,
         coverImage: raw.coverImage,
         gallery: Array.isArray(raw.gallery) ? raw.gallery : [],
         description: raw.description,
         features: raw.features || [],
-        status: raw.status,
         isFeatured: raw.isFeatured,
         isOffer: raw.isOffer,
         originalPrice: raw.originalPrice

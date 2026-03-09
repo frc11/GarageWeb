@@ -26,9 +26,7 @@ export default async function OffersPage() {
         currency: raw.currency,
         mileage: raw.mileage,
         transmission: raw.transmission,
-        fuelType: raw.fuelType === 'Gasoline' ? 'Nafta' : raw.fuelType === 'Diesel' ? 'Diesel' : raw.fuelType === 'Hybrid' ? 'Híbrido' : raw.fuelType === 'Electric' ? 'Eléctrico' : raw.fuelType, // Simple mapping
         category: raw.category,
-        status: raw.status,
         thumbnailImage: raw.thumbnailImage,
         coverImage: raw.coverImage,
         gallery: Array.isArray(raw.gallery) ? raw.gallery : [],

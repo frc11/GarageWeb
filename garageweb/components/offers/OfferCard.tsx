@@ -88,10 +88,6 @@ export function OfferCard({ car, className }: OfferCardProps) {
                     <span className="flex items-center gap-1">
                         <Settings2 size={12} /> {car.transmission}
                     </span>
-                    <span className="w-px h-3 bg-zinc-800" />
-                    <span className="flex items-center gap-1">
-                        <Fuel size={12} /> {car.fuelType}
-                    </span>
                 </div>
 
                 {/* Pricing Hook */}

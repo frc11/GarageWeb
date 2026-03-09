@@ -54,14 +54,8 @@ export async function GET() {
                     price: Math.floor(Math.random() * 200000) + 50000,
                     currency: 'USD',
                     mileage: 0,
-                    transmission: 'Automatic',
-                    fuelType: 'Hybrid',
-                    status: 'available',
+                    transmission: 'Automática',
                     description: `Auto de prueba generado automáticamente para validar la marca ${displayBrand}.`,
-                    features: ["Autopilot", "Launch Control", "Premium Sound"],
-                    isFeatured: true,
-                    isOffer: Math.random() > 0.5,
-                    images: [] // No images for now, avoiding external deps issues
                 };
 
                 const createdCar = await client.create(doc);

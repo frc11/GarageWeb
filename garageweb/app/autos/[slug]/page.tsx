@@ -212,9 +212,9 @@ export default async function CarPage(props: CarPageProps) {
                                         </p>
                                     </div>
                                     <div className="bg-black/40 p-4 rounded-xl border border-white/5">
-                                        <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Combustible</p>
+                                        <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Categoría</p>
                                         <p className="text-lg font-bold text-white flex items-center gap-2">
-                                            <Fuel size={14} /> {car.fuelType}
+                                            <Activity size={14} /> {car.category}
                                         </p>
                                     </div>
                                 </div>

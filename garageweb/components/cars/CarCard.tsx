@@ -16,10 +16,9 @@ interface CarCardProps {
     imageAspectClassName?: string;
 }
 
-export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage, hideStatusBadge = false, imageAspectClassName }: CarCardProps) {
+export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage, imageAspectClassName }: CarCardProps) {
     // Logic to determine if it's an offer 
     const isOfferActive = isOffer || car.isOffer;
-    const isSold = car.status === 'sold';
 
     // Price Logic (Simplified for consistency)
     const currentPrice = car.price;
@@ -62,29 +61,16 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
                 {/* Top Badges */}
-                <div className="absolute top-0 left-0 p-4 w-full flex justify-between items-start z-10">
-                    {/* Brand Badge */}
-                    <div className="px-2 py-1 bg-black/50 backdrop-blur-sm border border-white/10 rounded-md">
-                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">
-                            {car.brand}
-                        </span>
-                    </div>
-
-                    {/* Status / Offer Badge */}
-                    {!hideStatusBadge && (
-                        isSold ? (
-                            <div className="px-2 py-1 bg-red-900/80 backdrop-blur-sm border border-red-500/30 rounded-md">
-                                <span className="text-[10px] font-bold text-white uppercase tracking-widest">Vendido</span>
-                            </div>
-                        ) : discount > 0 ? (
-                            <div className="px-2 py-1 bg-amber-500 text-black rounded-md shadow-lg flex items-center gap-1.5">
-                                <BadgePercent size={12} strokeWidth={3} />
-                                <span className="text-[10px] font-extrabold uppercase tracking-wider">
-                                    OFERTA
-                                </span>
-                            </div>
-                        ) : null
-                    )}
+                <div className="absolute top-0 left-0 p-4 w-full flex justify-end items-start z-10">
+                    {/* Brand Badge moved or removed if not needed, focusing on Offer */}
+                    {isOfferActive && discount > 0 ? (
+                        <div className="px-2 py-1 bg-amber-500 text-black rounded-md shadow-lg flex items-center gap-1.5">
+                            <BadgePercent size={12} strokeWidth={3} />
+                            <span className="text-[10px] font-extrabold uppercase tracking-wider">
+                                OFERTA
+                            </span>
+                        </div>
+                    ) : null}
                 </div>
             </div>
 
@@ -101,8 +87,6 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                         <span>{car.year}</span>
                         <span className="w-1 h-1 rounded-full bg-zinc-700" />
                         <span>{car.transmission}</span>
-                        <span className="w-1 h-1 rounded-full bg-zinc-700" />
-                        <span>{car.fuelType}</span>
                     </div>
                 </div>
 
