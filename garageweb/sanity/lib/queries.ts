@@ -144,3 +144,7 @@ export const CATALOG_BRANDS_QUERY = defineQuery(`array::unique(*[_type == "car"]
 
 export const CATALOG_CATEGORIES_QUERY = defineQuery(`array::unique(*[_type == "car" && defined(category)].category) | order(@)`);
 
+export const FEATURED_VIDEO_QUERY = defineQuery(`*[_type == "featuredVideo"] | order(_createdAt desc)[0] {
+  "videoUrl": videoFile.asset->url
+}`);
+

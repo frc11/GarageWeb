@@ -58,7 +58,7 @@ export async function BrandMarquee() {
     return (
         <section className="w-full pt-50 pb-25 bg-white overflow-hidden relative z-20 -mt-32">
             {/* === Top Gradient Integration === */}
-            <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-zinc-950 via-zinc-950/40 to-transparent z-30 pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#050505] via-[#050505]/20 to-transparent z-30 pointer-events-none" />
 
             {/* Inline Styles for Animation (Server/Client Compatible) */}
             <style>{`
