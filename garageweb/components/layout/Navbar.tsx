@@ -24,7 +24,6 @@ export function Navbar() {
     const navLinks = [
         { name: "Inicio", href: "/" },
         { name: "Catálogo", href: "/catalogo" },
-        { name: "Vender", href: "/vender" },
     ];
 
     return (
@@ -99,7 +98,7 @@ export function Navbar() {
                     {/* Desktop Navigation - Centrado Absoluto */}
                     {/* Truco: Usamos posición absoluta para que esté perfectamente al centro, 
                         independientemente del ancho del logo o del botón de contacto */}
-                    <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 lg:gap-14">
+                    <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-16 lg:gap-24">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}

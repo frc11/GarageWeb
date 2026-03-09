@@ -44,7 +44,6 @@ export function Footer() {
                         <ul className="space-y-4">
                             <li><Link href="/" className="text-zinc-400 hover:text-white transition-colors text-sm">Inicio</Link></li>
                             <li><Link href="/catalogo" className="text-zinc-400 hover:text-white transition-colors text-sm">Catálogo</Link></li>
-                            <li><Link href="/vender" className="text-zinc-400 hover:text-white transition-colors text-sm">Vender</Link></li>
                             <li><Link href="/contacto" className="text-zinc-400 hover:text-white transition-colors text-sm">Contacto</Link></li>
                         </ul>
                     </div>
