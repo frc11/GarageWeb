@@ -44,15 +44,25 @@ export function OfferCard({ car, className }: OfferCardProps) {
                 className
             )}
         >
-            {/* --- Image Area --- */}
             <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                    src={car.images[0]}
-                    alt={`${car.brand} ${car.model}`}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
+                {car.thumbnailImage && car.thumbnailImage.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
+                    <video
+                        src={car.thumbnailImage}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                ) : (
+                    <Image
+                        src={car.thumbnailImage || ''}
+                        alt={`${car.brand} ${car.model}`}
+                        fill
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                )}
 
                 {/* Overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent opacity-80" />

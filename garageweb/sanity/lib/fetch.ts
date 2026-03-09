@@ -25,10 +25,12 @@ function mapSanityCarToCar(raw: any): Car {
         transmission: raw.transmission, // Assuming Sanity matches 'Automatic' | 'Manual' | 'PDK'
         fuelType: fuelMap[raw.fuelType] || raw.fuelType, // Fallback to raw if not mapped
         category: raw.category, // Now fetched from query
-        status: raw.status,
-        images: Array.isArray(raw.images) ? raw.images : [], // Queries project this as strings
+        thumbnailImage: raw.thumbnailImage,
+        coverImage: raw.coverImage,
+        gallery: Array.isArray(raw.gallery) ? raw.gallery : [],
         description: raw.description,
         features: raw.features || [],
+        status: raw.status,
         isFeatured: raw.isFeatured,
         isOffer: raw.isOffer,
         originalPrice: raw.originalPrice

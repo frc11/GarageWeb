@@ -9,7 +9,9 @@ export interface Car {
     mileage: number;
     transmission: 'Automatic' | 'Manual' | 'PDK';
     fuelType: string;
-    images: string[];
+    thumbnailImage?: string;
+    coverImage?: string;
+    gallery?: string[];
     description: string;
     features: string[];
     status: 'available' | 'reserved' | 'sold';

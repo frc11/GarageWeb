@@ -117,23 +117,49 @@ export default defineType({
             initialValue: 'available',
         }),
         defineField({
-            name: 'images',
-            title: 'Images',
+            name: 'coverImage',
+            title: 'Portada del Auto (Hero)',
             type: 'array',
-            of: [{ type: 'image', options: { hotspot: true } }],
-            validation: (rule) => rule.required().min(1),
+            of: [
+                { type: 'image', options: { hotspot: true } },
+                { type: 'file', options: { accept: 'video/mp4,video/webm' } }
+            ],
+            validation: (rule) => rule.required().max(1),
+            description: 'Imagen o video principal que ocupará toda la pantalla al entrar al detalle del vehículo.'
+        }),
+        defineField({
+            name: 'thumbnailImage',
+            title: 'Miniatura del Auto (Catálogo)',
+            type: 'array',
+            of: [
+                { type: 'image', options: { hotspot: true } },
+                { type: 'file', options: { accept: 'video/mp4,video/webm' } }
+            ],
+            validation: (rule) => rule.required().max(1),
+            description: 'Imagen o video (silenciado) que servirá de previsualización en la lista principal de autos.'
+        }),
+        defineField({
+            name: 'gallery',
+            title: 'Galería Visual',
+            type: 'array',
+            of: [
+                { type: 'image', options: { hotspot: true } },
+                { type: 'file', options: { accept: 'video/mp4,video/webm' } }
+            ],
+            description: 'Fotos y videos adicionales que aparecerán en la grilla inferior del detalle del vehículo.'
         }),
         defineField({
             name: 'description',
-            title: 'Description',
+            title: 'Descripción',
             type: 'text',
-            rows: 4,
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'features',
-            title: 'Features',
+            title: 'Equipamiento',
             type: 'array',
             of: [{ type: 'string' }],
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'isFeatured',
@@ -168,7 +194,7 @@ export default defineType({
         select: {
             title: 'model',
             subtitle: 'brand',
-            media: 'images.0',
+            media: 'coverImage.0',
         },
     },
 })

@@ -58,13 +58,30 @@ export default async function CarPage(props: CarPageProps) {
 
             {/* 1. HERO SECTION (Full Screen) */}
             <div className="relative h-screen w-full overflow-hidden">
-                <Image
-                    src={car.images[0]}
-                    alt={car.model}
-                    fill
-                    className="object-cover"
-                    priority
-                />
+                {car.coverImage ? (
+                    car.coverImage.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
+                        <video
+                            src={car.coverImage}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <Image
+                            src={car.coverImage}
+                            alt={car.model}
+                            fill
+                            className="object-cover"
+                            priority
+                        />
+                    )
+                ) : (
+                    <div className="absolute inset-0 bg-neutral-900 flex items-center justify-center">
+                        <span className="text-zinc-600 uppercase tracking-widest font-bold">Sin Portada</span>
+                    </div>
+                )}
 
                 {/* Gradient Filters */}
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
@@ -88,14 +105,23 @@ export default async function CarPage(props: CarPageProps) {
                     {/* 2. LEFT: Gallery & Story (Scrollable) */}
                     <div className="lg:col-span-7 space-y-24">
 
-                        {/* Gallery Grid (skipping first image as it was hero) */}
+                        {/* Gallery Grid */}
                         <div className="space-y-4">
                             <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-8">Galería Visual</h3>
                             <div className="grid grid-cols-1 gap-4">
-                                {car.images.length > 1 ? (
-                                    car.images.slice(1).map((img, idx) => (
+                                {car.gallery && car.gallery.length > 0 ? (
+                                    car.gallery.map((media, idx) => (
                                         <div key={idx} className="relative aspect-video rounded-3xl overflow-hidden border border-white/5">
-                                            <Image src={img} alt={`${car.model} view ${idx}`} fill className="object-cover" />
+                                            {media.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
+                                                <video
+                                                    src={media}
+                                                    controls
+                                                    className="w-full h-full object-cover"
+                                                    preload="metadata"
+                                                />
+                                            ) : (
+                                                <Image src={media} alt={`${car.model} gallery ${idx}`} fill className="object-cover" />
+                                            )}
                                         </div>
                                     ))
                                 ) : (

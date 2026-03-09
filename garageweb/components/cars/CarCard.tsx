@@ -41,17 +41,28 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                 className
             )}
         >
-            {/* --- Image Area --- */}
+            {/* --- Image/Video Area --- */}
             <div className={cn("relative overflow-hidden", imageAspectClassName || "aspect-[4/3]")}>
-                {car.images && car.images.length > 0 ? (
-                    <Image
-                        src={car.images[0]}
-                        alt={`${car.brand} ${car.model}`}
-                        fill
-                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        priority={priority}
-                    />
+                {car.thumbnailImage ? (
+                    car.thumbnailImage.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
+                        <video
+                            src={car.thumbnailImage}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                        />
+                    ) : (
+                        <Image
+                            src={car.thumbnailImage}
+                            alt={`${car.brand} ${car.model}`}
+                            fill
+                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            priority={priority}
+                        />
+                    )
                 ) : (
                     <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center">
                         <span className="text-zinc-600 text-xs uppercase tracking-widest">Sin Imagen</span>

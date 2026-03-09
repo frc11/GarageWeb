@@ -145,15 +145,25 @@ function DealCard({ car, isCarousel = true }: { car: Car, isCarousel?: boolean }
         >
             <div className="relative bg-neutral-900 rounded-xl overflow-hidden border border-transparent transition-all duration-300 group-hover/card:border-orange-500/40 group-hover/card:shadow-[0_0_40px_rgba(249,115,22,0.15)] flex flex-col h-full">
 
-                {/* Image Area */}
                 <div className="relative h-[200px] md:h-[240px] overflow-hidden bg-neutral-800 shrink-0">
-                    <Image
-                        src={car.images[0]}
-                        alt={car.model}
-                        fill
-                        className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
-                        sizes="(max-width: 768px) 85vw, 420px"
-                    />
+                    {car.thumbnailImage && car.thumbnailImage.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
+                        <video
+                            src={car.thumbnailImage}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
+                        />
+                    ) : (
+                        <Image
+                            src={car.thumbnailImage || ''}
+                            alt={car.model}
+                            fill
+                            className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
+                            sizes="(max-width: 768px) 85vw, 420px"
+                        />
+                    )}
                     {discountPercent && (
                         <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-orange-600 text-white px-2.5 py-1 md:px-3 md:py-1.5 rounded-md font-bold text-[10px] md:text-xs shadow-lg flex items-center gap-1.5 tracking-wider uppercase">
                             <TrendingDown className="w-3 h-3 text-white" />
