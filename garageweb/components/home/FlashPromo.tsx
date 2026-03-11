@@ -127,7 +127,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
 
 // Componente auxiliar actualizado para manejar estilos dinámicos
 function DealCard({ car, isCarousel = true }: { car: Car, isCarousel?: boolean }) {
-    const discountPercent = (car.isOffer && car.originalPrice && car.price < car.originalPrice)
+    const discountPercent = (car.isOffer && car.originalPrice && car.price !== undefined && car.price < car.originalPrice)
         ? Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100)
         : null;
 
@@ -187,7 +187,9 @@ function DealCard({ car, isCarousel = true }: { car: Car, isCarousel?: boolean }
                                 </span>
                             )}
                             <span className="text-2xl md:text-3xl font-bold text-orange-500 font-serif tracking-tight drop-shadow-sm">
-                                {formatCurrency(car.price, car.currency)}
+                                {car.price !== undefined && car.price !== null
+                                    ? formatCurrency(car.price, car.currency)
+                                    : <span className="text-xl md:text-2xl text-neutral-400 font-sans tracking-normal font-normal">Consultar Precio</span>}
                             </span>
                         </div>
                         <div className="bg-white/5 h-8 w-8 md:h-10 md:w-10 flex items-center justify-center rounded-full group-hover/card:bg-orange-500 group-hover/card:text-black transition-all duration-300 text-neutral-400">

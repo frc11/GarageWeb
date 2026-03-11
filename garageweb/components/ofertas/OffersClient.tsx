@@ -83,7 +83,7 @@ export function OffersClient({ cars }: OffersClientProps) {
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12"
             >
                 {currentCars.map((car) => {
-                    const discount = car.originalPrice && car.originalPrice > car.price
+                    const discount = car.originalPrice && car.price !== undefined && car.originalPrice > car.price
                         ? Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100)
                         : 0;
 
