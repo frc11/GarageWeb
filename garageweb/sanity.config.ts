@@ -4,12 +4,14 @@
  * Validates that Sanity configuration is present for the Studio.
  */
 
-import { visionTool } from '@sanity/vision'
+// Removed Vision tool import
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 
 import { apiVersion, dataset, projectId } from './sanity/env'
 import { schema } from './sanity/schema'
+
+import { esESLocale } from '@sanity/locale-es-es'
 
 export default defineConfig({
     basePath: '/studio',
@@ -18,9 +20,7 @@ export default defineConfig({
     // Add and edit the content schema in the './sanity/schema' folder
     schema,
     plugins: [
-        structureTool(),
-        // Vision is a tool that lets you query your content with GROQ in the studio
-        // https://www.sanity.io/docs/the-vision-plugin
-        visionTool({ defaultApiVersion: apiVersion }),
+        structureTool({ title: 'Contenido' }),
+        esESLocale(),
     ],
 })

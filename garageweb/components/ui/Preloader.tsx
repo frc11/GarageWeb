@@ -3,9 +3,15 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export const Preloader = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const pathname = usePathname();
+
+    if (pathname?.toLowerCase().includes("/studio")) {
+        return null;
+    }
 
     useEffect(() => {
         // Simulate loading time or wait for resources

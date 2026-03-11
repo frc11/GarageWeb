@@ -15,7 +15,7 @@ export function Navbar() {
     const { scrollY } = useScroll();
     const pathname = usePathname();
 
-    const isStudio = pathname?.startsWith("/studio");
+    const isStudio = pathname?.toLowerCase().includes("/studio");
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         setIsScrolled(latest > 50);
@@ -25,6 +25,10 @@ export function Navbar() {
         { name: "Inicio", href: "/" },
         { name: "Catálogo", href: "/catalogo" },
     ];
+
+    if (isStudio) {
+        return null;
+    }
 
     return (
         <>

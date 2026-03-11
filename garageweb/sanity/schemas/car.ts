@@ -1,4 +1,4 @@
-﻿import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export default defineType({
     name: 'car',
@@ -34,7 +34,7 @@ export default defineType({
         }),
         defineField({
             name: 'slug',
-            title: 'URL Slug',
+            title: 'URL',
             type: 'slug',
             options: {
                 source: (doc) => `${doc.brand}-${doc.model}`,
@@ -44,7 +44,7 @@ export default defineType({
         }),
         defineField({
             name: 'price',
-            title: 'Price',
+            title: 'Precio',
             type: 'number',
             validation: (rule) => rule.positive(),
         }),
@@ -84,7 +84,7 @@ export default defineType({
         }),
         defineField({
             name: 'year',
-            title: 'Year',
+            title: 'Año',
             type: 'number',
             validation: (rule) => rule.min(1900).max(new Date().getFullYear() + 1),
         }),
