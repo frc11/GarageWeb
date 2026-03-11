@@ -4,23 +4,39 @@ export default defineType({
     name: 'car',
     title: 'Vehículo',
     type: 'document',
+    groups: [
+        { name: 'general', title: 'Datos Principales', default: true },
+        { name: 'pricing', title: 'Precio y Ofertas' },
+        { name: 'specs', title: 'Especificaciones' },
+        { name: 'media', title: 'Imágenes y Videos' },
+    ],
+    fieldsets: [
+        {
+            name: 'oferta',
+            title: 'Configuración de Oferta Exclusiva',
+            options: { collapsible: true, collapsed: false }
+        }
+    ],
     fields: [
         defineField({
             name: 'brand',
             title: 'Marca',
             type: 'string',
+            group: 'general',
             validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'model',
             title: 'Modelo',
             type: 'string',
+            group: 'general',
             validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'category',
             title: 'Categoría',
             type: 'string',
+            group: 'general',
             options: {
                 list: [
                     { title: 'Deportivos', value: 'Deportivos' },
@@ -36,6 +52,7 @@ export default defineType({
             name: 'slug',
             title: 'URL',
             type: 'slug',
+            group: 'general',
             options: {
                 source: (doc) => `${doc.brand}-${doc.model}`,
                 maxLength: 96,
@@ -46,33 +63,63 @@ export default defineType({
             name: 'price',
             title: 'Precio',
             type: 'number',
+            group: 'pricing',
             validation: (rule) => rule.positive(),
         }),
         defineField({
             name: 'originalPrice',
             title: 'Precio Original (Antes de Oferta)',
             type: 'number',
-            description: 'Solo completar si el auto está en oferta. Se mostrará tachado al lado del precio actual.',
+            group: 'pricing',
+            fieldset: 'oferta',
+            validation: (rule) => rule.custom((value, context) => {
+                const doc = context.document as any;
+                if (value && !doc?.price) {
+                    return '❌ Error: Debes ingresar el "Precio" base primero.';
+                }
+                return true;
+            }),
+            description: 'Se mostrará tachado al lado del precio base.',
         }),
         defineField({
             name: 'isOffer',
             title: '¿Es Oferta Flash?',
             type: 'boolean',
             initialValue: false,
-            description: "Activa el badge de oferta y logic de descuento.",
+            group: 'pricing',
+            fieldset: 'oferta',
+            validation: (rule) => rule.custom((value, context) => {
+                const doc = context.document as any;
+                if (value && !doc?.originalPrice) {
+                    return '❌ Error: Debes ingresar un "Precio Original" para activar la Oferta Flash.';
+                }
+                return true;
+            }),
+            description: "Activa el badge de oferta. Carga el Precio Original primero.",
         }),
         defineField({
             name: 'discount',
             title: 'Porcentaje de Descuento (0-100)',
             type: 'number',
-            validation: (rule) => rule.min(0).max(100),
-            hidden: false,
+            group: 'pricing',
+            fieldset: 'oferta',
+            validation: (rule) => [
+                rule.min(0).max(100),
+                rule.custom((value, context) => {
+                    const doc = context.document as any;
+                    if (value && !doc?.isOffer) {
+                        return '❌ Error: Debes activar "¿Es Oferta Flash?" para cargar un descuento.';
+                    }
+                    return true;
+                })
+            ],
             description: 'Si se establece, anula el cálculo automático. Ejemplo: 15 para 15% OFF.',
         }),
         defineField({
             name: 'currency',
             title: 'Moneda',
             type: 'string',
+            group: 'pricing',
             options: {
                 list: [
                     { title: 'Dólares (USD)', value: 'USD' },
@@ -86,18 +133,21 @@ export default defineType({
             name: 'year',
             title: 'Año',
             type: 'number',
+            group: 'specs',
             validation: (rule) => rule.min(1900).max(new Date().getFullYear() + 1),
         }),
         defineField({
             name: 'mileage',
             title: 'Kilometraje',
             type: 'number',
+            group: 'specs',
             validation: (rule) => rule.min(0),
         }),
         defineField({
             name: 'transmission',
             title: 'Transmisión',
             type: 'string',
+            group: 'specs',
             options: {
                 list: [
                     { title: 'Automática', value: 'Automática' },
@@ -110,6 +160,7 @@ export default defineType({
             name: 'coverImage',
             title: 'Portada del Auto (Hero)',
             type: 'array',
+            group: 'media',
             of: [
                 { type: 'image', options: { hotspot: true } },
                 { type: 'file', options: { accept: 'video/mp4,video/webm' } }
@@ -121,6 +172,7 @@ export default defineType({
             name: 'thumbnailImage',
             title: 'Miniatura del Auto (Catálogo)',
             type: 'array',
+            group: 'media',
             of: [
                 { type: 'image', options: { hotspot: true } }
             ],
@@ -131,6 +183,7 @@ export default defineType({
             name: 'gallery',
             title: 'Galería Visual',
             type: 'array',
+            group: 'media',
             of: [
                 { type: 'image', options: { hotspot: true } },
                 { type: 'file', options: { accept: 'video/mp4,video/webm' } }
@@ -141,12 +194,14 @@ export default defineType({
             name: 'description',
             title: 'Descripción',
             type: 'text',
+            group: 'specs',
             validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'features',
             title: 'Equipamiento',
             type: 'array',
+            group: 'specs',
             of: [{ type: 'string' }],
             validation: (rule) => rule.required(),
         }),
@@ -154,6 +209,7 @@ export default defineType({
             name: 'isFeatured',
             title: '¿Destacar en Home?',
             type: 'boolean',
+            group: 'general',
             initialValue: false,
             validation: (rule) =>
                 rule.custom(async (isFeatured, context) => {
