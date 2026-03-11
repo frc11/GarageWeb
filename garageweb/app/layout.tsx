@@ -17,6 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://elgarage.com.ar"),
   title: {
     template: 'El Garage | %s',
     default: 'El Garage Automóviles',
