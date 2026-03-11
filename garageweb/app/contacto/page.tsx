@@ -44,11 +44,11 @@ export default function ContactPage() {
     const autofillClass = "[&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_#0d0d0d] [&:-webkit-autofill]:[-webkit-text-fill-color:white] [&:-webkit-autofill]:transition-[background-color_5000s_ease-in-out_0s]";
 
     return (
-        <main className="min-h-screen pt-24.5 bg-neutral-950 text-white selection:bg-amber-500/30">
-            <div className="flex flex-col lg:flex-row min-h-screen">
+        <main className="min-h-[100dvh] pt-24.5 bg-neutral-950 text-white selection:bg-amber-500/30">
+            <div className="flex flex-col lg:flex-row min-h-[100dvh]">
 
                 {/* Visual Column (Sticky) */}
-                <div className="group lg:w-[45%] relative h-[50vh] lg:h-screen lg:sticky lg:top-0 overflow-hidden border-r border-white/5">
+                <div className="group lg:w-[45%] relative h-[50svh] lg:h-[100dvh] lg:sticky lg:top-0 overflow-hidden border-r border-white/5">
                     <div className="absolute inset-0 z-0">
                         <Image
                             src="/showroom-facade.png"
@@ -108,7 +108,7 @@ export default function ContactPage() {
                                         <MapPin className="w-3 h-3" /> Casa central
                                     </h3>
                                     <p className="text-3xl font-serif leading-tight text-white/90">
-                                        Av. Aconquija 2450,<br />
+                                        Av. Aconquija 1252,<br />
                                         Yerba Buena, Tucumán
                                     </p>
                                     <a
