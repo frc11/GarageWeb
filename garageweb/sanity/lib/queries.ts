@@ -148,3 +148,13 @@ export const FEATURED_VIDEO_QUERY = defineQuery(`*[_type == "featuredVideo"] | o
   "videoUrl": videoFile.asset->url
 }`);
 
+export const TESTIMONIALS_QUERY = defineQuery(`*[_type == "testimonial"] | order(_createdAt desc) {
+  "id": _id,
+  name,
+  role,
+  car,
+  stars,
+  text,
+  "avatar": avatar.asset->url
+}`);
+

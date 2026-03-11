@@ -45,10 +45,7 @@ export default async function CarPage(props: CarPageProps) {
     }
 
     const whatsappMessage = `Hola, me interesa el ${car.brand} ${car.model} que vi en la web.`;
-    const whatsappUrl = `https://wa.me/5493814154708?text=${encodeURIComponent(whatsappMessage)}`;
-
-    const testDriveMessage = `Hola, ¡quiero hacer un test drive del ${car.brand} ${car.model} que vi en su pagina!`;
-    const testDriveUrl = `https://wa.me/5493814154708?text=${encodeURIComponent(testDriveMessage)}`;
+    const whatsappUrl = `https://wa.me/5493814663032?text=${encodeURIComponent(whatsappMessage)}`;
 
     const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://elgarage.com'}/autos/${car.slug}`;
     const shareText = `¡Mira este auto que vi en la página de El Garage!`;
@@ -237,11 +234,6 @@ export default async function CarPage(props: CarPageProps) {
                                     </PremiumButton>
                                 </a>
 
-                                <a href={testDriveUrl} target="_blank" rel="noopener noreferrer" className="block w-full">
-                                    <button className="w-full py-4 rounded-full border text-white font-bold uppercase tracking-wider text-xs transition-all border-amber-500/50 shadow-[0_0_20px_rgba(245,158,11,0.2)] lg:border-white/10 lg:shadow-none lg:hover:bg-white lg:hover:text-black">
-                                        Agendar Test Drive
-                                    </button>
-                                </a>
                             </div>
 
                             {/* Consultant Card replaced by Team Selector */}

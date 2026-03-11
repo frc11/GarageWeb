@@ -107,10 +107,10 @@ export function CinematicBanner() {
                             <h1 className="text-5xl xl:text-8xl font-black text-white tracking-tighter leading-[0.9]">
                                 ¿LISTO PARA
                                 <br />
-                                CONDUCIR?
+                                MANEJAR?
                             </h1>
                             <p className="text-zinc-400 mt-6 text-lg xl:text-2xl font-light">
-                                Encontrá tu próximo vehículo hoy.
+                                Encontrá tu próximo auto hoy.
                             </p>
                         </motion.div>
                     </div>

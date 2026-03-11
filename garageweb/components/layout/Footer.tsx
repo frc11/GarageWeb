@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Instagram, Facebook, MapPin, Mail } from "lucide-react";
+import { Instagram, Facebook, MapPin, Mail, MessageSquare } from "lucide-react";
 import { DeveloperBadge } from "./DeveloperBadge";
 import { usePathname } from "next/navigation";
 
@@ -32,9 +32,8 @@ export function Footer() {
                     {/* Column 1: Brand */}
                     <div className="space-y-6">
                         <span className="text-2xl font-black tracking-tighter text-white">EL GARAGE.</span>
-                        <p className="text-zinc-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
-                            Redefiniendo el estándar en la comercialización de vehículos de alta gama.
-                            Pasión, exclusividad y confianza.
+                        <p className="text-zinc-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0 mt-6">
+                            Desde 2016 brindando la mejor experiencia en la compra y venta de vehículos seleccionados. Más de 10 años garantizando confianza, asesoramiento claro y total responsabilidad.
                         </p>
                     </div>
 
@@ -58,10 +57,16 @@ export function Footer() {
                                     <span>Yerba Buena, Tucumán<br />Argentina</span>
                                 </a>
                             </li>
-                            <li className="flex items-center gap-3 text-sm text-zinc-400 justify-center md:justify-start">
-                                <Mail size={18} className="shrink-0" />
-                                <a href="mailto:elgarageautomoviles@gmail.com" className="hover:text-white transition-colors">
-                                    elgarageautomoviles@gmail.com
+                            <li className="text-sm text-zinc-400">
+                                <a href="mailto:elgarageautomoviles@gmail.com" className="flex items-center gap-3 hover:text-white transition-colors justify-center md:justify-start">
+                                    <Mail size={18} className="shrink-0" />
+                                    <span>elgarageautomoviles@gmail.com</span>
+                                </a>
+                            </li>
+                            <li className="text-sm text-zinc-400">
+                                <a href="https://wa.me/5493814663032" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-white transition-colors justify-center md:justify-start">
+                                    <MessageSquare size={18} className="shrink-0" />
+                                    <span>+54 9 381 4663032</span>
                                 </a>
                             </li>
                         </ul>

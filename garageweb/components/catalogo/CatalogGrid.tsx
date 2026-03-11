@@ -199,7 +199,6 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const clearFilters = () => {
         setSelectedCategory("Todos");
         setSelectedBrand("Todas");
-        setSelectedBrand("Todas");
         setYearRange(globalMinMax);
         setPriceRange(globalPriceMinMax);
         setSelectedTransmission("Todos");
@@ -345,6 +344,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         <YearRangeFilter
                             min={globalMinMax[0]}
                             max={globalMinMax[1]}
+                            value={yearRange}
                             onChange={setYearRange}
                         />
                     </div>
@@ -354,6 +354,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         <PriceRangeFilter
                             min={globalPriceMinMax[0]}
                             max={globalPriceMinMax[1]}
+                            value={priceRange}
                             onChange={setPriceRange}
                         />
                     </div>

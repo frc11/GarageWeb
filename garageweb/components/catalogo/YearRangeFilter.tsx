@@ -6,18 +6,30 @@ import { cn } from "@/lib/utils";
 interface YearRangeFilterProps {
     min: number;
     max: number;
+    value?: [number, number];
     onChange: (range: [number, number]) => void;
     className?: string;
 }
 
-export function YearRangeFilter({ min, max, onChange, className }: YearRangeFilterProps) {
+export function YearRangeFilter({ min, max, value, onChange, className }: YearRangeFilterProps) {
     const [minVal, setMinVal] = useState(min);
     const [maxVal, setMaxVal] = useState(max);
-    const minGap = 1;
+    
+    // Min gap of 1 year, or more if the range is very large
+    const minGap = Math.max(1, Math.round((max - min) * 0.02)); 
 
     useEffect(() => {
-        setMinVal(min);
-        setMaxVal(max);
+        if (value) {
+            setMinVal(value[0]);
+            setMaxVal(value[1]);
+        }
+    }, [value]);
+
+    useEffect(() => {
+        if (!value) {
+            setMinVal(min);
+            setMaxVal(max);
+        }
     }, [min, max]);
 
     const getPercent = useCallback((value: number) =>
@@ -113,7 +125,9 @@ export function YearRangeFilter({ min, max, onChange, className }: YearRangeFilt
                     onMouseUp={handleCommit}
                     onTouchEnd={handleCommit}
                     className="thumb-interact absolute pointer-events-none appearance-none z-30 h-full w-full opacity-0"
-                    style={{ zIndex: minVal > max - 10 ? "50" : "30" }}
+                    style={{ 
+                        zIndex: minVal > max - (max - min) / 10 ? "50" : "30" 
+                    }}
                 />
                 <input
                     type="range"
@@ -123,8 +137,10 @@ export function YearRangeFilter({ min, max, onChange, className }: YearRangeFilt
                     onChange={handleMaxChange}
                     onMouseUp={handleCommit}
                     onTouchEnd={handleCommit}
-                    className="thumb-interact absolute pointer-events-none appearance-none z-30 h-full w-full opacity-0"
-                    style={{ zIndex: 40 }}
+                    className="thumb-interact absolute pointer-events-none appearance-none z-40 h-full w-full opacity-0"
+                    style={{ 
+                        zIndex: maxVal < min + (max - min) / 10 ? "50" : "40" 
+                    }}
                 />
             </div>
         </div>

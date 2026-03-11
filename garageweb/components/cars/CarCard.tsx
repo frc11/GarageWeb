@@ -16,7 +16,7 @@ interface CarCardProps {
     imageAspectClassName?: string;
 }
 
-export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage, imageAspectClassName }: CarCardProps) {
+export function CarCard({ car, className, priority = false, isOffer = false, discountPercentage, hideStatusBadge, imageAspectClassName }: CarCardProps) {
     // Logic to determine if it's an offer 
     const isOfferActive = isOffer || car.isOffer;
 
@@ -63,7 +63,7 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                 {/* Top Badges */}
                 <div className="absolute top-0 left-0 p-4 w-full flex justify-end items-start z-10">
                     {/* Brand Badge moved or removed if not needed, focusing on Offer */}
-                    {isOfferActive && discount > 0 ? (
+                    {isOfferActive && discount > 0 && !hideStatusBadge ? (
                         <div className="px-2 py-1 bg-amber-500 text-black rounded-md shadow-lg flex items-center gap-1.5">
                             <BadgePercent size={12} strokeWidth={3} />
                             <span className="text-[10px] font-extrabold uppercase tracking-wider">

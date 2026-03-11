@@ -17,7 +17,7 @@ export function OfferCard({ car, className }: OfferCardProps) {
     let discount = car.discount || 0;
 
     // If no explicit discount but has originalPrice > price, calculate it
-    if (discount === 0 && car.originalPrice && car.originalPrice > car.price) {
+    if (discount === 0 && car.originalPrice && car.price && car.originalPrice > car.price) {
         discount = Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100);
     }
 
@@ -30,7 +30,7 @@ export function OfferCard({ car, className }: OfferCardProps) {
     let oldPrice = car.originalPrice;
 
     // If no originalPrice but we have a discount, reverse-calculate the "Old" price for anchor effect
-    if (!oldPrice && discount > 0) {
+    if (!oldPrice && discount > 0 && car.price) {
         oldPrice = car.price / (1 - (discount / 100));
     }
 
@@ -45,13 +45,19 @@ export function OfferCard({ car, className }: OfferCardProps) {
             )}
         >
             <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                    src={car.thumbnailImage || ''}
-                    alt={`${car.brand} ${car.model}`}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
+                {car.thumbnailImage ? (
+                    <Image
+                        src={car.thumbnailImage}
+                        alt={`${car.brand} ${car.model}`}
+                        fill
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                ) : (
+                    <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center">
+                        <span className="text-zinc-600 text-xs uppercase tracking-widest font-bold">Sin Imagen</span>
+                    </div>
+                )}
 
                 {/* Overlays */}
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent opacity-80" />
@@ -99,7 +105,7 @@ export function OfferCard({ car, className }: OfferCardProps) {
                             </span>
                         )}
                         <span className="text-white text-2xl font-bold tracking-tight">
-                            {formatCurrency(car.price, car.currency)}
+                            {formatCurrency(car.price || 0, car.currency)}
                         </span>
                     </div>
                 </div>

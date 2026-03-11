@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 export function DeveloperBadge() {
     return (
         <Link
-            href="https://develop-webdesign.netlify.app/"
+            href="https://develop-portfolio.netlify.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="group relative inline-flex items-center justify-center"

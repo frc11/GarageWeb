@@ -34,7 +34,7 @@ export default function ContactPage() {
 
         const text = `*SOLICITUD DE CITA - CONSENCIONARIA*\n\n*INTERÉS:* ${interest}\n\n*CONTACTO:*\n• Nombre: ${formData.name}\n• Tel: ${formData.phone}\n• Email: ${formData.email}\n\n*MENSAJE:*\n${formData.message || "Sin mensaje adicional"}`;
         const encodedText = encodeURIComponent(text);
-        window.open(`https://wa.me/5493814154708?text=${encodedText}`, '_blank');
+        window.open(`https://wa.me/5493814663032?text=${encodedText}`, '_blank');
         setIsLoading(false);
     };
 
@@ -77,12 +77,12 @@ export default function ContactPage() {
                             </h1>
                         </m.div>
 
-                        <div className="hidden lg:block space-y-2 text-neutral-400">
+                        <div className="hidden lg:block space-y-2 text-neutral-400 mb-15">
                             <p className="text-sm font-light tracking-wide">
-                                Una experiencia curada para coleccionistas.
+                                Vehículos seleccionados y asesoramiento premium en Yerba Buena.
                             </p>
                             <p className="text-xs uppercase tracking-widest opacity-50">
-                                Solo con cita previa.
+                                Vení a conocer la concesionaria.
                             </p>
                         </div>
                     </div>
@@ -122,23 +122,24 @@ export default function ContactPage() {
 
                                 <div className="flex flex-col md:flex-row gap-8 md:gap-16 pt-8 border-t border-white/5">
                                     <div className="space-y-2">
-                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Private Viewings</h4>
+                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Semana</h4>
                                         <p className="text-sm text-neutral-300 font-light">Lunes — Viernes</p>
-                                        <p className="text-sm text-white font-medium">10:00 — 19:00</p>
+                                        <p className="text-sm text-white font-medium">9:00 — 13:00</p>
+                                        <p className="text-sm text-white font-medium">16:30 — 20:30</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Weekend</h4>
+                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Fin De semana</h4>
                                         <p className="text-sm text-neutral-300 font-light">Sábados</p>
-                                        <p className="text-sm text-white font-medium">10:00 — 14:00 (Cita Previa)</p>
+                                        <p className="text-sm text-white font-medium">10:00 — 13:00</p>
                                     </div>
                                 </div>
 
                                 <div className="flex gap-4">
-                                    <a href="tel:+5493814154708" className="px-6 py-3 border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all flex items-center gap-2">
+                                    <a href="tel:+5493814663032" className="px-6 py-3 border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all flex items-center gap-2">
                                         <Phone className="w-3 h-3" /> Llamar
                                     </a>
-                                    <a href="https://wa.me/5493814154708" className="px-6 py-3 border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all flex items-center gap-2">
-                                        <MessageSquare className="w-3 h-3" /> WhatsApp VIP
+                                    <a href="https://wa.me/5493814663032" className="px-6 py-3 border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all flex items-center gap-2">
+                                        <MessageSquare className="w-3 h-3" /> WhatsApp
                                     </a>
                                 </div>
                             </m.div>
@@ -147,7 +148,7 @@ export default function ContactPage() {
                         {/* Priority Access Form */}
                         <section className="space-y-8 relative">
                             <div className="space-y-2">
-                                <h2 className="text-2xl font-serif text-white">Priority Access</h2>
+                                <h2 className="text-2xl font-serif text-white">Veni a visitarnos</h2>
                                 <p className="text-sm text-neutral-500 leading-relaxed max-w-md">
                                     Agenda una visita privada o solicita asesoramiento experto.
                                     Su tiempo es nuestra prioridad.
@@ -158,7 +159,7 @@ export default function ContactPage() {
                                 {/* Interest Selector */}
                                 <div className="space-y-3">
                                     <Label className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Interés Principal</Label>
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap gap-2 mt-2">
                                         {interests.map((item) => (
                                             <button
                                                 key={item}
@@ -263,7 +264,7 @@ export default function ContactPage() {
                         </div>
 
                         <footer className="pt-12 text-center text-neutral-600 text-xs tracking-widest uppercase mb-12">
-                            © 2024 Garage. All Rights Reserved.
+                            © 2026 Garage. Todos los derechos reservados.
                         </footer>
 
                     </div>

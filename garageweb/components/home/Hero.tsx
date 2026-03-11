@@ -54,7 +54,7 @@ export function Hero() {
                 <ScrollReveal animation="text-reveal">
                     <div className="max-w-5xl w-full">
                         <span className="inline-block mb-4 md:mb-6 px-4 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm text-xs font-medium tracking-[0.2em] text-white uppercase">
-                            Est. 2024 — El Garage
+                            Est. 2016
                         </span>
 
                         {/* SOLUCIÓN AL CORTE DE LETRA:
@@ -70,8 +70,7 @@ export function Hero() {
                         </h1>
 
                         <p className="text-base md:text-xl text-white/70 max-w-xl leading-relaxed font-light tracking-wide mx-auto lg:mx-0">
-                            Descubre nuestra colección de vehículos de alto rendimiento.
-                            Donde la ingeniería se encuentra con el arte.
+                            Donde la confianza se maneja.
                         </p>
 
                         <PremiumButton variant="primary" className="mt-8 md:mt-10" onClick={() => router.push("/catalogo")}>

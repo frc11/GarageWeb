@@ -5,7 +5,7 @@ import { Car } from "@/types/main";
 
 export const metadata = {
     title: "Ofertas",
-    description: "Selección de vehículos premium con condiciones extraordinarias y entrega inmediata.",
+    description: "Encontrá tu próximo auto entre nuestra selección de unidades premium. Oportunidades únicas con la confianza de El Garage.",
 };
 
 // Revalidate 0 for real-time (User Request)
@@ -63,9 +63,9 @@ export default async function OffersPage() {
                         <div className="h-px w-24 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent my-8" />
 
                         <p className="text-zinc-400 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
-                            Selección de vehículos premium con condiciones extraordinarias.
+                            Encontrá tu próximo auto entre nuestra selección de unidades premium.
                             <br className="hidden md:block" />
-                            Calidad certificada y beneficios únicos por tiempo limitado.
+                            Oportunidades únicas con la confianza y el respaldo de El Garage.
                         </p>
                     </div>
                 </div>

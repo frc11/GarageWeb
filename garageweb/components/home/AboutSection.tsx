@@ -17,7 +17,7 @@ const stats = [
 export function AboutSection() {
     const router = useRouter();
     return (
-        <section className="relative py-50  bg-neutral-50 dark:bg-zinc-950 overflow-hidden z-10">
+        <section className="relative py-16 lg:py-24 bg-neutral-50 dark:bg-zinc-950 overflow-hidden z-10">
 
             {/* === INTEGRACIÓN SUPERIOR (Featured -> About) === */}
             {/* Sombra de caída: Conecta el negro de arriba con el blanco de aquí. 
@@ -32,10 +32,10 @@ export function AboutSection() {
 
 
             <div className="container relative z-10 mx-auto px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-stretch">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
 
-                    {/* Left Column: Typographic & Editorial (5 Cols) */}
-                    <div className="lg:col-span-5 flex flex-col justify-center h-full space-y-12 pt-12 items-center text-center lg:items-start lg:text-left">
+                    {/* Left Column: Typographic & Editorial (6 Cols) */}
+                    <div className="lg:col-span-6 flex flex-col justify-center h-full space-y-8 pt-8 lg:pt-0 items-center text-center lg:items-start lg:text-left">
                         <m.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -47,16 +47,16 @@ export function AboutSection() {
                             <div className="flex items-center gap-3">
                                 <span className="h-px w-12 bg-neutral-400" />
                                 <span className="text-xs font-bold tracking-[0.2em] uppercase text-neutral-500">
-                                    Nuestra Esencia
+                                    El garage Automotores
                                 </span>
                                 <span className="h-px w-12 bg-neutral-400" />
                             </div>
 
                             {/* Headline */}
                             <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif font-medium text-neutral-900 dark:text-white leading-[0.95] tracking-tight">
-                                Más que <br />
-                                <span className="italic text-neutral-400 dark:text-neutral-600">Mecánica.</span><br />
-                                Arte Puro.
+                                Donde la <br />
+                                <span className="italic text-neutral-400 dark:text-neutral-600">confianza</span><br />
+                                se maneja.
                             </h2>
                         </m.div>
 
@@ -66,15 +66,20 @@ export function AboutSection() {
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="space-y-6 text-lg text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-md mx-auto lg:mx-0"
+                            className="space-y-5 text-base text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-xl mx-auto lg:mx-0"
                         >
                             <p>
-                                En <strong>El Garage</strong>, no solo comercializamos vehículos; curamos una colección.
-                                Entendemos que un automóvil de lujo no es solo transporte, es una extensión de la personalidad y un legado de ingeniería.
+                                En <strong>El Garage</strong> contamos con una amplia trayectoria en el rubro automotor, brindando a nuestros clientes en Tucumán un servicio confiable, transparente y profesional. A lo largo del tiempo hemos construido una reputación basada en la seriedad en cada operación, la calidad de los vehículos y la atención personalizada que recibe cada persona que confía en nosotros.
                             </p>
+
+
                             <p>
-                                Cada pieza de nuestro inventario ha superado un riguroso proceso de certificación de 120 puntos,
-                                garantizando que la excelencia no sea solo una promesa, sino un estándar.
+                                Nos especializamos en la compra y venta de vehículos seleccionados, priorizando siempre unidades en excelente estado y acompañando a nuestros clientes durante todo el proceso para que puedan tomar la mejor decisión. Entendemos que comprar o vender un vehículo es una decisión importante, por eso trabajamos con compromiso, asesoramiento claro y total responsabilidad..
+                            </p>
+
+
+                            <p>
+                                Desde Tucumán, seguimos creciendo día a día gracias a la confianza de nuestros clientes y a nuestra pasión por el mundo automotor, manteniendo siempre el objetivo de ofrecer vehículos de calidad y una experiencia de compra segura y satisfactoria.
                             </p>
                         </m.div>
 
@@ -87,7 +92,7 @@ export function AboutSection() {
                             className="flex flex-col sm:flex-row items-center gap-8 pt-4"
                         >
                             <PremiumButton variant="inverted" onClick={() => router.push("/contacto")}>
-                                Conocé el Showroom
+                                Conocé la Concesionaria
                                 <MapPin className="w-4 h-4 color-neutral-900 dark:text-white" />
                             </PremiumButton>
 
@@ -98,11 +103,11 @@ export function AboutSection() {
                         </m.div>
                     </div>
 
-                    {/* Right Column: Visual Bento Layout (7 Cols) */}
-                    <div className="lg:col-span-7 relative pt-12 lg:pt-0 flex flex-col justify-center h-full">
+                    {/* Right Column: Visual Bento Layout (6 Cols) */}
+                    <div className="lg:col-span-6 relative pt-12 lg:pt-0 flex flex-col justify-center h-full">
 
                         {/* Bento Grid Layer */}
-                        <div className="grid grid-cols-2 gap-4 md:gap-6">
+                        <div className="grid grid-cols-2 gap-4 md:gap-6 h-full">
 
                             {/* Main Image (Tall) - Izquierda */}
                             <m.div
@@ -110,7 +115,7 @@ export function AboutSection() {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
-                                className="relative col-span-1 row-span-2 h-full min-h-[500px]"
+                                className="relative col-span-1 row-span-2 h-full min-h-[380px]"
                             >
                                 <div className="absolute -inset-4 bg-gradient-to-tr from-white/20 to-neutral-600/20 blur-2xl -z-10 rounded-[2rem] opacity-70" />
                                 <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10">
@@ -131,7 +136,7 @@ export function AboutSection() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
-                                className="relative col-span-1 h-full min-h-[300px]"
+                                className="relative col-span-1 h-full min-h-[200px]"
                             >
                                 <div className="absolute -inset-4 bg-gradient-to-bl from-white/20 to-neutral-600/20 blur-2xl -z-10 rounded-[2rem] opacity-70" />
                                 <div className="relative h-full w-full rounded-[2rem] overflow-hidden border border-white/10">
@@ -159,12 +164,12 @@ export function AboutSection() {
                                         <div className="p-2 bg-neutral-100/5 rounded-lg">
                                             <Award className="w-6 h-6 text-white" />
                                         </div>
-                                        <span className="text-xs font-mono text-white uppercase">Est. 2004</span>
+                                        <span className="text-xs font-mono text-white uppercase">Est. 2016</span>
                                     </div>
 
                                     <div>
                                         <div className="text-3xl font-bold font-serif text-white">
-                                            +20
+                                            +10
                                         </div>
                                         <div className="text-sm text-white">
                                             Años de excelencia automotriz.

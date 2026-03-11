@@ -78,7 +78,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                     className="mt-4 text-neutral-400 max-w-lg mx-auto text-sm md:text-base"
                 >
                     Vehículos seleccionados con condiciones excepcionales. <br className="hidden md:block" />
-                    Disponibilidad inmediata y beneficios exclusivos.
+                    Disponibilidad inmediata y descuentos exclusivos.
                 </m.p>
             </div>
 
@@ -146,13 +146,19 @@ function DealCard({ car, isCarousel = true }: { car: Car, isCarousel?: boolean }
             <div className="relative bg-neutral-900 rounded-xl overflow-hidden border border-transparent transition-all duration-300 group-hover/card:border-orange-500/40 group-hover/card:shadow-[0_0_40px_rgba(249,115,22,0.15)] flex flex-col h-full">
 
                 <div className="relative h-[200px] md:h-[240px] overflow-hidden bg-neutral-800 shrink-0">
-                    <Image
-                        src={car.thumbnailImage || ''}
-                        alt={car.model}
-                        fill
-                        className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
-                        sizes="(max-width: 768px) 85vw, 420px"
-                    />
+                    {car.thumbnailImage ? (
+                        <Image
+                            src={car.thumbnailImage}
+                            alt={car.model}
+                            fill
+                            className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
+                            sizes="(max-width: 768px) 85vw, 420px"
+                        />
+                    ) : (
+                        <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center">
+                            <span className="text-zinc-600 text-xs uppercase tracking-widest font-bold">Sin Imagen</span>
+                        </div>
+                    )}
                     {discountPercent && (
                         <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-orange-600 text-white px-2.5 py-1 md:px-3 md:py-1.5 rounded-md font-bold text-[10px] md:text-xs shadow-lg flex items-center gap-1.5 tracking-wider uppercase">
                             <TrendingDown className="w-3 h-3 text-white" />
