@@ -237,7 +237,7 @@ export default async function CarPage(props: CarPageProps) {
                             </div>
 
                             {/* Consultant Card replaced by Team Selector */}
-                            <TeamSelector carName={`${car.brand} ${car.model}`} />
+                            {/* <TeamSelector carName={`${car.brand} ${car.model}`} /> */}
 
                         </div>
                     </div>

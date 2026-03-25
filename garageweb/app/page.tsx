@@ -40,7 +40,7 @@ export default async function Home() {
       <FeaturedCars cars={featuredCars} />
       <ReviewsSection />
       <AboutSection />
-      <StaffGrid />
+
       <CinematicBanner />
     </main>
   );

@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 export function Hero() {
     const router = useRouter();
-    const videos = ["/hero-bg.mp4", "/location-bg.mp4"];
+    const videos = ["/hero-bg.mp4", "/hero-bg.mp4"];
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
