@@ -11,6 +11,7 @@ export function Hero() {
     const router = useRouter();
     const videos = ["/hero-bg.mp4", "/hero-bg.mp4"];
     const [index, setIndex] = useState(0);
+    // Only true once the video is actually playing (not just first frame decoded)
     const [isVideoReady, setIsVideoReady] = useState(false);
 
     useEffect(() => {
@@ -39,29 +40,32 @@ export function Hero() {
                             muted
                             playsInline
                             disablePictureInPicture
-                            onCanPlay={() => setIsVideoReady(true)}
+                            // onPlaying fires when frames are actually rendering — avoids the
+                            // static first-frame flash that onCanPlay causes on slow connections
+                            onPlaying={() => setIsVideoReady(true)}
                             className="h-full w-full object-cover filter brightness-[0.7] saturate-[0.8]"
                         >
                             <source src={videos[index]} type="video/mp4" />
                         </video>
-
-                        {/* Spinner de carga del hero */}
-                        <AnimatePresence>
-                            {!isVideoReady && (
-                                <motion.div
-                                    key="hero-loader"
-                                    initial={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.8 }}
-                                    className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950"
-                                >
-                                    <div className="w-10 h-10 border-2 border-white/10 border-t-amber-500 rounded-full animate-spin" />
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
                     </motion.div>
                 </AnimatePresence>
             </ScrollReveal>
+
+            {/* Spinner de carga — FUERA del AnimatePresence keyeado por index
+                para que no reaparezca en cada transición de clip              */}
+            <AnimatePresence>
+                {!isVideoReady && (
+                    <motion.div
+                        key="hero-loader"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950"
+                    >
+                        <div className="w-10 h-10 border-2 border-white/10 border-t-amber-500 rounded-full animate-spin" />
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* CAPA 1: Gradiente */}
             <div className="absolute inset-0 z-10 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent" />
@@ -74,11 +78,6 @@ export function Hero() {
                             Est. 2016
                         </span>
 
-                        {/* SOLUCIÓN AL CORTE DE LETRA:
-                           1. Agregamos 'pb-2' (padding-bottom) para dar espacio vertical si el glifo de la fuente es alto.
-                           2. Agregamos 'pr-2' (padding-right) en el span del gradiente para que la última letra no se corte horizontalmente.
-                           3. Aseguramos 'leading-tight' en lugar de 'leading-[1]' para dar un poco más de aire vertical sin perder el estilo compacto.
-                        */}
                         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-tighter text-white mb-6 md:mb-8 leading-tight uppercase pb-2">
                             El Garage <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/20 pr-2">

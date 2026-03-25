@@ -54,10 +54,13 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
     };
 
     const toggleFullscreen = () => {
-        if (videoRef.current) {
-            if (videoRef.current.requestFullscreen) {
-                videoRef.current.requestFullscreen();
-            }
+        const video = videoRef.current;
+        if (!video) return;
+        // iOS Safari requires webkitEnterFullscreen() on the <video> element itself
+        if ((video as any).webkitEnterFullscreen) {
+            (video as any).webkitEnterFullscreen();
+        } else if (video.requestFullscreen) {
+            video.requestFullscreen();
         }
     };
 
