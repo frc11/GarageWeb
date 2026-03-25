@@ -11,6 +11,7 @@ export function Hero() {
     const router = useRouter();
     const videos = ["/hero-bg.mp4", "/hero-bg.mp4"];
     const [index, setIndex] = useState(0);
+    const [isVideoReady, setIsVideoReady] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -38,10 +39,26 @@ export function Hero() {
                             muted
                             playsInline
                             disablePictureInPicture
+                            onCanPlay={() => setIsVideoReady(true)}
                             className="h-full w-full object-cover filter brightness-[0.7] saturate-[0.8]"
                         >
                             <source src={videos[index]} type="video/mp4" />
                         </video>
+
+                        {/* Spinner de carga del hero */}
+                        <AnimatePresence>
+                            {!isVideoReady && (
+                                <motion.div
+                                    key="hero-loader"
+                                    initial={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.8 }}
+                                    className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-950"
+                                >
+                                    <div className="w-10 h-10 border-2 border-white/10 border-t-amber-500 rounded-full animate-spin" />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </motion.div>
                 </AnimatePresence>
             </ScrollReveal>

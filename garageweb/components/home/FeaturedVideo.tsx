@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, Volume2, VolumeX, Maximize, RotateCcw } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Maximize } from "lucide-react";
 
 interface FeaturedVideoProps {
     videoUrl: string | null;
@@ -61,13 +61,17 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
         }
     };
 
-    const handleMouseMove = () => {
+    const triggerControlsTimeout = () => {
         setShowControls(true);
         if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
         controlsTimeoutRef.current = setTimeout(() => {
             if (isPlaying) setShowControls(false);
         }, 3000);
     };
+
+    // Alias for mouse and touch
+    const handleMouseMove = triggerControlsTimeout;
+    const handleTouchStart = triggerControlsTimeout;
 
     if (!videoUrl) return null;
 
@@ -76,6 +80,7 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
             className="relative w-full bg-[#050505] overflow-hidden py-24 md:py-40 z-10"
             onMouseMove={handleMouseMove}
             onMouseLeave={() => isPlaying && setShowControls(false)}
+            onTouchStart={handleTouchStart}
         >
             {/* Top Fade */}
             <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-zinc-950 to-transparent z-20 pointer-events-none" />
@@ -184,7 +189,7 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
                                             <button onClick={toggleMute} className="text-white hover:text-amber-500 transition-colors">
                                                 {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                                             </button>
-                                            <button onClick={toggleFullscreen} className="text-white hover:text-amber-500 transition-colors hidden md:block">
+                                            <button onClick={toggleFullscreen} className="text-white hover:text-amber-500 transition-colors">
                                                 <Maximize className="w-5 h-5" />
                                             </button>
                                         </div>
