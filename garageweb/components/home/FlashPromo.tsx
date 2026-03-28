@@ -127,8 +127,10 @@ export function FlashPromo({ offers }: FlashPromoProps) {
 
 // Componente auxiliar actualizado para manejar estilos dinámicos
 function DealCard({ car, isCarousel = true }: { car: Car, isCarousel?: boolean }) {
-    const discountPercent = (car.isOffer && car.originalPrice && car.price !== undefined && car.price < car.originalPrice)
-        ? Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100)
+    const discountPercent = car.isOffer
+        ? (car.discount || (car.originalPrice && car.price !== undefined && car.price < car.originalPrice
+            ? Math.round(((car.originalPrice - car.price) / car.originalPrice) * 100)
+            : null))
         : null;
 
     return (

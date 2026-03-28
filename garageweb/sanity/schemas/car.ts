@@ -98,24 +98,6 @@ export default defineType({
             description: "Activa el badge de oferta. Carga el Precio Original primero.",
         }),
         defineField({
-            name: 'discount',
-            title: 'Porcentaje de Descuento (0-100)',
-            type: 'number',
-            group: 'pricing',
-            fieldset: 'oferta',
-            validation: (rule) => [
-                rule.min(0).max(100),
-                rule.custom((value, context) => {
-                    const doc = context.document as any;
-                    if (value && !doc?.isOffer) {
-                        return '❌ Error: Debes activar "¿Es Oferta Flash?" para cargar un descuento.';
-                    }
-                    return true;
-                })
-            ],
-            description: 'Si se establece, anula el cálculo automático. Ejemplo: 15 para 15% OFF.',
-        }),
-        defineField({
             name: 'currency',
             title: 'Moneda',
             type: 'string',
@@ -195,7 +177,6 @@ export default defineType({
             title: 'Descripción',
             type: 'text',
             group: 'specs',
-            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'features',
@@ -203,7 +184,6 @@ export default defineType({
             type: 'array',
             group: 'specs',
             of: [{ type: 'string' }],
-            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'isFeatured',

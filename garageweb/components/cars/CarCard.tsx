@@ -25,7 +25,7 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
     const originalPrice = car.originalPrice;
 
     // Discount Calculation for Badge
-    const discount = discountPercentage || (originalPrice && currentPrice && originalPrice > currentPrice
+    const discount = discountPercentage || car.discount || (originalPrice && currentPrice && originalPrice > currentPrice
         ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
         : 0);
 
