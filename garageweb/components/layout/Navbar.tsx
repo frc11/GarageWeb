@@ -40,8 +40,7 @@ export function Navbar() {
                     top: {
                         y: 0,
                         width: "100%",
-                        maxWidth: "100%",
-                        top: 0,
+                        maxWidth: "10000px",
                         borderRadius: "0px",
                         backgroundColor: "rgba(0, 0, 0, 0)",
                         borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
@@ -52,10 +51,9 @@ export function Navbar() {
                         paddingRight: "32px"
                     },
                     scrolled: {
-                        y: 0,
+                        y: 12,
                         width: "92%",
                         maxWidth: "1000px",
-                        top: 12,
                         borderRadius: "100px",
                         backgroundColor: "rgba(10, 10, 10, 0.85)",
                         borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
@@ -68,12 +66,13 @@ export function Navbar() {
                 }}
                 transition={{
                     type: "spring",
-                    stiffness: 85,
-                    damping: 20,
-                    mass: 1
+                    stiffness: 80,
+                    damping: 25,
+                    mass: 0.8
                 }}
                 className={cn(
-                    "left-1/2 -translate-x-1/2 z-50 border border-transparent box-border",
+                    "inset-x-0 mx-auto top-0 z-50 border border-transparent box-border origin-center",
+                    (!isStudio && isScrolled) ? "w-[92%] max-w-[1000px]" : "w-full max-w-full",
                     isStudio ? "absolute" : "fixed shadow-2xl"
                 )}
                 style={{
@@ -102,7 +101,7 @@ export function Navbar() {
                     {/* Desktop Navigation - Centrado Absoluto */}
                     {/* Truco: Usamos posición absoluta para que esté perfectamente al centro, 
                         independientemente del ancho del logo o del botón de contacto */}
-                    <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-16 lg:gap-24">
+                    <div className="hidden md:flex absolute inset-x-0 mx-auto w-fit items-center gap-16 lg:gap-24">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
@@ -121,7 +120,7 @@ export function Navbar() {
                     </div>
 
                     {/* Contact Button & Mobile Toggle */}
-                    <div className="flex items-center gap-6 shrink-0">
+                    <div className="flex items-center gap-6 shrink-0 z-50">
                         <Link href="/contacto" className="hidden md:block">
                             <PremiumButton
                                 className="h-10 px-6 py-0 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] transition-all duration-300 group"
