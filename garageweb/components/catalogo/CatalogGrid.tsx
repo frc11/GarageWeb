@@ -143,7 +143,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         return ["Todos", ...transmissions];
     }, [cars]);
 
-    const categories = ["Todos", "Deportivos", "SUV", "Sedán", "Pick-up", "Clásicos"];
+    const categories = ["Todos", "Deportivos", "SUV", "Sedán", "Pick-up", "Clásicos", "Hatchback"];
 
     const brandPills = useMemo(() => {
         const uniqueBrands = allBrands.length > 0

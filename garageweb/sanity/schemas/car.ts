@@ -44,6 +44,7 @@ export default defineType({
                     { title: 'Sedán', value: 'Sedán' },
                     { title: 'Pick-up', value: 'Pick-up' },
                     { title: 'Clásicos', value: 'Clásicos' },
+                    { title: 'Hatchback', value: 'Hatchback' },
                 ],
             },
             validation: (rule) => rule.required(),
