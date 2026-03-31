@@ -5,7 +5,7 @@ import { FlashPromo } from "@/components/home/FlashPromo";
 import { AboutSection } from "@/components/home/AboutSection";
 import { StaffGrid } from "@/components/home/StaffGrid";
 import { BrandMarquee } from "@/components/home/BrandMarquee";
-import { ReviewsSection } from "@/components/home/ReviewsSection";
+import { EntregasSection } from "@/components/home/EntregasSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { FeaturedVideo } from "@/components/home/FeaturedVideo";
 import { getFeaturedCars, getOfferCars, getStockBrands, getFeaturedVideo } from "@/sanity/lib/fetch";
@@ -38,7 +38,7 @@ export default async function Home() {
 
       <FlashPromo offers={offerCars} />
       <FeaturedCars cars={featuredCars} />
-      <ReviewsSection />
+      <EntregasSection />
       <AboutSection />
 
       <CinematicBanner />

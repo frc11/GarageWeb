@@ -2,76 +2,59 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Star, Quote, CheckCircle2, ChevronLeft, ChevronRight, User } from "lucide-react";
+import { Quote, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { client } from "@/sanity/lib/client";
-import { TESTIMONIALS_QUERY } from "@/sanity/lib/queries";
+import { ENTREGAS_QUERY } from "@/sanity/lib/queries";
 
-interface Testimonial {
+interface Entrega {
     id: string;
-    name: string;
-    role?: string;
-    car: string;
-    text: string;
-    stars: number;
-    avatar?: string;
+    clientName: string;
+    review: string;
+    imageUrl: string;
 }
 
-const ReviewCard = ({ item, isCenter = true }: { item: Testimonial; isCenter?: boolean }) => (
-    <div className={`review-card relative backdrop-blur-xl border p-8 rounded-3xl transition-all duration-500 group h-full flex flex-col ${isCenter
-        ? 'bg-neutral-950/80 border-amber-500/20 shadow-[0_0_40px_rgba(245,158,11,0.3)]'
-        : 'bg-neutral-950/40 border-white/5'
+const EntregaCard = ({ item, isCenter = true }: { item: Entrega; isCenter?: boolean }) => (
+    <div className={`entrega-card relative w-full aspect-[9/16] max-h-[700px] rounded-3xl overflow-hidden transition-all duration-500 group mx-auto ${isCenter
+        ? 'shadow-[0_0_40px_rgba(245,158,11,0.3)] ring-1 ring-amber-500/50'
+        : 'opacity-70 ring-1 ring-white/10'
         }`}>
 
-        {/* Quote Icon */}
-        <Quote className="absolute top-8 right-8 text-white/5 w-12 h-12 group-hover:text-amber-500/10 transition-colors duration-500" />
+        {/* Background Image */}
+        <Image
+            src={item.imageUrl}
+            alt={`Entrega a ${item.clientName}`}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 400px"
+        />
 
-        {/* Stars */}
-        <div className="flex gap-1 mb-6">
-            {[...Array(item.stars)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-            ))}
-        </div>
+        {/* Gradient Overlay for Text Readability - Darker at bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent pointer-events-none" />
 
-        {/* Content */}
-        <p className="text-neutral-300 text-base sm:text-lg leading-relaxed mb-8 italic min-h-[120px]">
-            "{item.text.length > 180 ? `${item.text.substring(0, 177)}...` : item.text}"
-        </p>
+        {/* Content Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col justify-end">
+            <Quote className="text-amber-500/60 w-8 h-8 mb-4 group-hover:text-amber-400 transition-colors duration-500" />
+            
+            <p className="text-white text-lg md:text-xl font-medium leading-relaxed mb-6 italic text-balance shadow-black drop-shadow-lg">
+                "{item.review}"
+            </p>
 
-        <div className="flex items-center justify-between border-t border-white/5 pt-6 mt-auto">
-            <div className="flex items-center gap-4">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 flex-shrink-0 bg-neutral-800 flex items-center justify-center">
-                    {item.avatar ? (
-                        <Image
-                            src={item.avatar}
-                            alt={item.name}
-                            fill
-                            className="object-cover"
-                        />
-                    ) : (
-                        <User className="text-neutral-500 w-6 h-6" />
-                    )}
+            <div className="flex items-center gap-3 pt-4 border-t border-white/20">
+                <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-amber-500" />
                 </div>
                 <div>
-                    <div className="flex items-center gap-2">
-                        <h4 className="text-white font-bold text-sm">{item.name}</h4>
-                        <CheckCircle2 className="w-3 h-3 text-blue-400" />
-                    </div>
-                    {item.role && (
-                        <p className="text-neutral-500 text-xs uppercase tracking-wider">{item.role}</p>
-                    )}
+                    <h4 className="text-white font-bold text-sm tracking-wider uppercase drop-shadow-md">{item.clientName}</h4>
+                    <p className="text-white/60 text-xs mt-0.5">Cliente Verificado</p>
                 </div>
-            </div>
-            <div className="text-right">
-                <p className="text-amber-500/80 text-[10px] font-bold uppercase tracking-wider mb-1">Dueño de</p>
-                <p className="text-white text-xs font-serif">{item.car}</p>
             </div>
         </div>
     </div>
 );
 
-export function ReviewsSection() {
-    const [reviews, setReviews] = useState<Testimonial[]>([]);
+export function EntregasSection() {
+    const [entregas, setEntregas] = useState<Entrega[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0); // -1 for prev, 1 for next
@@ -79,21 +62,21 @@ export function ReviewsSection() {
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-        const fetchReviews = async () => {
+        const fetchEntregas = async () => {
             try {
-                const data = await client.fetch(TESTIMONIALS_QUERY);
-                setReviews(data);
+                const data = await client.fetch(ENTREGAS_QUERY);
+                setEntregas(data);
             } catch (error) {
-                console.error("Error fetching testimonials:", error);
+                console.error("Error fetching entregas:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchReviews();
+        fetchEntregas();
     }, []);
 
-    const totalItems = reviews.length;
+    const totalItems = entregas.length;
 
     // Circular Buffer Logic: Calculate visible items
     const getVisibleItems = useCallback(() => {
@@ -103,11 +86,11 @@ export function ReviewsSection() {
         const nextIndex = (currentIndex + 1) % totalItems;
 
         return [
-            { item: reviews[prevIndex], position: 'prev', index: prevIndex },
-            { item: reviews[currentIndex], position: 'center', index: currentIndex },
-            { item: reviews[nextIndex], position: 'next', index: nextIndex }
+            { item: entregas[prevIndex], position: 'prev', index: prevIndex },
+            { item: entregas[currentIndex], position: 'center', index: currentIndex },
+            { item: entregas[nextIndex], position: 'next', index: nextIndex }
         ];
-    }, [currentIndex, totalItems, reviews]);
+    }, [currentIndex, totalItems, entregas]);
 
     const visibleItems = getVisibleItems();
 
@@ -115,12 +98,10 @@ export function ReviewsSection() {
     const startAutoplay = useCallback(() => {
         if (totalItems <= 1) return;
 
-        // Clear any existing interval first
         if (intervalRef.current) {
             clearInterval(intervalRef.current);
         }
 
-        // Start new interval
         intervalRef.current = setInterval(() => {
             setDirection(1);
             setCurrentIndex((prev) => (prev + 1) % totalItems);
@@ -129,7 +110,7 @@ export function ReviewsSection() {
 
     // Reset autoplay timer (called on manual interaction)
     const resetAutoplay = useCallback(() => {
-        startAutoplay(); // This clears old interval and starts fresh
+        startAutoplay();
     }, [startAutoplay]);
 
     // Navigation Handlers with Timer Reset
@@ -137,14 +118,14 @@ export function ReviewsSection() {
         if (totalItems <= 1) return;
         setDirection(1);
         setCurrentIndex((prev) => (prev + 1) % totalItems);
-        resetAutoplay(); // RESET TIMER on manual interaction
+        resetAutoplay();
     }, [totalItems, resetAutoplay]);
 
     const handlePrev = useCallback(() => {
         if (totalItems <= 1) return;
         setDirection(-1);
         setCurrentIndex((prev) => (prev - 1 + totalItems) % totalItems);
-        resetAutoplay(); // RESET TIMER on manual interaction
+        resetAutoplay();
     }, [totalItems, resetAutoplay]);
 
     // Initialize autoplay on mount and cleanup on unmount
@@ -196,7 +177,7 @@ export function ReviewsSection() {
                         className="flex items-center justify-center gap-3 mb-4"
                     >
                         <span className="h-px w-12 bg-amber-500/50" />
-                        <span className="text-amber-500 text-xs font-bold uppercase tracking-[0.2em]">Testimonios</span>
+                        <span className="text-amber-500 text-xs font-bold uppercase tracking-[0.2em]">Entregas</span>
                         <span className="h-px w-12 bg-amber-500/50" />
                     </motion.div>
                     <motion.h2
@@ -206,38 +187,38 @@ export function ReviewsSection() {
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-5xl font-serif text-white leading-tight"
                     >
-                        EXPERIENCIAS DE{" "}
+                        CLIENTES{" "}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-600">
-                            EXCELENCIA
+                            FELICES
                         </span>
                     </motion.h2>
                 </div>
 
                 {/* Content Area */}
-                <div className="relative min-h-[400px]">
-                    {totalItems <= 3 ? (
-                        /* Static Grid for 1-3 items */
-                        <div className={`grid gap-8 justify-center max-w-5xl mx-auto ${
-                            totalItems === 1 ? 'grid-cols-1 max-w-lg' : 
-                            totalItems === 2 ? 'grid-cols-1 md:grid-cols-2' : 
-                            'grid-cols-1 md:grid-cols-3'
+                <div className="relative">
+                    {totalItems <= 2 ? (
+                        /* Static Grid for 1-2 items (vertical cards take more space horizontally, so max 2 is better for desktop) */
+                        <div className={`grid gap-8 justify-center w-full max-w-4xl mx-auto ${
+                            totalItems === 1 ? 'grid-cols-1 max-w-sm' : 
+                            'grid-cols-1 md:grid-cols-2'
                         }`}>
-                            {reviews.map((item) => (
+                            {entregas.map((item) => (
                                 <motion.div
                                     key={item.id}
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
+                                    className="w-full"
                                 >
-                                    <ReviewCard item={item} isCenter={true} />
+                                    <EntregaCard item={item} isCenter={true} />
                                 </motion.div>
                             ))}
                         </div>
                     ) : (
-                        /* Circular Carousel for more than 3 items */
-                        <div className="relative h-[500px] md:h-[450px]">
+                        /* Circular Carousel for more than 2 items */
+                        <div className="relative h-[650px] md:h-[700px] flex items-center justify-center">
                             {/* Sliding Window Render */}
-                            <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="absolute inset-0 flex items-center justify-center overflow-hidden md:overflow-visible">
                                 <AnimatePresence initial={false} custom={direction} mode="popLayout">
                                     {visibleItems.map(({ item, position, index }) => (
                                         <motion.div
@@ -251,18 +232,14 @@ export function ReviewsSection() {
                                                 x: { type: "spring", stiffness: 300, damping: 30 },
                                                 opacity: { duration: 0.3 }
                                             }}
-                                            className={`absolute transition-all duration-500 ${position === 'center'
+                                            className={`absolute transition-all duration-500 w-[85%] max-w-[380px] ${position === 'center'
                                                 ? 'z-30 scale-100 opacity-100'
                                                 : position === 'prev'
-                                                    ? 'z-10 -translate-x-[60%] scale-90 opacity-40 blur-sm pointer-events-none'
-                                                    : 'z-10 translate-x-[60%] scale-90 opacity-40 blur-sm pointer-events-none'
+                                                    ? 'z-10 -translate-x-[75%] md:-translate-x-[90%] scale-90 opacity-40 blur-[2px] pointer-events-none'
+                                                    : 'z-10 translate-x-[75%] md:translate-x-[90%] scale-90 opacity-40 blur-[2px] pointer-events-none'
                                                 }`}
-                                            style={{
-                                                width: position === 'center' ? '90%' : '90%',
-                                                maxWidth: position === 'center' ? '500px' : '500px'
-                                            }}
                                         >
-                                            <ReviewCard item={item} isCenter={position === 'center'} />
+                                            <EntregaCard item={item} isCenter={position === 'center'} />
                                         </motion.div>
                                     ))}
                                 </AnimatePresence>
@@ -271,23 +248,23 @@ export function ReviewsSection() {
                             {/* Custom Navigation Buttons */}
                             <button
                                 onClick={handlePrev}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-black/60 hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all duration-300 group cursor-pointer active:scale-95"
-                                aria-label="Previous review"
+                                className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 hover:border-amber-500/50 hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all duration-300 group cursor-pointer active:scale-95"
+                                aria-label="Entrega anterior"
                             >
-                                <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                <ChevronLeft className="w-6 h-6 group-hover:scale-110 transition-transform -translate-x-0.5" />
                             </button>
 
                             <button
                                 onClick={handleNext}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-black/60 hover:border-amber-500/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all duration-300 group cursor-pointer active:scale-95"
-                                aria-label="Next review"
+                                className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 hover:border-amber-500/50 hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all duration-300 group cursor-pointer active:scale-95"
+                                aria-label="Siguiente entrega"
                             >
-                                <ChevronRight className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                <ChevronRight className="w-6 h-6 group-hover:scale-110 transition-transform translate-x-0.5" />
                             </button>
 
                             {/* Pagination Dots */}
-                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2">
-                                {reviews.map((_, index) => (
+                            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+                                {entregas.map((_, index) => (
                                     <button
                                         key={index}
                                         onClick={() => {
@@ -298,7 +275,7 @@ export function ReviewsSection() {
                                             ? 'w-8 bg-amber-500'
                                             : 'w-1.5 bg-white/20 hover:bg-white/40'
                                             }`}
-                                        aria-label={`Go to review ${index + 1}`}
+                                        aria-label={`Ir a entrega ${index + 1}`}
                                     />
                                 ))}
                             </div>
