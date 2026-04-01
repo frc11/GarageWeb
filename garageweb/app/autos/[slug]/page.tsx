@@ -51,10 +51,10 @@ export default async function CarPage(props: CarPageProps) {
     const shareText = `¡Mira este auto que vi en la página de El Garage!`;
 
     return (
-        <main className="bg-zinc-950 min-h-screen pt-24.5">
+        <main className="bg-zinc-950 min-h-[100dvh] pt-24.5">
 
             {/* 1. HERO SECTION (Full Screen) */}
-            <div className="relative h-screen w-full overflow-hidden">
+            <div className="relative h-[100dvh] w-full overflow-hidden">
                 {car.coverImage ? (
                     car.coverImage.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
                         <video

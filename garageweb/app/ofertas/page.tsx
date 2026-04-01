@@ -38,7 +38,7 @@ export default async function OffersPage() {
     }));
 
     return (
-        <main className="min-h-screen bg-black text-white selection:bg-amber-500/30">
+        <main className="min-h-[100dvh] bg-black text-white selection:bg-amber-500/30">
 
             {/* 1. Cinematic Hero Section */}
             <section className="relative pt-48 pb-24 md:pt-64 md:pb-32 overflow-hidden">
