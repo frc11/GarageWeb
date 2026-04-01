@@ -23,7 +23,11 @@ const BRAND_ASSETS: Record<string, string> = {
     "nissan": "/brands/nissan.svg",
     "porsche": "/brands/porsche.svg",
     "toyota": "/brands/toyota.svg",
-    "peugeot": "/brands/peugeot.svg"
+    "peugeot": "/brands/peugeot.svg",
+    "volkswagen": "/brands/volkswagen.svg",
+    "haval": "/brands/haval.svg",
+    "dodge": "/brands/dodge.svg",
+    "chevrolet": "/brands/chevrolet.svg"
 };
 
 // --- Helper ---
@@ -37,7 +41,8 @@ export async function BrandMarquee() {
 
     // 2. Filter & Map
     // Only show brands that exist in our local asset map
-    const activeBrands = fetchedBrands
+    const uniqueFetched = Array.from<string>(new Set(fetchedBrands.map(b => b.trim())));
+    const activeBrands = uniqueFetched
         .filter(brandName => {
             const key = normalizeBrand(brandName);
             // Check specific key or direct lowercase match

@@ -74,7 +74,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     return {
                         id: raw.id || raw._id,
                         slug: raw.slug,
-                        brand: raw.brand,
+                        brand: typeof raw.brand === 'string' ? raw.brand.trim() : raw.brand,
                         model: raw.model,
                         year: raw.year,
                         price: raw.price,
@@ -115,10 +115,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     }
                 }
 
-                const mappedBrands = brandNames.map((name: string) => ({
+                const uniqueNames = Array.from<string>(new Set(brandNames.map((n: string) => n.trim())));
+                const mappedBrands = uniqueNames.map((name: string) => ({
                     id: name.toLowerCase(),
                     name: name,
-                    slug: name.toLowerCase().trim().replace(/\s+/g, '-')
+                    slug: name.toLowerCase().replace(/\s+/g, '-')
                 }));
                 setAllBrands(mappedBrands);
 

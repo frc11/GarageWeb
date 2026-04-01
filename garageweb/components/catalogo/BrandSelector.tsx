@@ -34,33 +34,7 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
         };
     }, [isOpen]);
 
-    // Prevent page scroll when scrolling inside dropdown
-    useEffect(() => {
-        const menuElement = menuRef.current;
-        if (!menuElement || !isOpen) return;
-
-        const handleWheel = (e: WheelEvent) => {
-            const { scrollTop, scrollHeight, clientHeight } = menuElement;
-            const isAtTop = scrollTop === 0;
-            const isAtBottom = scrollTop + clientHeight >= scrollHeight;
-
-            // Prevent page scroll only if we're not at the boundaries
-            // or if we're scrolling in the direction that would scroll the content
-            if (
-                (e.deltaY < 0 && !isAtTop) || // Scrolling up and not at top
-                (e.deltaY > 0 && !isAtBottom)  // Scrolling down and not at bottom
-            ) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        };
-
-        menuElement.addEventListener("wheel", handleWheel, { passive: false });
-
-        return () => {
-            menuElement.removeEventListener("wheel", handleWheel);
-        };
-    }, [isOpen]);
+    // Use native CSS overscroll behavior instead of blocking wheel events
 
     const handleSelect = (brand: string) => {
         onBrandChange(brand);
@@ -110,7 +84,7 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
                         transition={{ duration: 0.2, ease: "easeOut" }}
                         className={cn(
                             "absolute top-full left-0 right-0 mt-2 z-50",
-                            "max-h-[320px] overflow-y-auto",
+                            "max-h-[320px] overflow-y-auto overscroll-contain",
                             "bg-zinc-950/95 backdrop-blur-2xl",
                             "border border-white/10 rounded-2xl",
                             "shadow-[0_20px_60px_rgba(0,0,0,0.8)]",
