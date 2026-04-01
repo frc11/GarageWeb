@@ -11,46 +11,44 @@ export function Hero() {
     const router = useRouter();
     const videos = ["/hero-bg.mp4", "/hero-bg.mp4"];
     const [index, setIndex] = useState(0);
-    // Solo true una vez que el video de verdad empezó a reproducir fotogramas
+    // Only true once the video is actually playing (not just first frame decoded)
     const [isVideoReady, setIsVideoReady] = useState(false);
-    const [isFadingOut, setIsFadingOut] = useState(false);
 
-    const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
-        const video = e.currentTarget;
-        // Comenzar a hacer fade out 1.5 segundos antes de que termine
-        if (video.duration > 0 && video.duration - video.currentTime <= 1.5) {
-            if (!isFadingOut) setIsFadingOut(true);
-        }
-    };
-
-    const handleEnded = () => {
-        setIsVideoReady(false);
-        setIsFadingOut(false);
-        setIndex((prevIndex) => (prevIndex + 1) % videos.length);
-    };
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setIndex((prevIndex) => (prevIndex + 1) % videos.length);
+        }, 8000);
+        return () => clearInterval(timer);
+    }, [videos.length]);
 
     return (
         <section className="relative w-full h-[90vh] min-h-[600px] overflow-hidden bg-zinc-950 z-30">
             {/* CAPA 0: Fondo Animado */}
             <ScrollReveal animation="hero-zoom" className="absolute inset-0 z-0">
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isVideoReady && !isFadingOut ? 1 : 0 }}
-                    transition={{ duration: 1.5, ease: "easeInOut" }}
-                    className="absolute inset-0"
-                >
-                    <video
-                        autoPlay
-                        muted
-                        playsInline
-                        disablePictureInPicture
-                        src={videos[index]}
-                        onPlaying={() => setIsVideoReady(true)}
-                        onTimeUpdate={handleTimeUpdate}
-                        onEnded={handleEnded}
-                        className="h-full w-full object-cover filter brightness-[0.7] saturate-[0.8]"
-                    />
-                </motion.div>
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 2.0, ease: "easeInOut" }}
+                        className="absolute inset-0"
+                    >
+                        <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            disablePictureInPicture
+                            // onPlaying fires when frames are actually rendering — avoids the
+                            // static first-frame flash that onCanPlay causes on slow connections
+                            onPlaying={() => setIsVideoReady(true)}
+                            className="h-full w-full object-cover filter brightness-[0.7] saturate-[0.8]"
+                        >
+                            <source src={videos[index]} type="video/mp4" />
+                        </video>
+                    </motion.div>
+                </AnimatePresence>
             </ScrollReveal>
 
             {/* Spinner de carga — FUERA del AnimatePresence keyeado por index
