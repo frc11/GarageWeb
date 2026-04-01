@@ -14,7 +14,7 @@ export function CinematicBanner() {
             <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-neutral-950 via-neutral-950/60 to-transparent z-20 pointer-events-none" />
 
             {/* === MOBILE VIEW (Visible < 1024px) === */}
-            <div className="flex lg:hidden flex-col items-center justify-center text-center px-6 py-24 min-h-[70vh] w-full relative z-10 gap-8">
+            <div className="flex lg:hidden flex-col items-center justify-center text-center px-6 py-24 min-h-[70svh] w-full relative z-10 gap-8">
                 {/* ... (El código móvil se mantiene igual que antes) ... */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -71,7 +71,7 @@ export function CinematicBanner() {
 
 
             {/* === DESKTOP VIEW (Visible >= 1024px) - CORREGIDO === */}
-            <div className="hidden lg:flex w-full min-h-screen relative items-center justify-center overflow-hidden">
+            <div className="hidden lg:flex w-full min-h-[100svh] relative items-center justify-center overflow-hidden">
 
                 {/* 1. LAS LÍNEAS (FONDO ABSOLUTO) */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-8 z-0 pointer-events-none">
