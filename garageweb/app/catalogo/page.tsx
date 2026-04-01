@@ -21,7 +21,7 @@ export default async function CatalogPage(props: {
     const brandSlug = searchParams.brand;
 
     return (
-        <main className="pt-32 pb-24 bg-zinc-950 min-h-[100svh] relative overflow-hidden">
+        <main className="pt-32 pb-24 bg-zinc-950 min-h-screen relative overflow-hidden">
             {/* Background noise/gradient */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 blur-[150px] rounded-full pointer-events-none z-0" />
 

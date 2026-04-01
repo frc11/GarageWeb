@@ -69,10 +69,14 @@ export default function RootLayout({
         <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
         <SmoothScroll>
           <MotionProvider>
-            <Preloader />
-            <Navbar />
-            {children}
-            <Footer />
+            <div className="main-scroll-container" id="app-scroll-container">
+              <div>
+                <Preloader />
+                <Navbar />
+                {children}
+                <Footer />
+              </div>
+            </div>
           </MotionProvider>
         </SmoothScroll>
       </body>

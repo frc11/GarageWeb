@@ -30,7 +30,7 @@ export function Hero() {
     };
 
     return (
-        <section className="relative w-full h-[90svh] min-h-[600px] overflow-hidden bg-zinc-950 z-30">
+        <section className="relative w-full h-[90vh] min-h-[600px] overflow-hidden bg-zinc-950 z-30">
             {/* CAPA 0: Fondo Animado */}
             <ScrollReveal animation="hero-zoom" className="absolute inset-0 z-0">
                 <motion.div

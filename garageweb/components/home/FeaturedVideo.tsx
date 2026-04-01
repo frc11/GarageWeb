@@ -136,7 +136,7 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
                     transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
                     className="relative w-full max-w-5xl mx-auto rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 bg-black shadow-[0_48px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5 group"
                 >
-                    <div className="relative w-full flex items-center justify-center bg-zinc-950 aspect-video md:max-h-[80svh]">
+                    <div className="relative w-full flex items-center justify-center bg-zinc-950 aspect-video md:max-h-[80vh]">
                         <video
                             ref={videoRef}
                             src={videoUrl}

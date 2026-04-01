@@ -44,11 +44,11 @@ export default function ContactPage() {
     const autofillClass = "[&:-webkit-autofill]:shadow-[inset_0_0_0_1000px_#0d0d0d] [&:-webkit-autofill]:[-webkit-text-fill-color:white] [&:-webkit-autofill]:transition-[background-color_5000s_ease-in-out_0s]";
 
     return (
-        <main className="min-h-[100svh] pt-24.5 bg-neutral-950 text-white selection:bg-amber-500/30">
-            <div className="flex flex-col lg:flex-row min-h-[100svh]">
+        <main className="min-h-screen pt-24.5 bg-neutral-950 text-white selection:bg-amber-500/30">
+            <div className="flex flex-col lg:flex-row min-h-screen">
 
                 {/* Visual Column (Sticky) */}
-                <div className="group lg:w-[45%] relative h-[50svh] lg:h-[100svh] lg:sticky lg:top-0 overflow-hidden border-r border-white/5">
+                <div className="group lg:w-[45%] relative h-[50vh] lg:h-screen lg:sticky lg:top-0 overflow-hidden border-r border-white/5">
                     <div className="absolute inset-0 z-0">
                         <Image
                             src="/showroom-facade.png"
