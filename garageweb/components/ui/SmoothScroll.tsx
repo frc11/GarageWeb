@@ -8,13 +8,8 @@ function LenisScroller({ children }: { children: React.ReactNode }) {
     const lenisRef = useRef<Lenis | null>(null);
     const pathname = usePathname();
 
-    // 1. Initialize Lenis exactly once to avoid hook dependency size changes
     useEffect(() => {
-        const wrapper = document.getElementById("app-scroll-container");
-        
         const lenis = new Lenis({
-            wrapper: wrapper || window,
-            content: wrapper?.firstElementChild as HTMLElement || document.documentElement,
             duration: 1.5,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
             orientation: "vertical",

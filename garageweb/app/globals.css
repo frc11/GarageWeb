@@ -155,31 +155,10 @@
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000000 100%);
-  }
-
-  /* App-like scroll lock as requested */
-  html, body {
-    height: 100%;
-    height: -webkit-fill-available;
-    width: 100vw;
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
+    /* Aplicar fondo de lujo por defecto */
   }
 
   * {
     @apply border-border;
-  }
-}
-
-@layer utilities {
-  .main-scroll-container {
-    height: 100%;
-    height: -webkit-fill-available;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
   }
 }
