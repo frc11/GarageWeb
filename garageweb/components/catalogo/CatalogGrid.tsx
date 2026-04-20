@@ -6,7 +6,7 @@ import { Car } from "@/types/main";
 import { CarCard } from "@/components/cars/CarCard";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { cn } from "@/lib/utils";
-import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, X, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { BrandSelector } from "./BrandSelector";
 import { ViewAllButton } from "./ViewAllButton";
@@ -28,6 +28,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const router = useRouter(); // Initialize router
 
     // 1. State Management
+    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
     const [cars, setCars] = useState<Car[]>([]);
     const [allBrands, setAllBrands] = useState<{ id: string; name: string; slug: string }[]>([]);
     const [loading, setLoading] = useState(true);
@@ -255,19 +256,58 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
 
     return (
         <div className="space-y-8">
-            {/* --- 1. BRAND SELECTOR & CTA --- */}
-            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 max-w-3xl mx-auto">
-                <BrandSelector
-                    brands={brandPills}
-                    selectedBrand={selectedBrand}
-                    onBrandChange={setSelectedBrand}
-                    className="flex-1 md:min-w-[280px]"
-                />
-                <ViewAllButton
-                    onClick={() => router.push("/ofertas")}
-                    className="md:flex-shrink-0"
-                />
+            {/* --- MOBILE ONLY: CTA & FILTER TOGGLE --- */}
+            <div className="lg:hidden flex flex-col gap-4 mb-2">
+                <button 
+                    onClick={() => setIsMobileFiltersOpen(true)}
+                    className="flex items-center justify-center gap-2 bg-zinc-900/80 p-4 rounded-2xl border border-white/10 text-white font-bold uppercase tracking-wider text-sm w-full"
+                >
+                    <Filter className="w-5 h-5 text-amber-500" />
+                    Filtrar Catálogo
+                    {hasActiveFilters && <span className="ml-2 bg-amber-500 text-black text-[10px] px-2 py-0.5 rounded-full">Activo</span>}
+                </button>
+                <ViewAllButton onClick={() => router.push("/ofertas")} className="w-full flex justify-center" />
             </div>
+
+            {/* --- FILTERS WRAPPER --- */}
+            <div className={cn(
+                "space-y-8 lg:space-y-8",
+                isMobileFiltersOpen 
+                    ? "fixed inset-0 z-[100] bg-zinc-950 overflow-y-auto block px-6 pb-32 w-full h-full" 
+                    : "hidden lg:block"
+            )}>
+                {/* Mobile Filter Header */}
+                {isMobileFiltersOpen && (
+                    <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-8 lg:hidden sticky top-0 bg-zinc-950 z-50 pt-28">
+                        <h2 className="text-xl font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                            <Filter className="text-amber-500" /> Filtros
+                        </h2>
+                        <div className="flex items-center gap-4">
+                            {hasActiveFilters && (
+                                <button onClick={clearFilters} className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs">
+                                    Limpiar
+                                </button>
+                            )}
+                            <button onClick={() => setIsMobileFiltersOpen(false)} className="p-2 text-zinc-400 hover:text-white bg-white/5 rounded-full">
+                                <X size={20} />
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* --- 1. BRAND SELECTOR & CTA --- */}
+                <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 max-w-3xl mx-auto w-full">
+                    <BrandSelector
+                        brands={brandPills}
+                        selectedBrand={selectedBrand}
+                        onBrandChange={setSelectedBrand}
+                        className="flex-1 w-full"
+                    />
+                    <ViewAllButton
+                        onClick={() => router.push("/ofertas")}
+                        className="hidden lg:flex flex-shrink-0"
+                    />
+                </div>
 
             {/* --- 2. CATEGORY TABS --- */}
             <div className="flex flex-wrap items-center justify-center gap-3">
@@ -361,6 +401,22 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     </div>
                 </div>
             </div>
+
+            {/* Mobile Apply Button */}
+            {isMobileFiltersOpen && (
+                <div className="fixed bottom-0 left-0 right-0 p-4 bg-zinc-950 border-t border-white/10 lg:hidden z-50">
+                    <button 
+                        onClick={() => {
+                            setIsMobileFiltersOpen(false);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="w-full bg-amber-500 text-black font-black uppercase tracking-widest text-sm py-4 rounded-full flex items-center justify-center gap-2"
+                    >
+                        Ver {filteredCars.length} Vehículos
+                    </button>
+                </div>
+            )}
+        </div>
 
             {/* --- 4. RESULTS COUNT & CLEAR --- */}
             <div className="flex justify-between items-center px-2 container mx-auto max-w-5xl">

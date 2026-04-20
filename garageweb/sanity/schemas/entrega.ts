@@ -13,7 +13,6 @@ export default defineType({
             title: 'Nombre del Cliente',
             type: 'string',
             fieldset: 'details',
-            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'review',
@@ -21,7 +20,7 @@ export default defineType({
             type: 'text',
             fieldset: 'details',
             description: 'Ej: "Felicidades amigo! Disfruta de tu nueva Chata. Muchas gracias."',
-            validation: (rule) => rule.required().max(100),
+            validation: (rule) => rule.max(100),
         }),
         defineField({
             name: 'image',

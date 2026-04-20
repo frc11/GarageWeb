@@ -107,21 +107,27 @@ export default async function CarPage(props: CarPageProps) {
                             <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-8">Galería Visual</h3>
                             <div className="grid grid-cols-1 gap-4">
                                 {car.gallery && car.gallery.length > 0 ? (
-                                    car.gallery.map((media, idx) => (
-                                        <div key={idx} className="relative aspect-video rounded-3xl overflow-hidden border border-white/5">
-                                            {media.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
-                                                <video
-                                                    src={media}
-                                                    controls
-                                                    playsInline
-                                                    className="w-full h-full object-cover"
-                                                    preload="metadata"
-                                                />
-                                            ) : (
-                                                <Image src={media} alt={`${car.model} gallery ${idx}`} fill className="object-cover" />
-                                            )}
-                                        </div>
-                                    ))
+                                    car.gallery.map((media, idx) => {
+                                        const isVideo = media.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i);
+                                        return (
+                                            <div key={idx} className={cn(
+                                                "relative rounded-3xl overflow-hidden border border-white/5 mx-auto",
+                                                isVideo ? "w-fit bg-black flex justify-center items-center" : "aspect-video w-full"
+                                            )}>
+                                                {isVideo ? (
+                                                    <video
+                                                        src={media}
+                                                        controls
+                                                        playsInline
+                                                        className="w-auto max-w-full h-auto max-h-[80vh] md:max-h-[85vh] object-contain"
+                                                        preload="metadata"
+                                                    />
+                                                ) : (
+                                                    <Image src={media} alt={`${car.model} gallery ${idx}`} fill className="object-cover" />
+                                                )}
+                                            </div>
+                                        );
+                                    })
                                 ) : (
                                     <div className="flex items-center justify-center aspect-video rounded-3xl bg-zinc-900/30 border border-white/5 p-12">
                                         <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-zinc-600 text-center">
