@@ -106,7 +106,7 @@ export async function BrandMarquee() {
                 <div className="absolute left-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 bottom-0 w-32 md:w-64 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-                <div className="flex w-fit animate-scroll">
+                <div className="flex w-fit animate-scroll will-change-transform">
                     {/* Render 1 */}
                     <div className="flex items-center shrink-0 gap-16 md:gap-32 px-8 md:px-16">
                         {activeBrands.map((brand, i) => (
@@ -117,7 +117,7 @@ export async function BrandMarquee() {
                             >
                                 <Image
                                     src={brand.logo}
-                                    alt={brand.name}
+                                    alt={`Logo de ${brand.name}`}
                                     fill
                                     className="object-contain transition-all duration-500 
                                                opacity-100 grayscale-0 
@@ -139,7 +139,7 @@ export async function BrandMarquee() {
                             >
                                 <Image
                                     src={brand.logo}
-                                    alt={brand.name}
+                                    alt={`Logo de ${brand.name}`}
                                     fill
                                     className="object-contain transition-all duration-500 
                                                opacity-100 grayscale-0 

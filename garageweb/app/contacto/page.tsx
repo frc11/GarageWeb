@@ -52,10 +52,11 @@ export default function ContactPage() {
                     <div className="absolute inset-0 z-0">
                         <Image
                             src="/showroom-facade.png"
-                            alt="Garage Showroom Ambience"
+                            alt="Fachada del showroom premium de El Garage"
                             fill
                             className="object-cover opacity-60 lg:grayscale transition-all duration-300 ease-in-out group-hover:grayscale-0 "
                             priority
+                            sizes="(max-width: 1024px) 100vw, 45vw"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-neutral-950/40" />
                         <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/80 to-transparent" />

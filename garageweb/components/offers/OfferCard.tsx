@@ -40,15 +40,16 @@ export function OfferCard({ car, className }: OfferCardProps) {
             className={cn(
                 "block relative group overflow-hidden rounded-2xl bg-neutral-900 transition-all duration-500",
                 "border border-white/5 hover:border-amber-500/50",
-                "hover:shadow-[0_0_30px_rgba(245,158,11,0.2)]",
+                // Keep the premium desktop glow on an opacity-only overlay instead of animating box-shadow.
+                "before:absolute before:inset-0 before:rounded-[inherit] before:pointer-events-none before:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.18),transparent_72%)] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100",
                 className
             )}
         >
-            <div className="relative aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden bg-neutral-950">
                 {car.thumbnailImage ? (
                     <Image
                         src={car.thumbnailImage}
-                        alt={`${car.brand} ${car.model}`}
+                        alt={`${car.brand} ${car.model} en oferta en El Garage`}
                         fill
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -112,7 +113,7 @@ export function OfferCard({ car, className }: OfferCardProps) {
 
                 {/* CTA Button */}
                 <div className="pt-2">
-                    <div className="w-full bg-white/5 hover:bg-amber-500 text-zinc-400 hover:text-black font-bold text-xs uppercase tracking-widest py-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 group/btn">
+                    <div className="w-full bg-white/5 hover:bg-amber-500 text-zinc-400 hover:text-black font-bold text-xs uppercase tracking-widest py-3 rounded-lg flex items-center justify-center gap-2 transition-colors duration-300 group/btn">
                         <span>Ver Oferta</span>
                         <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                     </div>

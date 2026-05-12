@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import React from "react";
 
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
 interface SectionHeadingProps {
     title: React.ReactNode;
     subtitle?: string;
@@ -22,11 +24,12 @@ export function SectionHeading({ title, subtitle, className, align = 'center' }:
         <div className={cn("flex flex-col gap-6 mb-16", alignments[align], className)}>
             {/* Vertical Line Accent */}
             <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                whileInView={{ height: 48, opacity: 1 }}
-                viewport={{ once: true }}
+                initial={{ scaleY: 0, opacity: 0 }}
+                whileInView={{ scaleY: 1, opacity: 1 }}
+                viewport={IN_VIEW_VIEWPORT}
                 transition={{ duration: 0.8, ease: "circOut" }}
-                className="w-px bg-gradient-to-b from-transparent via-white/50 to-transparent shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                // Same visual line reveal, but via transform so it stays off the layout pipeline.
+                className="h-12 w-px origin-top bg-gradient-to-b from-transparent via-white/50 to-transparent shadow-[0_0_10px_rgba(255,255,255,0.3)]"
             />
 
             <div className="space-y-3">
@@ -34,7 +37,7 @@ export function SectionHeading({ title, subtitle, className, align = 'center' }:
                     <motion.span
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         transition={{ delay: 0.2 }}
                         className="inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-[10px] font-bold uppercase tracking-[0.25em] text-white/70"
                     >
@@ -45,7 +48,7 @@ export function SectionHeading({ title, subtitle, className, align = 'center' }:
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={IN_VIEW_VIEWPORT}
                     transition={{ delay: 0.3, duration: 0.6 }}
                     className="text-4xl md:text-5xl lg:text-7xl font-serif font-black text-white tracking-tighter"
                 >

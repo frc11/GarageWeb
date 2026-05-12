@@ -35,17 +35,18 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
             className={cn(
                 "block relative group overflow-hidden rounded-2xl bg-neutral-900/40 backdrop-blur-md transition-all duration-500",
                 "border border-white/5 hover:border-amber-500/50",
-                "hover:shadow-[0_0_30px_rgba(245,158,11,0.15)]",
+                // Desktop glow is pre-rendered and only fades opacity, avoiding heavy hover repaints.
+                "before:absolute before:inset-0 before:rounded-[inherit] before:pointer-events-none before:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.16),transparent_70%)] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100",
                 isOfferActive && "border-amber-500/30",
                 className
             )}
         >
             {/* --- Image/Video Area --- */}
-            <div className={cn("relative overflow-hidden", imageAspectClassName || "aspect-[4/3]")}>
+            <div className={cn("relative overflow-hidden bg-neutral-950", imageAspectClassName || "aspect-[4/3]")}>
                 {car.thumbnailImage ? (
                     <Image
                         src={car.thumbnailImage}
-                        alt={`${car.brand} ${car.model}`}
+                        alt={`${car.brand} ${car.model} disponible en El Garage`}
                         fill
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -120,7 +121,7 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
                     </div>
 
                     {/* Minimal Arrow Button */}
-                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-amber-500 group-hover:text-black transition-all duration-300">
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-amber-500 group-hover:text-black transition-colors duration-300">
                         <ArrowUpRight size={16} strokeWidth={2} />
                     </div>
                 </div>

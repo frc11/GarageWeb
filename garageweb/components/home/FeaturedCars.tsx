@@ -12,6 +12,8 @@ interface FeaturedCarsProps {
     cars: Car[];
 }
 
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
 function getClassForIndex(index: number, total: number): string {
     // 1 Item: Full width
     if (total === 1) return "md:col-span-12";
@@ -90,7 +92,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                     <m.div
                         initial="hidden"
                         whileInView="show"
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         variants={{
                             hidden: { opacity: 0 },
                             show: {
@@ -129,7 +131,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                         <m.h3
                             initial={{ y: "100%", opacity: 0 }}
                             whileInView={{ y: 0, opacity: 1 }}
-                            viewport={{ once: true }}
+                            viewport={IN_VIEW_VIEWPORT}
                             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                             className="text-sm font-serif font-medium tracking-[0.2em] text-amber-500/80 uppercase"
                         >
@@ -141,7 +143,7 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                     <m.h2
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         transition={{ duration: 0.8, delay: 0.4 }}
                         className="text-5xl md:text-7xl font-serif font-medium text-white tracking-tight leading-[0.9]"
                     >
@@ -158,8 +160,9 @@ export function FeaturedCars({ cars }: FeaturedCarsProps) {
                     variants={container}
                     initial="hidden"
                     whileInView="show"
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[400px]"
+                    viewport={IN_VIEW_VIEWPORT}
+                    // The staggered bento reveal stays on the transform compositor path instead of thrashing layout.
+                    className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[400px] will-change-transform"
                 >
                     {displayCars.map((car, index) => {
                         const colSpanClass = getClassForIndex(index, totalItems);

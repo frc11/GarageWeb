@@ -16,6 +16,7 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+    const menuId = "brand-selector-menu";
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -42,19 +43,23 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
     };
 
     return (
-        <div ref={dropdownRef} className={cn("relative", className)}>
+        <div ref={dropdownRef} className={cn("relative select-none", className)}>
             {/* Selector Trigger Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
+                aria-label={selectedBrand === "Todas" ? "Seleccionar marca" : `Marca seleccionada: ${selectedBrand}`}
+                aria-expanded={isOpen}
+                aria-haspopup="listbox"
+                aria-controls={menuId}
                 className={cn(
                     "w-full flex items-center justify-between gap-3",
-                    "px-6 py-3.5 rounded-2xl",
+                    "px-6 py-3.5 min-h-11 rounded-2xl",
                     "bg-zinc-900/60 backdrop-blur-xl",
                     "border border-white/10",
                     "text-sm font-medium text-white",
                     "transition-all duration-300",
                     "hover:bg-zinc-900/80 hover:border-white/20",
-                    "focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20",
+                    "focus-visible:outline-none focus-visible:border-amber-500/50 focus-visible:ring-1 focus-visible:ring-white/30",
                     isOpen && "border-amber-500/50 ring-2 ring-amber-500/20"
                 )}
             >
@@ -68,6 +73,7 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
                 <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
+                    aria-hidden="true"
                 >
                     <ChevronDown className="w-4 h-4 text-amber-500" />
                 </motion.div>
@@ -78,6 +84,9 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
                 {isOpen && (
                     <motion.div
                         ref={menuRef}
+                        id={menuId}
+                        role="listbox"
+                        aria-label="Opciones de marca"
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -99,14 +108,17 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
                                     <motion.button
                                         key={brand}
                                         onClick={() => handleSelect(brand)}
+                                        role="option"
+                                        aria-selected={isSelected}
                                         initial={{ opacity: 0, x: -10 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: index * 0.02 }}
                                         className={cn(
                                             "w-full flex items-center justify-between gap-3",
-                                            "px-4 py-3 rounded-xl",
+                                            "px-4 py-3 min-h-11 rounded-xl",
                                             "text-sm font-medium transition-all duration-200",
                                             "group",
+                                            "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30",
                                             isSelected
                                                 ? "bg-amber-500/20 text-white border border-amber-500/30"
                                                 : "text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent"

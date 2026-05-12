@@ -37,10 +37,10 @@ export function ShareButton({ title, text, url, className }: ShareButtonProps) {
     return (
         <button
             onClick={handleShare}
-            className={cn("p-3 rounded-full bg-white/5 text-white hover:bg-white hover:text-black transition-colors", className)}
+            className={cn("p-3 min-w-11 min-h-11 flex items-center justify-center rounded-full bg-white/5 text-white hover:bg-white hover:text-black transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30", className)}
             aria-label="Compartir"
         >
-            <Share2 size={20} />
+            <Share2 size={18} />
         </button>
     );
 }

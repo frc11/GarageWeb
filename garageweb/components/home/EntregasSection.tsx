@@ -14,6 +14,8 @@ interface Entrega {
     imageUrl: string;
 }
 
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
 const EntregaCard = ({ item, isCenter = true }: { item: Entrega; isCenter?: boolean }) => (
     <div className={`entrega-card relative w-full aspect-[9/16] max-h-[700px] rounded-3xl overflow-hidden transition-all duration-500 group mx-auto ${isCenter
         ? 'shadow-[0_0_40px_rgba(245,158,11,0.3)] ring-1 ring-amber-500/50'
@@ -173,7 +175,7 @@ export function EntregasSection() {
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         className="flex items-center justify-center gap-3 mb-4"
                     >
                         <span className="h-px w-12 bg-amber-500/50" />
@@ -183,7 +185,7 @@ export function EntregasSection() {
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-5xl font-serif text-white leading-tight"
                     >
@@ -207,7 +209,7 @@ export function EntregasSection() {
                                     key={item.id}
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
+                                    viewport={IN_VIEW_VIEWPORT}
                                     className="w-full"
                                 >
                                     <EntregaCard item={item} isCenter={true} />
@@ -232,11 +234,12 @@ export function EntregasSection() {
                                                 x: { type: "spring", stiffness: 300, damping: 30 },
                                                 opacity: { duration: 0.3 }
                                             }}
+                                            // Carousel cards slide exclusively through transforms/opacity to avoid reflow on autoplay.
                                             className={`absolute transition-all duration-500 w-[85%] max-w-[380px] ${position === 'center'
-                                                ? 'z-30 scale-100 opacity-100'
+                                                ? 'z-30 scale-100 opacity-100 will-change-[transform,opacity]'
                                                 : position === 'prev'
-                                                    ? 'z-10 -translate-x-[75%] md:-translate-x-[90%] scale-90 opacity-40 blur-[2px] pointer-events-none'
-                                                    : 'z-10 translate-x-[75%] md:translate-x-[90%] scale-90 opacity-40 blur-[2px] pointer-events-none'
+                                                    ? 'z-10 -translate-x-[75%] md:-translate-x-[90%] scale-90 opacity-40 blur-[2px] pointer-events-none will-change-[transform,opacity]'
+                                                    : 'z-10 translate-x-[75%] md:translate-x-[90%] scale-90 opacity-40 blur-[2px] pointer-events-none will-change-[transform,opacity]'
                                                 }`}
                                         >
                                             <EntregaCard item={item} isCenter={position === 'center'} />
@@ -248,18 +251,18 @@ export function EntregasSection() {
                             {/* Custom Navigation Buttons */}
                             <button
                                 onClick={handlePrev}
-                                className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 hover:border-amber-500/50 hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all duration-300 group cursor-pointer active:scale-95"
+                                className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 hover:border-amber-500/50 transition-all duration-300 group cursor-pointer active:scale-95 select-none before:absolute before:inset-0 before:rounded-full before:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.28),transparent_72%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
                                 aria-label="Entrega anterior"
                             >
-                                <ChevronLeft className="w-6 h-6 group-hover:scale-110 transition-transform -translate-x-0.5" />
+                                <ChevronLeft className="relative z-10 w-6 h-6 group-hover:scale-110 transition-transform -translate-x-0.5" />
                             </button>
 
                             <button
                                 onClick={handleNext}
-                                className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 hover:border-amber-500/50 hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all duration-300 group cursor-pointer active:scale-95"
+                                className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/80 hover:border-amber-500/50 transition-all duration-300 group cursor-pointer active:scale-95 select-none before:absolute before:inset-0 before:rounded-full before:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.28),transparent_72%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
                                 aria-label="Siguiente entrega"
                             >
-                                <ChevronRight className="w-6 h-6 group-hover:scale-110 transition-transform translate-x-0.5" />
+                                <ChevronRight className="relative z-10 w-6 h-6 group-hover:scale-110 transition-transform translate-x-0.5" />
                             </button>
 
                             {/* Pagination Dots */}
@@ -271,7 +274,7 @@ export function EntregasSection() {
                                             setDirection(index > currentIndex ? 1 : -1);
                                             setCurrentIndex(index);
                                         }}
-                                        className={`h-1.5 rounded-full transition-all duration-300 ${index === currentIndex
+                                        className={`h-1.5 rounded-full transition-all duration-300 select-none ${index === currentIndex
                                             ? 'w-8 bg-amber-500'
                                             : 'w-1.5 bg-white/20 hover:bg-white/40'
                                             }`}

@@ -125,7 +125,7 @@ export function YearRangeFilter({ min, max, value, onChange, className }: YearRa
                         onChange={e => setMinText(e.target.value)}
                         onBlur={commitMinText}
                         onKeyDown={e => handleKeyDown(e, commitMinText)}
-                        className="w-[54px] bg-zinc-800 px-2 py-1 rounded text-xs font-mono text-white text-center border border-transparent focus:border-amber-500 focus:outline-none transition-colors [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                        className="w-[54px] bg-zinc-800 px-2 py-1 rounded text-xs font-mono text-white text-center border border-transparent focus-visible:border-amber-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 transition-colors [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
                     <span className="text-zinc-600">-</span>
                     <input
@@ -134,7 +134,7 @@ export function YearRangeFilter({ min, max, value, onChange, className }: YearRa
                         onChange={e => setMaxText(e.target.value)}
                         onBlur={commitMaxText}
                         onKeyDown={e => handleKeyDown(e, commitMaxText)}
-                        className="w-[54px] bg-zinc-800 px-2 py-1 rounded text-xs font-mono text-white text-center border border-transparent focus:border-amber-500 focus:outline-none transition-colors [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                        className="w-[54px] bg-zinc-800 px-2 py-1 rounded text-xs font-mono text-white text-center border border-transparent focus-visible:border-amber-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 transition-colors [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
                 </div>
             </div>

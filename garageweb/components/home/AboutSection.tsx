@@ -14,6 +14,8 @@ const stats = [
     { label: "Clientes Satisfechos", value: "100%", icon: Users },
 ];
 
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
 export function AboutSection() {
     const router = useRouter();
     return (
@@ -39,7 +41,7 @@ export function AboutSection() {
                         <m.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
+                            viewport={IN_VIEW_VIEWPORT}
                             transition={{ duration: 0.6 }}
                             className="space-y-6"
                         >
@@ -64,7 +66,7 @@ export function AboutSection() {
                         <m.div
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
-                            viewport={{ once: true, margin: "-100px" }}
+                            viewport={IN_VIEW_VIEWPORT}
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="space-y-5 text-base text-neutral-600 dark:text-neutral-400 font-light leading-relaxed max-w-xl mx-auto lg:mx-0"
                         >
@@ -87,7 +89,7 @@ export function AboutSection() {
                         <m.div
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
+                            viewport={IN_VIEW_VIEWPORT}
                             transition={{ duration: 0.6, delay: 0.4 }}
                             className="flex flex-col sm:flex-row items-center gap-8 pt-4"
                         >
@@ -113,7 +115,7 @@ export function AboutSection() {
                             <m.div
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
+                                viewport={IN_VIEW_VIEWPORT}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                                 className="relative col-span-1 row-span-2 h-full min-h-[380px]"
                             >
@@ -134,7 +136,7 @@ export function AboutSection() {
                             <m.div
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
+                                viewport={IN_VIEW_VIEWPORT}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                                 className="relative col-span-1 h-full min-h-[200px]"
                             >
@@ -154,7 +156,7 @@ export function AboutSection() {
                             <m.div
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
+                                viewport={IN_VIEW_VIEWPORT}
                                 transition={{ duration: 0.8, delay: 0.3 }}
                                 className="relative col-span-1"
                             >

@@ -1,12 +1,13 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://elgarage.com";
+
     return {
         rules: {
-            userAgent: '*',
-            allow: '/',
-            disallow: '/studio/', // Hide CMS from search engines
+            userAgent: "*",
+            allow: "/",
         },
-        sitemap: 'https://garageweb.vercel.app/sitemap.xml',
-    }
+        sitemap: `${baseUrl}/sitemap.xml`,
+    };
 }

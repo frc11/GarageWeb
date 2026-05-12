@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
 export function CinematicBanner() {
     return (
         // CAMBIO 1: Agregamos '-mt-2' para subir la sección y tapar la micro-línea divisora.
@@ -19,7 +21,7 @@ export function CinematicBanner() {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={IN_VIEW_VIEWPORT}
                     transition={{ duration: 0.8 }}
                 >
                     <h2 className="text-5xl font-black text-white tracking-tighter leading-[0.9] uppercase italic">
@@ -37,14 +39,14 @@ export function CinematicBanner() {
                         <motion.div
                             initial={{ scaleX: 0 }}
                             whileInView={{ scaleX: 1 }}
-                            viewport={{ once: true }}
+                            viewport={IN_VIEW_VIEWPORT}
                             transition={{ duration: 0.8, delay: 0.5, ease: "circOut" }}
                             className="w-full h-12 bg-white shadow-[0_0_25px_rgba(255,255,255,0.8)] origin-center"
                         />
                         <motion.div
                             initial={{ scaleX: 0 }}
                             whileInView={{ scaleX: 1 }}
-                            viewport={{ once: true }}
+                            viewport={IN_VIEW_VIEWPORT}
                             transition={{ duration: 0.8, delay: 0.6, ease: "circOut" }}
                             className="w-full h-12 bg-white shadow-[0_0_25px_rgba(255,255,255,0.8)] origin-center"
                         />
@@ -55,7 +57,7 @@ export function CinematicBanner() {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
+                    viewport={IN_VIEW_VIEWPORT}
                     transition={{ duration: 0.5, delay: 0.6 }}
                 >
                     <Link href="/catalogo" className="group flex flex-col items-center gap-4 mt-[50]">
@@ -78,14 +80,14 @@ export function CinematicBanner() {
                     <motion.div
                         initial={{ scaleY: 0 }}
                         whileInView={{ scaleY: 1 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         transition={{ duration: 1.5, delay: 0.2, ease: "circOut" }}
                         className="w-16 h-[150vh] bg-white -skew-x-12 shadow-[0_0_50px_rgba(255,255,255,0.4)] origin-center"
                     />
                     <motion.div
                         initial={{ scaleY: 0 }}
                         whileInView={{ scaleY: 1 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         transition={{ duration: 1.5, delay: 0.4, ease: "circOut" }}
                         className="w-16 h-[150vh] bg-white -skew-x-12 shadow-[0_0_50px_rgba(255,255,255,0.4)] origin-center"
                     />
@@ -100,15 +102,15 @@ export function CinematicBanner() {
                         <motion.div
                             initial={{ x: -50, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
+                            viewport={IN_VIEW_VIEWPORT}
                             transition={{ duration: 1 }}
                         >
                             {/* CAMBIO: Reduje text-6xl a text-5xl en 'lg' y sube a 8xl en 'xl' */}
-                            <h1 className="text-5xl xl:text-8xl font-black text-white tracking-tighter leading-[0.9]">
+                            <h2 className="text-5xl xl:text-8xl font-black text-white tracking-tighter leading-[0.9]">
                                 ¿LISTO PARA
                                 <br />
                                 MANEJAR?
-                            </h1>
+                            </h2>
                             <p className="text-zinc-400 mt-6 text-lg xl:text-2xl font-light">
                                 Encontrá tu próximo auto hoy.
                             </p>
@@ -124,7 +126,7 @@ export function CinematicBanner() {
                         <motion.div
                             initial={{ x: 50, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
-                            viewport={{ once: true }}
+                            viewport={IN_VIEW_VIEWPORT}
                             transition={{ duration: 1, delay: 0.2 }}
                         >
                             <Link href="/catalogo" className="group flex flex-col items-start gap-4">

@@ -13,6 +13,8 @@ interface FlashPromoProps {
     offers: Car[];
 }
 
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
 export function FlashPromo({ offers }: FlashPromoProps) {
     const router = useRouter();
     if (!offers || offers.length === 0) return null;
@@ -52,7 +54,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 <m.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={IN_VIEW_VIEWPORT}
                     transition={{ duration: 0.6 }}
                     className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border-none text-orange-400 text-[10px] font-bold uppercase tracking-widest mb-6"
                 >
@@ -63,7 +65,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 <m.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={IN_VIEW_VIEWPORT}
                     transition={{ duration: 0.6, delay: 0.1 }}
                     className="text-4xl md:text-5xl font-serif text-white tracking-tight"
                 >
@@ -73,7 +75,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
                 <m.p
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
+                    viewport={IN_VIEW_VIEWPORT}
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="mt-4 text-neutral-400 max-w-lg mx-auto text-sm md:text-base"
                 >
@@ -90,7 +92,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
             <div className={cn("w-full relative group z-20 mb-16", !enableCarousel && "container mx-auto px-4")}>
                 <div className={cn(
                     enableCarousel
-                        ? "flex animate-runway w-fit hover:cursor-grab active:cursor-grabbing pl-4 md:pl-0"
+                        ? "flex animate-runway w-fit hover:cursor-grab active:cursor-grabbing pl-4 md:pl-0 will-change-transform"
                         : "flex flex-wrap justify-center gap-6" // Layout estático centrado
                 )}>
                     {displayOffers.map((car, index) => (
@@ -107,7 +109,7 @@ export function FlashPromo({ offers }: FlashPromoProps) {
             <m.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={IN_VIEW_VIEWPORT}
                 transition={{ duration: 0.6 }}
                 className="relative z-20"
             >
@@ -151,7 +153,7 @@ function DealCard({ car, isCarousel = true }: { car: Car, isCarousel?: boolean }
                     {car.thumbnailImage ? (
                         <Image
                             src={car.thumbnailImage}
-                            alt={car.model}
+                            alt={`${car.brand} ${car.model} vehiculo en oferta`}
                             fill
                             className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
                             sizes="(max-width: 768px) 85vw, 420px"

@@ -123,7 +123,7 @@ export function Navbar() {
                     <div className="flex items-center gap-6 shrink-0 z-50">
                         <Link href="/contacto" className="hidden md:block">
                             <PremiumButton
-                                className="h-10 px-6 py-0 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] transition-all duration-300 group"
+                                className="relative isolate h-10 px-6 py-0 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300 group before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.45),transparent_72%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
                             >
                                 <span>Contacto</span>
                                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -132,10 +132,10 @@ export function Navbar() {
 
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="md:hidden text-white p-2 rounded-full hover:bg-white/10 transition-colors relative z-50"
-                            aria-label="Toggle Menu"
+                            className="md:hidden text-white p-2 min-w-11 min-h-11 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors relative z-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
+                            aria-label={isMobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
                         >
-                            {isMobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+                            {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
                         </button>
                     </div>
                 </div>
@@ -178,7 +178,7 @@ export function Navbar() {
                         >
                             <Link href="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
                                 <PremiumButton
-                                    className="w-full py-4 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] transition-all duration-300 group"
+                                    className="relative isolate w-full py-4 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300 group before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.45),transparent_72%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
                                 >
                                     <span>Contacto</span>
                                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />

@@ -284,11 +284,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         </h2>
                         <div className="flex items-center gap-4">
                             {hasActiveFilters && (
-                                <button onClick={clearFilters} className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs">
+                                <button onClick={clearFilters} className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-sm">
                                     Limpiar
                                 </button>
                             )}
-                            <button onClick={() => setIsMobileFiltersOpen(false)} className="p-2 text-zinc-400 hover:text-white bg-white/5 rounded-full">
+                            <button onClick={() => setIsMobileFiltersOpen(false)} aria-label="Cerrar filtros" className="p-2 min-w-11 min-h-11 flex items-center justify-center text-zinc-400 hover:text-white bg-white/5 rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 select-none">
                                 <X size={20} />
                             </button>
                         </div>
@@ -347,12 +347,13 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                                 placeholder="Buscar vehículo..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+                                className="w-full bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3.5 text-sm text-white placeholder-zinc-600 focus-visible:outline-none focus-visible:border-amber-500/50 focus-visible:ring-1 focus-visible:ring-white/30 transition-all"
                             />
                             {searchTerm && (
                                 <button
                                     onClick={() => setSearchTerm("")}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                                    aria-label="Limpiar búsqueda"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 min-w-11 min-h-11 flex items-center justify-center text-zinc-500 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-full select-none"
                                 >
                                     <X size={14} />
                                 </button>
@@ -426,7 +427,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                 {hasActiveFilters && (
                     <button
                         onClick={clearFilters}
-                        className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-2 group"
+                        className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-2 group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-sm"
                     >
                         <X size={12} className="group-hover:rotate-90 transition-transform" />
                         Limpiar
@@ -476,7 +477,8 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors"
+                        aria-label="Página anterior"
+                        className="p-3 min-w-11 min-h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 select-none"
                     >
                         <ChevronLeft size={20} />
                     </button>
@@ -488,7 +490,8 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
-                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors"
+                        aria-label="Página siguiente"
+                        className="p-3 min-w-11 min-h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 select-none"
                     >
                         <ChevronRight size={20} />
                     </button>

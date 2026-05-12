@@ -2,10 +2,13 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { CarFront } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
 
 export function Hero() {
     const router = useRouter();
@@ -25,6 +28,16 @@ export function Hero() {
         <section className="relative w-full h-[90vh] min-h-[600px] overflow-hidden bg-zinc-950 z-30">
             {/* CAPA 0: Fondo Animado */}
             <ScrollReveal animation="hero-zoom" className="absolute inset-0 z-0">
+                {/* This poster is eagerly fetched on desktop so the hero never waits on the first video frame for LCP. */}
+                <Image
+                    src="/hero-poster.svg"
+                    alt=""
+                    fill
+                    priority
+                    aria-hidden="true"
+                    sizes="100vw"
+                    className="object-cover filter brightness-[0.7] saturate-[0.8]"
+                />
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={index}
@@ -39,6 +52,8 @@ export function Hero() {
                             loop
                             muted
                             playsInline
+                            preload="metadata"
+                            poster="/hero-poster.svg"
                             disablePictureInPicture
                             // onPlaying fires when frames are actually rendering — avoids the
                             // static first-frame flash that onCanPlay causes on slow connections
@@ -72,7 +87,7 @@ export function Hero() {
 
             {/* CAPA 2: Contenido Editorial */}
             <div className="relative z-20 my-10 container mx-auto h-full flex flex-col justify-end pb-20 md:pb-24 lg:pb-32 px-6 items-center lg:items-start text-center lg:text-left">
-                <ScrollReveal animation="text-reveal">
+                <ScrollReveal animation="text-reveal" viewport={IN_VIEW_VIEWPORT}>
                     <div className="max-w-5xl w-full">
                         <span className="inline-block mb-4 md:mb-6 px-4 py-1.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm text-xs font-medium tracking-[0.2em] text-white uppercase">
                             Est. 2016

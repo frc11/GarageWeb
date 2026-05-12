@@ -135,7 +135,7 @@ export function PriceRangeFilter({ min, max, value, onChange, className }: Price
                             onChange={e => setMinText(e.target.value)}
                             onBlur={commitMinText}
                             onKeyDown={e => handleKeyDown(e, commitMinText)}
-                            className="w-[60px] bg-transparent text-xs font-mono text-white text-center focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            className="w-[60px] bg-transparent text-xs font-mono text-white text-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                         />
                     </div>
                     <span className="text-zinc-600">-</span>
@@ -147,7 +147,7 @@ export function PriceRangeFilter({ min, max, value, onChange, className }: Price
                             onChange={e => setMaxText(e.target.value)}
                             onBlur={commitMaxText}
                             onKeyDown={e => handleKeyDown(e, commitMaxText)}
-                            className="w-[60px] bg-transparent text-xs font-mono text-white text-center focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            className="w-[60px] bg-transparent text-xs font-mono text-white text-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                         />
                     </div>
                 </div>

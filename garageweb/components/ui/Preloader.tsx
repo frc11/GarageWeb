@@ -53,6 +53,7 @@ export const Preloader = () => {
                             fill
                             className="object-contain brightness-0 invert"
                             priority
+                            sizes="(max-width: 768px) 256px, 320px"
                         />
                     </motion.div>
 

@@ -10,9 +10,15 @@ interface ScrollRevealProps {
     animation: keyof typeof UI_ANIMATIONS;
     className?: string;
     duration?: number;
+    viewport?: {
+        once?: boolean;
+        margin?: string;
+    };
 }
 
-export function ScrollReveal({ children, animation, className, duration }: ScrollRevealProps) {
+const DEFAULT_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
+export function ScrollReveal({ children, animation, className, duration, viewport = DEFAULT_VIEWPORT }: ScrollRevealProps) {
     const config = UI_ANIMATIONS[animation];
 
     return (
@@ -20,7 +26,8 @@ export function ScrollReveal({ children, animation, className, duration }: Scrol
             className={cn(className)}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            // Disconnect observers after the first reveal and trigger slightly before full entry on mobile.
+            viewport={viewport}
             variants={config as unknown as Variants}
             {...(duration ? { transition: { duration } } : {})}
         >

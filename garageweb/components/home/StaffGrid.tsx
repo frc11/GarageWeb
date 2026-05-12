@@ -39,6 +39,8 @@ const STAFF = [
     }
 ];
 
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
 export function StaffGrid() {
     return (
         <section className="py-25 md:py-32 bg-neutral-950 relative overflow-hidden">
@@ -54,7 +56,7 @@ export function StaffGrid() {
                     <m.div
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         transition={{ duration: 0.6 }}
                         className="flex items-center space-x-4 mb-4"
                     >
@@ -68,7 +70,7 @@ export function StaffGrid() {
                     <m.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-3xl md:text-5xl font-light text-white tracking-tight font-display"
                     >
@@ -83,14 +85,14 @@ export function StaffGrid() {
                             <m.div
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
+                                viewport={IN_VIEW_VIEWPORT}
                                 transition={{ duration: 0.6, delay: i * 0.1 }}
                                 className="group relative cursor-pointer"
                             >
                                 <div className="relative aspect-[3/4] overflow-hidden bg-neutral-800 transition-all duration-500 ease-out group-hover:scale-[1.02] shadow-2xl">
                                     <Image
                                         src={member.image}
-                                        alt={member.name}
+                                        alt={`${member.name}, integrante del staff de El Garage`}
                                         fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                                         className="object-cover transition-all duration-700 grayscale-0 scale-100 lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-110"

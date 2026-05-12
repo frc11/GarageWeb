@@ -8,6 +8,8 @@ interface FeaturedVideoProps {
     videoUrl: string | null;
 }
 
+const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
+
 export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(true);
@@ -94,13 +96,14 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
                 <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
                 <motion.div
+                    // This glow stays on a compositor-friendly transform path during its infinite motion.
                     animate={{
                         x: [0, 40, 0],
                         y: [0, -40, 0],
                         scale: [1, 1.1, 1],
                     }}
                     transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-0 right-0 w-[800px] h-[800px] bg-amber-500/10 blur-[150px] rounded-full mix-blend-screen"
+                    className="absolute top-0 right-0 w-[800px] h-[800px] bg-amber-500/10 blur-[150px] rounded-full mix-blend-screen will-change-transform"
                 />
             </div>
 
@@ -110,7 +113,7 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         className="flex items-center gap-4"
                     >
                         <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-amber-500/50" />
@@ -121,7 +124,7 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={IN_VIEW_VIEWPORT}
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-7xl font-black text-white tracking-tighter uppercase text-center leading-none"
                     >
@@ -132,9 +135,9 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
+                    viewport={IN_VIEW_VIEWPORT}
                     transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative w-fit max-w-full md:max-w-5xl mx-auto rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 bg-black shadow-[0_48px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5 group"
+                    className="relative w-fit max-w-full md:max-w-5xl mx-auto rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 bg-black shadow-[0_48px_100px_-20px_rgba(0,0,0,1)] ring-1 ring-white/5 group will-change-[transform,opacity]"
                 >
                     <div className="relative flex items-center justify-center bg-zinc-950">
                         <video
@@ -144,6 +147,7 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
                             muted
                             loop
                             playsInline
+                            preload="metadata"
                             onTimeUpdate={handleProgress}
                             onClick={togglePlay}
                             className="w-auto max-w-full h-auto max-h-[80vh] md:max-h-[85vh] object-contain relative z-10 cursor-pointer"
@@ -168,7 +172,7 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
                                         className="w-full max-w-4xl mx-auto bg-black/40 backdrop-blur-2xl border border-white/10 rounded-2xl md:rounded-full p-2 md:p-3 flex items-center gap-4 md:gap-6 pointer-events-auto shadow-2xl"
                                     >
                                         {/* Mini Play Toggle */}
-                                        <button onClick={togglePlay} className="text-white hover:text-amber-500 transition-colors p-2">
+                                        <button onClick={togglePlay} aria-label={isPlaying ? "Pausar video" : "Reproducir video"} className="text-white hover:text-amber-500 transition-colors p-2 min-w-11 min-h-11 flex items-center justify-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-full">
                                             {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
                                         </button>
 
@@ -189,10 +193,10 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
 
                                         {/* Controls Right */}
                                         <div className="flex items-center gap-2 md:gap-4 pr-2">
-                                            <button onClick={toggleMute} className="text-white hover:text-amber-500 transition-colors">
+                                            <button onClick={toggleMute} aria-label={isMuted ? "Activar sonido" : "Silenciar video"} className="text-white hover:text-amber-500 transition-colors min-w-11 min-h-11 flex items-center justify-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-full">
                                                 {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                                             </button>
-                                            <button onClick={toggleFullscreen} className="text-white hover:text-amber-500 transition-colors">
+                                            <button onClick={toggleFullscreen} aria-label="Ver video en pantalla completa" className="text-white hover:text-amber-500 transition-colors min-w-11 min-h-11 flex items-center justify-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-full">
                                                 <Maximize className="w-5 h-5" />
                                             </button>
                                         </div>

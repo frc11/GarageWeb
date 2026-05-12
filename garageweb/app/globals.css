@@ -149,6 +149,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior-y: none;
   }
 
   body {
@@ -156,9 +158,11 @@
     color: hsl(var(--foreground));
     background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000000 100%);
     /* Aplicar fondo de lujo por defecto */
+    overscroll-behavior-y: none;
   }
 
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
   }
 }

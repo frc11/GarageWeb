@@ -1,0 +1,21 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#09090B"/>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <ellipse cx="1140" cy="230" rx="420" ry="240" fill="url(#amber)" fill-opacity="0.18"/>
+  <ellipse cx="800" cy="870" rx="900" ry="260" fill="url(#fade)" fill-opacity="0.9"/>
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(800 320) rotate(90) scale(620 1100)">
+      <stop stop-color="#18181B"/>
+      <stop offset="0.55" stop-color="#0B0B0D"/>
+      <stop offset="1" stop-color="#09090B"/>
+    </radialGradient>
+    <radialGradient id="amber" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1140 230) rotate(90) scale(240 420)">
+      <stop stop-color="#F59E0B"/>
+      <stop offset="1" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fade" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(800 870) rotate(90) scale(260 900)">
+      <stop stop-color="#09090B"/>
+      <stop offset="1" stop-color="#09090B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

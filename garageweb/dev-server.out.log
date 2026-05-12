@@ -1,0 +1,30 @@
+
+> garageweb@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.27:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 1268ms
+ GET / 200 in 4.8s (compile: 2.6s, render: 2.2s)
+ GET /api/auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fadmin 404 in 784ms (compile: 714ms, render: 70ms)
+ GET /api 404 in 38ms (compile: 4ms, render: 34ms)
+ GET / 200 in 1839ms (compile: 3ms, render: 1835ms)
+ GET /catalogo 200 in 833ms (compile: 811ms, render: 23ms)
+✓ Compiled in 321ms
+ GET /catalogo 200 in 251ms (compile: 7ms, render: 244ms)
+ GET /catalogo 200 in 473ms (compile: 185ms, render: 288ms)
+ GET /catalogo 200 in 824ms (compile: 296ms, render: 528ms)
+ GET /catalogo 200 in 83ms (compile: 47ms, render: 36ms)
+ GET /catalogo 200 in 231ms (compile: 75ms, render: 157ms)
+ GET / 200 in 851ms (compile: 151ms, render: 700ms)
+ GET / 200 in 507ms (compile: 29ms, render: 479ms)
+ GET / 200 in 117ms (compile: 6ms, render: 111ms)
+ GET / 200 in 1936ms (compile: 13ms, render: 1923ms)
+✓ Compiled in 254ms
+ GET / 200 in 2.4s (compile: 140ms, render: 2.2s)
+ GET / 200 in 1902ms (compile: 4ms, render: 1898ms)
+✓ Compiled in 147ms

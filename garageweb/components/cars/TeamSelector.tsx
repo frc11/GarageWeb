@@ -39,7 +39,7 @@ const STAFF = [
 export function TeamSelector({ className, carName }: TeamSelectorProps) {
 
     return (
-        <div className={cn("space-y-4", className)}>
+        <div className={cn("space-y-4 select-none", className)}>
             <div className="flex items-center justify-between mb-4">
                 <p className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Elige tu asesor</p>
             </div>
@@ -56,14 +56,15 @@ export function TeamSelector({ className, carName }: TeamSelectorProps) {
                             href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group relative flex flex-col items-center gap-2 cursor-pointer"
+                            className="group relative flex flex-col items-center gap-2 cursor-pointer select-none"
                         >
-                            <div className="relative w-full aspect-square rounded-2xl overflow-hidden border border-white/10 transition-all duration-300 scale-110 border-amber-500/50 shadow-[0_0_20px_rgba(245,158,11,0.2)] lg:group-hover:scale-110 lg:group-hover:border-amber-500/50 lg:group-hover:shadow-[0_0_20px_rgba(245,158,11,0.2)] lg:scale-100 lg:border-white/10 lg:shadow-none">
+                            <div className="relative w-full aspect-square rounded-2xl overflow-hidden border border-white/10 transition-all duration-300 scale-110 border-amber-500/50 lg:group-hover:scale-110 lg:group-hover:border-amber-500/50 lg:scale-100 lg:border-white/10 before:absolute before:inset-0 before:rounded-[inherit] before:pointer-events-none before:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.2),transparent_72%)] before:opacity-100 before:transition-opacity before:duration-300 lg:before:opacity-0 lg:group-hover:before:opacity-100">
                                 <Image
                                     src={member.image}
-                                    alt={member.name}
+                                    alt={`Asesor ${member.name} de El Garage`}
                                     fill
                                     className="object-cover grayscale-0 lg:grayscale lg:group-hover:grayscale-0 transition-all duration-300"
+                                    sizes="(max-width: 768px) 25vw, 96px"
                                 />
 
                                 {/* Overlay Icon - Visible on hover only on desktop, maybe subtle on mobile? keeping it simpler as per request for 'colored photo' */}

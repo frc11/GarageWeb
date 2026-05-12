@@ -14,7 +14,7 @@ export function Footer() {
 
     return (
         // z-50 para que la sombra tape el corte de la sección anterior
-        <footer className="relative bg-zinc-950 pt-20 pb-10 overflow-visible z-50">
+        <footer className="relative bg-zinc-950 pt-20 pb-10 overflow-visible z-50 [content-visibility:auto] [contain-intrinsic-size:1px_900px]">
 
             {/* === SOMBRA DE INTEGRACIÓN (FADE TO BLACK) === */}
             {/* Sube 128px (-top-32) hacia la sección de arriba.
@@ -76,10 +76,10 @@ export function Footer() {
                     <div>
                         <h3 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">Seguinos</h3>
                         <div className="flex gap-4 justify-center md:justify-start">
-                            <a href="https://www.instagram.com/elgarageautomoviles/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white">
+                            <a href="https://www.instagram.com/elgarageautomoviles/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de El Garage" className="p-3 min-w-11 min-h-11 flex items-center justify-center bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30">
                                 <Instagram size={20} />
                             </a>
-                            <a href="https://www.facebook.com/profile.php?id=100075887566882" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white">
+                            <a href="https://www.facebook.com/profile.php?id=100075887566882" target="_blank" rel="noopener noreferrer" aria-label="Facebook de El Garage" className="p-3 min-w-11 min-h-11 flex items-center justify-center bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30">
                                 <Facebook size={20} />
                             </a>
                         </div>
@@ -105,9 +105,9 @@ export function Footer() {
 
             {/* MASSIVE TYPOGRAPHY BACKGROUND */}
             <div className="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none select-none leading-none z-0">
-                <h1 className="text-[17vw] font-black text-zinc-900/50 tracking-tighter text-center whitespace-nowrap translate-y-[20%]">
+                <div aria-hidden="true" className="text-[17vw] font-black text-zinc-900/50 tracking-tighter text-center whitespace-nowrap translate-y-[20%]">
                     EL GARAGE
-                </h1>
+                </div>
             </div>
         </footer>
     );

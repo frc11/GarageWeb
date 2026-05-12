@@ -7,13 +7,15 @@ import { Footer } from "@/components/layout/Footer";
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
-  display: "swap"
+  display: "swap",
+  preload: true,
 });
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap"
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {

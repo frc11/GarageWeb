@@ -3,10 +3,8 @@ import { FeaturedCars } from "@/components/home/FeaturedCars";
 import { CinematicBanner } from "@/components/home/CinematicBanner";
 import { FlashPromo } from "@/components/home/FlashPromo";
 import { AboutSection } from "@/components/home/AboutSection";
-import { StaffGrid } from "@/components/home/StaffGrid";
 import { BrandMarquee } from "@/components/home/BrandMarquee";
 import { EntregasSection } from "@/components/home/EntregasSection";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { FeaturedVideo } from "@/components/home/FeaturedVideo";
 import { getFeaturedCars, getOfferCars, getStockBrands, getFeaturedVideo } from "@/sanity/lib/fetch";
 
@@ -18,9 +16,40 @@ export default async function Home() {
   const offerCars = await getOfferCars();
   const brands = await getStockBrands();
   const featuredVideoUrl = await getFeaturedVideo();
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://elgarage.com";
+  const autoDealerJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AutoDealer",
+    name: "El Garage",
+    url: baseUrl,
+    description: "Concesionaria premium de autos de lujo y exóticos en Argentina.",
+    priceRange: "$$$$",
+    areaServed: "Argentina",
+    availableLanguage: ["es", "es-AR"],
+    brand: brands.map((brand) => brand.name),
+    knowsAbout: ["autos de lujo", "autos exóticos", "vehículos premium", "venta de autos en Argentina"],
+    makesOffer: featuredCars.slice(0, 6).map((car) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Car",
+        name: `${car.brand} ${car.model}`,
+        brand: car.brand,
+        vehicleModelDate: car.year?.toString(),
+        vehicleTransmission: car.transmission,
+      },
+      price: car.price,
+      priceCurrency: car.currency,
+      availability: "https://schema.org/InStock",
+      url: `${baseUrl}/autos/${car.slug}`,
+    })),
+  };
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(autoDealerJsonLd) }}
+      />
       <Hero />
       <FeaturedVideo videoUrl={featuredVideoUrl} />
 

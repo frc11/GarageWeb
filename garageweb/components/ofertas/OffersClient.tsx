@@ -102,7 +102,7 @@ export function OffersClient({ cars }: OffersClientProps) {
                             </div>
 
                             {/* Card Container with Glow */}
-                            <div className="h-full rounded-[2rem] p-1 bg-transparent transition-all duration-500 hover:bg-gradient-to-br hover:from-amber-500/20 hover:to-transparent hover:shadow-[0_0_40px_rgba(245,158,11,0.1)]">
+                            <div className="relative h-full rounded-[2rem] p-1 bg-transparent transition-all duration-500 hover:bg-gradient-to-br hover:from-amber-500/20 hover:to-transparent before:absolute before:inset-0 before:rounded-[inherit] before:pointer-events-none before:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.16),transparent_72%)] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100">
                                 <div className="h-full rounded-[1.8rem] overflow-hidden bg-zinc-950 border border-white/5 group-hover:border-amber-500/30 transition-colors duration-500">
                                     <CarCard car={car} hideStatusBadge={true} />
                                 </div>
@@ -118,7 +118,7 @@ export function OffersClient({ cars }: OffersClientProps) {
                     <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors"
+                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors select-none"
                     >
                         <ChevronLeft size={20} className="text-white" />
                     </button>
@@ -130,7 +130,7 @@ export function OffersClient({ cars }: OffersClientProps) {
                     <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
-                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors"
+                        className="p-3 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors select-none"
                     >
                         <ChevronRight size={20} className="text-white" />
                     </button>

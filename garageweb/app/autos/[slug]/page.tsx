@@ -1,12 +1,10 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, Calendar, Gauge, Zap, Fuel, Activity } from "lucide-react";
+import { Calendar, Gauge, Zap, Activity } from "lucide-react";
 import { getCarBySlug } from "@/sanity/lib/fetch";
 import { formatCurrency, cn } from "@/lib/utils";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { ShareButton } from "@/components/ui/ShareButton";
 import { BackButton } from "@/components/ui/BackButton";
-import { TeamSelector } from "@/components/cars/TeamSelector"; // Correct Import
 import Image from "next/image";
 import { Metadata } from "next";
 
@@ -19,21 +17,55 @@ interface CarPageProps {
 export async function generateMetadata(props: CarPageProps): Promise<Metadata> {
     const params = await props.params;
     const car = await getCarBySlug(params.slug);
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://elgarage.com";
 
     if (!car) {
         return {
             title: "Vehículo no encontrado",
-            description: "El vehículo que buscas no está disponible."
+            description: "El vehículo que buscas no está disponible.",
+            robots: {
+                index: false,
+                follow: false,
+            },
         };
     }
 
+    const yearLabel = car.year ? `${car.year}` : "año a consultar";
+    const mileageLabel =
+        car.mileage !== undefined && car.mileage !== null
+            ? `${car.mileage.toLocaleString("es-AR")} km`
+            : "kilometraje a consultar";
+    const vehicleUrl = `${baseUrl}/autos/${car.slug}`;
+    const ogImage = (car.coverImage && !car.coverImage.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i)
+        ? car.coverImage
+        : car.thumbnailImage) || undefined;
+    const description = `${car.brand} ${car.model} ${yearLabel} en El Garage. ${mileageLabel}, transmisión ${car.transmission}${car.category ? ` y categoría ${car.category}` : ""}. ${car.description ? car.description.slice(0, 120) : "Vehículo premium seleccionado con atención personalizada."}`.trim();
+    const title = `${car.brand} ${car.model}${car.year ? ` ${car.year}` : ""} | El Garage`;
+
     return {
-        title: `${car.brand} ${car.model}`,
-        description: `Conoce el ${car.brand} ${car.model} ${car.year}. ${car.description?.slice(0, 150)}...`,
+        title,
+        description,
+        alternates: {
+            canonical: vehicleUrl,
+        },
+        openGraph: {
+            title,
+            description,
+            url: vehicleUrl,
+            siteName: "El Garage",
+            type: "website",
+            locale: "es_AR",
+            images: ogImage ? [{ url: ogImage, alt: `${car.brand} ${car.model}` }] : undefined,
+        },
+        twitter: {
+            card: ogImage ? "summary_large_image" : "summary",
+            title,
+            description,
+            images: ogImage ? [ogImage] : undefined,
+        },
     };
 }
 
-// Revalidate every minute
 export const revalidate = 60;
 
 export default async function CarPage(props: CarPageProps) {
@@ -47,13 +79,11 @@ export default async function CarPage(props: CarPageProps) {
     const whatsappMessage = `Hola, me interesa el ${car.brand} ${car.model} que vi en la web.`;
     const whatsappUrl = `https://wa.me/5493814663032?text=${encodeURIComponent(whatsappMessage)}`;
 
-    const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://elgarage.com'}/autos/${car.slug}`;
+    const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL || "https://elgarage.com"}/autos/${car.slug}`;
     const shareText = `¡Mira este auto que vi en la página de El Garage!`;
 
     return (
         <main className="bg-zinc-950 min-h-screen pt-24.5">
-
-            {/* 1. HERO SECTION (Full Screen) */}
             <div className="relative h-screen w-full overflow-hidden">
                 {car.coverImage ? (
                     car.coverImage.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i) ? (
@@ -68,10 +98,11 @@ export default async function CarPage(props: CarPageProps) {
                     ) : (
                         <Image
                             src={car.coverImage}
-                            alt={car.model}
+                            alt={`${car.brand} ${car.model} portada principal`}
                             fill
                             className="object-cover"
                             priority
+                            sizes="100vw"
                         />
                     )
                 ) : (
@@ -80,9 +111,8 @@ export default async function CarPage(props: CarPageProps) {
                     </div>
                 )}
 
-                {/* Gradient Filters */}
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
-                <div className="absolute inset-0 bg-black/20" /> {/* Dimmer */}
+                <div className="absolute inset-0 bg-black/20" />
 
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-24 z-20">
                     <div className="container mx-auto">
@@ -98,22 +128,21 @@ export default async function CarPage(props: CarPageProps) {
 
             <div className="container mx-auto px-6 py-24 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
-
-                    {/* 2. LEFT: Gallery & Story (Scrollable) */}
                     <div className="lg:col-span-7 space-y-24">
-
-                        {/* Gallery Grid */}
                         <div className="space-y-4">
-                            <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-8">Galería Visual</h3>
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-8">Galería Visual</h2>
                             <div className="grid grid-cols-1 gap-4">
                                 {car.gallery && car.gallery.length > 0 ? (
                                     car.gallery.map((media, idx) => {
                                         const isVideo = media.match(/\.(mp4|webm|mov|m4v)(\?.*)?$/i);
                                         return (
-                                            <div key={idx} className={cn(
-                                                "relative rounded-3xl overflow-hidden border border-white/5 mx-auto",
-                                                isVideo ? "w-fit bg-black flex justify-center items-center" : "aspect-video w-full"
-                                            )}>
+                                            <div
+                                                key={idx}
+                                                className={cn(
+                                                    "relative rounded-3xl overflow-hidden border border-white/5 mx-auto",
+                                                    isVideo ? "w-fit bg-black flex justify-center items-center" : "aspect-video w-full"
+                                                )}
+                                            >
                                                 {isVideo ? (
                                                     <video
                                                         src={media}
@@ -123,7 +152,13 @@ export default async function CarPage(props: CarPageProps) {
                                                         preload="metadata"
                                                     />
                                                 ) : (
-                                                    <Image src={media} alt={`${car.model} gallery ${idx}`} fill className="object-cover" />
+                                                    <Image
+                                                        src={media}
+                                                        alt={`${car.brand} ${car.model} imagen de galeria ${idx + 1}`}
+                                                        fill
+                                                        className="object-cover"
+                                                        sizes="(max-width: 1024px) 100vw, 58vw"
+                                                    />
                                                 )}
                                             </div>
                                         );
@@ -138,20 +173,18 @@ export default async function CarPage(props: CarPageProps) {
                             </div>
                         </div>
 
-                        {/* Narrative Description */}
                         {car.description && (
                             <div className="space-y-8">
-                                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Descripción</h3>
+                                <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Descripción</h2>
                                 <div className="prose prose-invert prose-lg text-gray-400 font-light leading-relaxed">
                                     <p>{car.description}</p>
                                 </div>
                             </div>
                         )}
 
-                        {/* Features Grid */}
                         {car.features && car.features.length > 0 && (
                             <div className="space-y-8">
-                                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Equipamiento</h3>
+                                <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Equipamiento</h2>
                                 <div className="grid grid-cols-2 bg-zinc-900/50 border border-white/10 rounded-3xl overflow-hidden">
                                     {car.features.map((feature, index) => (
                                         <div key={index} className="border-b border-r border-white/5 p-6 flex items-start gap-4 hover:bg-white/5 transition-colors">
@@ -164,11 +197,8 @@ export default async function CarPage(props: CarPageProps) {
                         )}
                     </div>
 
-                    {/* 3. RIGHT: Sticky Tech Panel */}
                     <div className="lg:col-span-5 relative">
                         <div className="sticky top-32 space-y-12">
-
-                            {/* Price Block */}
                             <div className="p-8 rounded-3xl bg-zinc-900/80 backdrop-blur-xl border border-white/10 space-y-8">
                                 <div className="flex justify-between items-start">
                                     {car.price ? (
@@ -180,10 +210,12 @@ export default async function CarPage(props: CarPageProps) {
                                                         {formatCurrency(car.originalPrice, car.currency)}
                                                     </span>
                                                 )}
-                                                <span className={cn(
-                                                    "text-4xl md:text-5xl font-bold tracking-tight order-2 whitespace-nowrap",
-                                                    car.isOffer ? "text-amber-500" : "text-white"
-                                                )}>
+                                                <span
+                                                    className={cn(
+                                                        "text-4xl md:text-5xl font-bold tracking-tight order-2 whitespace-nowrap",
+                                                        car.isOffer ? "text-amber-500" : "text-white"
+                                                    )}
+                                                >
                                                     {formatCurrency(car.price, car.currency)}
                                                 </span>
                                             </div>
@@ -201,7 +233,6 @@ export default async function CarPage(props: CarPageProps) {
                                     />
                                 </div>
 
-                                {/* Tech Specs 2x2 */}
                                 <div className="grid grid-cols-2 gap-3">
                                     {car.year && (
                                         <div className="bg-black/40 p-4 rounded-xl border border-white/5">
@@ -233,18 +264,12 @@ export default async function CarPage(props: CarPageProps) {
                                     </div>
                                 </div>
 
-                                {/* Actions */}
                                 <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block w-full">
                                     <PremiumButton variant="primary" className="w-full h-14 text-base">
                                         {car.isOffer ? "SOLICITAR OFERTA" : "CONSULTAR COMPRA"}
                                     </PremiumButton>
                                 </a>
-
                             </div>
-
-                            {/* Consultant Card replaced by Team Selector */}
-                            {/* <TeamSelector carName={`${car.brand} ${car.model}`} /> */}
-
                         </div>
                     </div>
                 </div>
