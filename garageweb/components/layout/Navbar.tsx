@@ -9,6 +9,8 @@ import { PremiumButton } from "../ui/PremiumButton";
 import { m, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { usePathname } from "next/navigation";
 
+const focusVisibleRing = "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -85,7 +87,7 @@ export function Navbar() {
                 <div className="flex items-center justify-between w-full h-full">
 
                     {/* Logo */}
-                    <Link href="/" className="flex items-center shrink-0 relative z-50">
+                    <Link href="/" className={cn("flex items-center shrink-0 relative z-50 rounded-sm", focusVisibleRing)}>
                         <div className="relative w-28 h-9 md:w-40 md:h-12 transition-all duration-300">
                             <Image
                                 src="/ElGarageLogo-Modificado.png"
@@ -106,7 +108,7 @@ export function Navbar() {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="relative group"
+                                className={cn("relative group rounded-sm", focusVisibleRing)}
                             >
                                 <span className={cn(
                                     "text-sm font-medium tracking-[0.15em] uppercase transition-colors duration-300",
@@ -121,7 +123,7 @@ export function Navbar() {
 
                     {/* Contact Button & Mobile Toggle */}
                     <div className="flex items-center gap-6 shrink-0 z-50">
-                        <Link href="/contacto" className="hidden md:block">
+                        <Link href="/contacto" className={cn("hidden md:block rounded-full", focusVisibleRing)}>
                             <PremiumButton
                                 className="relative isolate h-10 px-6 py-0 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300 group before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.45),transparent_72%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
                             >
@@ -132,7 +134,7 @@ export function Navbar() {
 
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="md:hidden text-white p-2 min-w-11 min-h-11 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors relative z-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30"
+                            className={cn("md:hidden text-white p-2 min-w-11 min-h-11 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors relative z-50", focusVisibleRing)}
                             aria-label={isMobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
                         >
                             {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
@@ -145,6 +147,9 @@ export function Navbar() {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <m.div
+                        role="dialog"
+                        aria-modal="true"
+                        data-lenis-pause="true"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -162,7 +167,7 @@ export function Navbar() {
                             >
                                 <Link
                                     href={link.href}
-                                    className="text-4xl font-serif font-light text-white tracking-tight hover:text-amber-500 transition-colors"
+                                    className={cn("text-4xl font-serif font-light text-white tracking-tight hover:text-amber-500 transition-colors rounded-sm", focusVisibleRing)}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {link.name}
@@ -176,7 +181,7 @@ export function Navbar() {
                             transition={{ delay: 0.3, duration: 0.5 }}
                             className="mt-8"
                         >
-                            <Link href="/contacto" onClick={() => setIsMobileMenuOpen(false)}>
+                            <Link href="/contacto" onClick={() => setIsMobileMenuOpen(false)} className={cn("rounded-full", focusVisibleRing)}>
                                 <PremiumButton
                                     className="relative isolate w-full py-4 text-sm font-bold text-black bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-300 group before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.45),transparent_72%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
                                 >

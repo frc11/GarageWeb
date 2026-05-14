@@ -21,7 +21,35 @@ interface CatalogGridProps {
     initialBrandSlug?: string;
 }
 
+interface RawCatalogCar {
+    _id?: string;
+    id?: string;
+    slug: string;
+    brand: string;
+    model: string;
+    year?: number;
+    price?: number;
+    currency?: "USD" | "ARS";
+    mileage?: number;
+    transmission?: string;
+    category?: Car["category"];
+    thumbnailImage?: string;
+    coverImage?: string;
+    gallery?: unknown;
+    description?: string;
+    features?: string[];
+    isFeatured?: boolean;
+    isOffer?: boolean;
+    originalPrice?: number;
+    discount?: number;
+}
+
 const ITEMS_PER_PAGE = 9;
+const focusVisibleRing = "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
+
+function getScrollBehavior(): ScrollBehavior {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
 
 export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
     const searchParams = useSearchParams();
@@ -56,11 +84,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             setError(null);
             try {
                 const [rawCars, brandNames] = await Promise.all([
-                    client.fetch(CARS_QUERY, { brandSlug: null }), // Load ALL cars first for client-side filtering
-                    client.fetch(CATALOG_BRANDS_QUERY)
+                    client.fetch<RawCatalogCar[]>(CARS_QUERY, { brandSlug: null }), // Load ALL cars first for client-side filtering
+                    client.fetch<string[]>(CATALOG_BRANDS_QUERY)
                 ]);
 
-                const mappedCars: Car[] = rawCars.map((raw: any) => {
+                const mappedCars: Car[] = rawCars.map((raw) => {
                     // Normalize transmission
                     let transmission = raw.transmission;
                     const lowerTrans = (transmission || '').toLowerCase();
@@ -73,20 +101,20 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     }
 
                     return {
-                        id: raw.id || raw._id,
+                        id: raw.id || raw._id || raw.slug,
                         slug: raw.slug,
                         brand: typeof raw.brand === 'string' ? raw.brand.trim() : raw.brand,
                         model: raw.model,
                         year: raw.year,
                         price: raw.price,
-                        currency: raw.currency,
+                        currency: raw.currency === "ARS" ? "ARS" : "USD",
                         mileage: raw.mileage,
                         transmission: transmission as 'Automática' | 'Manual',
                         category: raw.category,
                         thumbnailImage: raw.thumbnailImage,
                         coverImage: raw.coverImage,
-                        gallery: Array.isArray(raw.gallery) ? raw.gallery : [],
-                        description: raw.description,
+                        gallery: Array.isArray(raw.gallery) ? raw.gallery.filter((image): image is string => typeof image === "string") : [],
+                        description: raw.description || "",
                         features: raw.features || [],
                         isFeatured: raw.isFeatured,
                         isOffer: raw.isOffer,
@@ -125,11 +153,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                 setAllBrands(mappedBrands);
 
                 if (initialBrandSlug && mappedBrands.length > 0) {
-                    const found = mappedBrands.find((b: any) => b.slug === initialBrandSlug);
+                    const found = mappedBrands.find((b) => b.slug === initialBrandSlug);
                     if (found) setSelectedBrand(found.name);
                 }
 
-            } catch (err: any) {
+            } catch (err: unknown) {
                 console.error("Error fetching catalog data:", err);
                 setError("No se pudo cargar el catálogo. Por favor, intenta de nuevo.");
             } finally {
@@ -158,15 +186,12 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         const brandParam = searchParams.get('brand');
         if (brandParam) {
             setSelectedBrand(brandParam);
+            setCurrentPage(1);
         }
     }, [searchParams]);
 
-    useMemo(() => {
-        setCurrentPage(1);
-    }, [searchTerm, selectedCategory, selectedBrand, yearRange, priceRange, selectedTransmission]);
-
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
     }, [currentPage]);
 
     // 2. Combined Filter Logic
@@ -205,6 +230,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
         setPriceRange(globalPriceMinMax);
         setSelectedTransmission("Todos");
         setSearchTerm("");
+        setCurrentPage(1);
     };
 
     const hasActiveFilters =
@@ -246,7 +272,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                 <p className="text-zinc-500 max-w-xs mx-auto">{error}</p>
                 <button
                     onClick={() => window.location.reload()}
-                    className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs border-b border-amber-500/30 pb-0.5"
+                    className={cn("text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs border-b border-amber-500/30 pb-0.5 rounded-sm", focusVisibleRing)}
                 >
                     Reintentar
                 </button>
@@ -260,7 +286,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             <div className="lg:hidden flex flex-col gap-4 mb-2">
                 <button 
                     onClick={() => setIsMobileFiltersOpen(true)}
-                    className="flex items-center justify-center gap-2 bg-zinc-900/80 p-4 rounded-2xl border border-white/10 text-white font-bold uppercase tracking-wider text-sm w-full"
+                    className={cn("flex items-center justify-center gap-2 bg-zinc-900/80 p-4 rounded-2xl border border-white/10 text-white font-bold uppercase tracking-wider text-sm w-full", focusVisibleRing)}
                 >
                     <Filter className="w-5 h-5 text-amber-500" />
                     Filtrar Catálogo
@@ -270,12 +296,15 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
             </div>
 
             {/* --- FILTERS WRAPPER --- */}
-            <div className={cn(
+            <div
+                className={cn(
                 "space-y-8 lg:space-y-8",
                 isMobileFiltersOpen 
                     ? "fixed inset-0 z-[100] bg-zinc-950 overflow-y-auto block px-6 pb-32 w-full h-full" 
                     : "hidden lg:block"
-            )}>
+                )}
+                data-lenis-pause={isMobileFiltersOpen ? "true" : undefined}
+            >
                 {/* Mobile Filter Header */}
                 {isMobileFiltersOpen && (
                     <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-8 lg:hidden sticky top-0 bg-zinc-950 z-50 pt-28">
@@ -284,11 +313,11 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         </h2>
                         <div className="flex items-center gap-4">
                             {hasActiveFilters && (
-                                <button onClick={clearFilters} className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-sm">
+                                <button onClick={clearFilters} className={cn("text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs rounded-sm", focusVisibleRing)}>
                                     Limpiar
                                 </button>
                             )}
-                            <button onClick={() => setIsMobileFiltersOpen(false)} aria-label="Cerrar filtros" className="p-2 min-w-11 min-h-11 flex items-center justify-center text-zinc-400 hover:text-white bg-white/5 rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 select-none">
+                            <button onClick={() => setIsMobileFiltersOpen(false)} aria-label="Cerrar filtros" className={cn("p-2 min-w-11 min-h-11 flex items-center justify-center text-zinc-400 hover:text-white bg-white/5 rounded-full select-none", focusVisibleRing)}>
                                 <X size={20} />
                             </button>
                         </div>
@@ -300,7 +329,10 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     <BrandSelector
                         brands={brandPills}
                         selectedBrand={selectedBrand}
-                        onBrandChange={setSelectedBrand}
+                        onBrandChange={(brand) => {
+                            setSelectedBrand(brand);
+                            setCurrentPage(1);
+                        }}
                         className="flex-1 w-full"
                     />
                     <ViewAllButton
@@ -314,8 +346,12 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                 {categories.map((cat) => (
                     <button
                         key={cat}
-                        onClick={() => setSelectedCategory(cat)}
+                        onClick={() => {
+                            setSelectedCategory(cat);
+                            setCurrentPage(1);
+                        }}
                         className={cn(
+                            focusVisibleRing,
                             "px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wide transition-all duration-300",
                             selectedCategory === cat
                                 ? "bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105"
@@ -346,14 +382,20 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                                 type="text"
                                 placeholder="Buscar vehículo..."
                                 value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3.5 text-sm text-white placeholder-zinc-600 focus-visible:outline-none focus-visible:border-amber-500/50 focus-visible:ring-1 focus-visible:ring-white/30 transition-all"
+                                onChange={(e) => {
+                                    setSearchTerm(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                                className="w-full bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-full pl-12 pr-10 py-3.5 text-sm text-white placeholder-zinc-600 focus-visible:outline-none focus-visible:border-amber-500/50 focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-all"
                             />
                             {searchTerm && (
                                 <button
-                                    onClick={() => setSearchTerm("")}
+                                    onClick={() => {
+                                        setSearchTerm("");
+                                        setCurrentPage(1);
+                                    }}
                                     aria-label="Limpiar búsqueda"
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 min-w-11 min-h-11 flex items-center justify-center text-zinc-500 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-full select-none"
+                                    className={cn("absolute right-3 top-1/2 -translate-y-1/2 min-w-11 min-h-11 flex items-center justify-center text-zinc-500 hover:text-white transition-colors rounded-full select-none", focusVisibleRing)}
                                 >
                                     <X size={14} />
                                 </button>
@@ -369,7 +411,10 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         <PremiumDropdown
                             options={availableTransmissions}
                             value={selectedTransmission}
-                            onChange={(val) => setSelectedTransmission(val || "Todos")}
+                            onChange={(val) => {
+                                setSelectedTransmission(val || "Todos");
+                                setCurrentPage(1);
+                            }}
                             allowClear={false}
                             className="w-full"
                         />
@@ -387,7 +432,10 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                             min={globalMinMax[0]}
                             max={globalMinMax[1]}
                             value={yearRange}
-                            onChange={setYearRange}
+                            onChange={(range) => {
+                                setYearRange(range);
+                                setCurrentPage(1);
+                            }}
                         />
                     </div>
 
@@ -397,7 +445,10 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                             min={globalPriceMinMax[0]}
                             max={globalPriceMinMax[1]}
                             value={priceRange}
-                            onChange={setPriceRange}
+                            onChange={(range) => {
+                                setPriceRange(range);
+                                setCurrentPage(1);
+                            }}
                         />
                     </div>
                 </div>
@@ -409,9 +460,9 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                     <button 
                         onClick={() => {
                             setIsMobileFiltersOpen(false);
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            window.scrollTo({ top: 0, behavior: getScrollBehavior() });
                         }}
-                        className="w-full bg-amber-500 text-black font-black uppercase tracking-widest text-sm py-4 rounded-full flex items-center justify-center gap-2"
+                        className={cn("w-full bg-amber-500 text-black font-black uppercase tracking-widest text-sm py-4 rounded-full flex items-center justify-center gap-2", focusVisibleRing)}
                     >
                         Ver {filteredCars.length} Vehículos
                     </button>
@@ -427,7 +478,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                 {hasActiveFilters && (
                     <button
                         onClick={clearFilters}
-                        className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-2 group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 rounded-sm"
+                        className={cn("text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs flex items-center gap-2 group rounded-sm", focusVisibleRing)}
                     >
                         <X size={12} className="group-hover:rotate-90 transition-transform" />
                         Limpiar
@@ -463,7 +514,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         <p className="text-zinc-500 max-w-xs mx-auto">No encontramos vehículos que coincidan con tu búsqueda.</p>
                         <button
                             onClick={clearFilters}
-                            className="text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs border-b border-amber-500/30 pb-0.5"
+                            className={cn("text-amber-500 hover:text-amber-400 font-bold uppercase tracking-wider text-xs border-b border-amber-500/30 pb-0.5 rounded-sm", focusVisibleRing)}
                         >
                             Limpiar Filtros
                         </button>
@@ -478,7 +529,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
                         aria-label="Página anterior"
-                        className="p-3 min-w-11 min-h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 select-none"
+                        className={cn("p-3 min-w-11 min-h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors select-none", focusVisibleRing)}
                     >
                         <ChevronLeft size={20} />
                     </button>
@@ -491,7 +542,7 @@ export function CatalogGrid({ initialBrandSlug }: CatalogGridProps) {
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
                         aria-label="Página siguiente"
-                        className="p-3 min-w-11 min-h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30 select-none"
+                        className={cn("p-3 min-w-11 min-h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 transition-colors select-none", focusVisibleRing)}
                     >
                         <ChevronRight size={20} />
                     </button>

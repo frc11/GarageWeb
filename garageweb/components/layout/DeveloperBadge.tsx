@@ -10,7 +10,7 @@ export function DeveloperBadge() {
             href="https://develop-portfolio.netlify.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center justify-center"
+            className="group relative inline-flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
             <motion.div
                 // CAMBIO: En móvil ya tiene borde brillante y fondo activo (border-white/20 bg-white/10).

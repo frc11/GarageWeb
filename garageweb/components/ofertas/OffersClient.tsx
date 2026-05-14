@@ -14,8 +14,26 @@ interface OffersClientProps {
 
 const ITEMS_PER_PAGE = 9;
 
+function getScrollBehavior(): ScrollBehavior {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
+
 export function OffersClient({ cars }: OffersClientProps) {
-    if (!cars || cars.length === 0) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const safeCars = useMemo(() => cars ?? [], [cars]);
+
+    const totalPages = Math.ceil(safeCars.length / ITEMS_PER_PAGE);
+
+    const currentCars = useMemo(() => {
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        return safeCars.slice(start, start + ITEMS_PER_PAGE);
+    }, [safeCars, currentPage]);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+    }, [currentPage]);
+
+    if (safeCars.length === 0) {
         return (
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -40,19 +58,6 @@ export function OffersClient({ cars }: OffersClientProps) {
             </motion.div>
         );
     }
-
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const totalPages = Math.ceil(cars.length / ITEMS_PER_PAGE);
-
-    const currentCars = useMemo(() => {
-        const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        return cars.slice(start, start + ITEMS_PER_PAGE);
-    }, [cars, currentPage]);
-
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [currentPage]);
 
     const container = {
         hidden: { opacity: 0 },

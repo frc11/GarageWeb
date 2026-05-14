@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Fuel, Calendar, Settings2, BadgePercent } from "lucide-react";
+import { ArrowUpRight, BadgePercent } from "lucide-react";
 import { Car } from "@/types/main";
 import { formatCurrency, cn } from "@/lib/utils";
 
@@ -35,6 +35,7 @@ export function CarCard({ car, className, priority = false, isOffer = false, dis
             className={cn(
                 "block relative group overflow-hidden rounded-2xl bg-neutral-900/40 backdrop-blur-md transition-all duration-500",
                 "border border-white/5 hover:border-amber-500/50",
+                "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                 // Desktop glow is pre-rendered and only fades opacity, avoiding heavy hover repaints.
                 "before:absolute before:inset-0 before:rounded-[inherit] before:pointer-events-none before:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.16),transparent_70%)] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100",
                 isOfferActive && "border-amber-500/30",

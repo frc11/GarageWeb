@@ -33,6 +33,7 @@ export function PremiumButton({
             transition={{ type: "spring", stiffness: 400, damping: 10 }} // Snappy feel
             className={cn(
                 "relative overflow-hidden px-8 py-4 rounded-full font-bold tracking-wide uppercase text-sm border transition-colors duration-300",
+                "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                 variants[variant],
                 className
             )}

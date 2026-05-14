@@ -59,7 +59,7 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
                     "text-sm font-medium text-white",
                     "transition-all duration-300",
                     "hover:bg-zinc-900/80 hover:border-white/20",
-                    "focus-visible:outline-none focus-visible:border-amber-500/50 focus-visible:ring-1 focus-visible:ring-white/30",
+                    "focus-visible:outline-none focus-visible:border-amber-500/50 focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                     isOpen && "border-amber-500/50 ring-2 ring-amber-500/20"
                 )}
             >
@@ -118,7 +118,7 @@ export function BrandSelector({ brands, selectedBrand, onBrandChange, className 
                                             "px-4 py-3 min-h-11 rounded-xl",
                                             "text-sm font-medium transition-all duration-200",
                                             "group",
-                                            "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30",
+                                            "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                                             isSelected
                                                 ? "bg-amber-500/20 text-white border border-amber-500/30"
                                                 : "text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent"

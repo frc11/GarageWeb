@@ -3,15 +3,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 
 export const Preloader = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const pathname = usePathname();
-
-    if (pathname?.toLowerCase().includes("/studio")) {
-        return null;
-    }
 
     useEffect(() => {
         // Simulate loading time or wait for resources
@@ -29,6 +23,7 @@ export const Preloader = () => {
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.8, ease: "easeInOut" }}
+                    data-lenis-pause="true"
                     className="fixed inset-0 z-[9999] flex items-center justify-center bg-black"
                 >
                     <motion.div

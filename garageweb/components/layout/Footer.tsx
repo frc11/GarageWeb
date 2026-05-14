@@ -1,17 +1,11 @@
-"use client";
-
 import Link from "next/link";
 import { Instagram, Facebook, MapPin, Mail, MessageSquare } from "lucide-react";
 import { DeveloperBadge } from "./DeveloperBadge";
-import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+
+const focusVisibleRing = "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
 export function Footer() {
-    const pathname = usePathname();
-
-    if (pathname?.toLowerCase().includes("/studio")) {
-        return null;
-    }
-
     return (
         // z-50 para que la sombra tape el corte de la sección anterior
         <footer className="relative bg-zinc-950 pt-20 pb-10 overflow-visible z-50 [content-visibility:auto] [contain-intrinsic-size:1px_900px]">
@@ -41,9 +35,9 @@ export function Footer() {
                     <div>
                         <h3 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">Navegación</h3>
                         <ul className="space-y-4">
-                            <li><Link href="/" className="text-zinc-400 hover:text-white transition-colors text-sm">Inicio</Link></li>
-                            <li><Link href="/catalogo" className="text-zinc-400 hover:text-white transition-colors text-sm">Catálogo</Link></li>
-                            <li><Link href="/contacto" className="text-zinc-400 hover:text-white transition-colors text-sm">Contacto</Link></li>
+                            <li><Link href="/" className={cn("text-zinc-400 hover:text-white transition-colors text-sm rounded-sm", focusVisibleRing)}>Inicio</Link></li>
+                            <li><Link href="/catalogo" className={cn("text-zinc-400 hover:text-white transition-colors text-sm rounded-sm", focusVisibleRing)}>Catálogo</Link></li>
+                            <li><Link href="/contacto" className={cn("text-zinc-400 hover:text-white transition-colors text-sm rounded-sm", focusVisibleRing)}>Contacto</Link></li>
                         </ul>
                     </div>
 
@@ -52,19 +46,19 @@ export function Footer() {
                         <h3 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">Contacto</h3>
                         <ul className="space-y-4">
                             <li className="text-sm text-zinc-400">
-                                <a href="https://maps.app.goo.gl/PXUmFowAsKH8FTqPA" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 hover:text-white transition-colors justify-center md:justify-start">
+                                <a href="https://maps.app.goo.gl/PXUmFowAsKH8FTqPA" target="_blank" rel="noopener noreferrer" className={cn("flex items-start gap-3 hover:text-white transition-colors justify-center md:justify-start rounded-sm", focusVisibleRing)}>
                                     <MapPin size={18} className="shrink-0 mt-0.5" />
                                     <span>Yerba Buena, Tucumán<br />Argentina</span>
                                 </a>
                             </li>
                             <li className="text-sm text-zinc-400">
-                                <a href="mailto:elgarageautomoviles@gmail.com" className="flex items-center gap-3 hover:text-white transition-colors justify-center md:justify-start">
+                                <a href="mailto:elgarageautomoviles@gmail.com" className={cn("flex items-center gap-3 hover:text-white transition-colors justify-center md:justify-start rounded-sm", focusVisibleRing)}>
                                     <Mail size={18} className="shrink-0" />
                                     <span>elgarageautomoviles@gmail.com</span>
                                 </a>
                             </li>
                             <li className="text-sm text-zinc-400">
-                                <a href="https://wa.me/5493814663032" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-white transition-colors justify-center md:justify-start">
+                                <a href="https://wa.me/5493814663032" target="_blank" rel="noopener noreferrer" className={cn("flex items-center gap-3 hover:text-white transition-colors justify-center md:justify-start rounded-sm", focusVisibleRing)}>
                                     <MessageSquare size={18} className="shrink-0" />
                                     <span>+54 9 381 4663032</span>
                                 </a>
@@ -76,10 +70,10 @@ export function Footer() {
                     <div>
                         <h3 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">Seguinos</h3>
                         <div className="flex gap-4 justify-center md:justify-start">
-                            <a href="https://www.instagram.com/elgarageautomoviles/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de El Garage" className="p-3 min-w-11 min-h-11 flex items-center justify-center bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30">
+                            <a href="https://www.instagram.com/elgarageautomoviles/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de El Garage" className={cn("p-3 min-w-11 min-h-11 flex items-center justify-center bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white", focusVisibleRing)}>
                                 <Instagram size={20} />
                             </a>
-                            <a href="https://www.facebook.com/profile.php?id=100075887566882" target="_blank" rel="noopener noreferrer" aria-label="Facebook de El Garage" className="p-3 min-w-11 min-h-11 flex items-center justify-center bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/30">
+                            <a href="https://www.facebook.com/profile.php?id=100075887566882" target="_blank" rel="noopener noreferrer" aria-label="Facebook de El Garage" className={cn("p-3 min-w-11 min-h-11 flex items-center justify-center bg-white/5 rounded-full hover:bg-white hover:text-black transition-all text-white", focusVisibleRing)}>
                                 <Facebook size={20} />
                             </a>
                         </div>
@@ -93,8 +87,8 @@ export function Footer() {
                     <div className="flex flex-col md:flex-row items-center gap-6 text-xs text-zinc-600 mb-12 text-center">
                         <p>© {new Date().getFullYear()} EL GARAGE. Todos los derechos reservados.</p>
                         <div className="flex gap-6">
-                            <Link href="/privacidad" className="hover:text-zinc-400 transition-colors">Privacidad</Link>
-                            <Link href="/terminos" className="hover:text-zinc-400 transition-colors">Términos</Link>
+                            <Link href="/privacidad" className={cn("hover:text-zinc-400 transition-colors rounded-sm", focusVisibleRing)}>Privacidad</Link>
+                            <Link href="/terminos" className={cn("hover:text-zinc-400 transition-colors rounded-sm", focusVisibleRing)}>Términos</Link>
                         </div>
                     </div>
 

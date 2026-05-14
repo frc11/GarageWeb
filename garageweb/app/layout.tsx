@@ -57,6 +57,7 @@ export const metadata: Metadata = {
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { MotionProvider } from "@/components/providers/MotionProvider";
 import { Preloader } from "@/components/ui/Preloader";
+import { HideOnStudio } from "@/components/layout/HideOnStudio";
 
 // ... (imports)
 
@@ -67,14 +68,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://grainy-gradients.vercel.app" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google.com" />
+        <link rel="preconnect" href="https://maps.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body className={`${manrope.variable} ${inter.variable} font-sans bg-black text-white antialiased selection:bg-amber-500 selection:text-black`}>
         <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
         <SmoothScroll>
           <MotionProvider>
-            <Preloader />
+            <HideOnStudio>
+              <Preloader />
+            </HideOnStudio>
             <Navbar />
             {children}
-            <Footer />
+            <HideOnStudio>
+              <Footer />
+            </HideOnStudio>
           </MotionProvider>
         </SmoothScroll>
       </body>

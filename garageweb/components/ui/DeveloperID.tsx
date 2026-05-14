@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -8,11 +8,23 @@ import { cn } from "@/lib/utils";
 export const DeveloperID = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
+    const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (tooltipTimeoutRef.current) {
+                clearTimeout(tooltipTimeoutRef.current);
+            }
+        };
+    }, []);
 
     const handleCopyLink = () => {
         navigator.clipboard.writeText("https://github.com/develop");
         setShowTooltip(true);
-        setTimeout(() => setShowTooltip(false), 2000);
+        if (tooltipTimeoutRef.current) {
+            clearTimeout(tooltipTimeoutRef.current);
+        }
+        tooltipTimeoutRef.current = setTimeout(() => setShowTooltip(false), 2000);
     };
 
     return (

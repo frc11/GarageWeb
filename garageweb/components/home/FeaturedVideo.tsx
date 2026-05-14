@@ -8,6 +8,10 @@ interface FeaturedVideoProps {
     videoUrl: string | null;
 }
 
+type WebKitFullscreenVideo = HTMLVideoElement & {
+    webkitEnterFullscreen?: () => void;
+};
+
 const IN_VIEW_VIEWPORT = { once: true, margin: "0px 0px -10% 0px" } as const;
 
 export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
@@ -24,6 +28,14 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
             videoRef.current.muted = isMuted;
         }
     }, [isMuted]);
+
+    useEffect(() => {
+        return () => {
+            if (controlsTimeoutRef.current) {
+                clearTimeout(controlsTimeoutRef.current);
+            }
+        };
+    }, []);
 
     const togglePlay = () => {
         if (videoRef.current) {
@@ -58,9 +70,11 @@ export function FeaturedVideo({ videoUrl }: FeaturedVideoProps) {
     const toggleFullscreen = () => {
         const video = videoRef.current;
         if (!video) return;
+        const webkitVideo = video as WebKitFullscreenVideo;
+
         // iOS Safari requires webkitEnterFullscreen() on the <video> element itself
-        if ((video as any).webkitEnterFullscreen) {
-            (video as any).webkitEnterFullscreen();
+        if (webkitVideo.webkitEnterFullscreen) {
+            webkitVideo.webkitEnterFullscreen();
         } else if (video.requestFullscreen) {
             video.requestFullscreen();
         }

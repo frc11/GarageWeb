@@ -23,6 +23,7 @@ export function ViewAllButton({ onClick, className }: ViewAllButtonProps) {
                 "shadow-[0_0_30px_rgba(255,255,255,0.3)]",
                 "transition-all duration-300",
                 "hover:border-amber-400",
+                "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                 className
             )}
         >
